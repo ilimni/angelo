@@ -69,7 +69,7 @@
      2. DOM HELPERS
      ============================================================ */
   function $(sel) { return document.querySelector(sel); }
-  function $$(sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+  function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
   function el(tag, attrs, children) {
     var node = document.createElement(tag);
     attrs = attrs || {};
@@ -311,11 +311,12 @@
     var interactionRoot = $("#q-interaction");
     interactionRoot.innerHTML = "";
 
-    var renderer = RENDERERS[currentQuestion.type] || RENDERERS._fallback;
-    renderer(currentQuestion, interactionRoot, onAnswerChange, existing);
-
     var submitBtn = $("#btn-submit");
     var nextBtn = $("#btn-next");
+    submitBtn.disabled = true; // default until the renderer reports a ready answer
+
+    var renderer = RENDERERS[currentQuestion.type] || RENDERERS._fallback;
+    renderer(currentQuestion, interactionRoot, onAnswerChange, existing);
 
     if (existing) {
       lockAndReveal(currentQuestion, existing.answer, existing.correct, false);
@@ -323,7 +324,6 @@
       nextBtn.hidden = false;
     } else {
       submitBtn.hidden = false;
-      submitBtn.disabled = true;
       nextBtn.hidden = true;
     }
 
