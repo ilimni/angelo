@@ -226,7 +226,7 @@ main {
 .card__subtitle { color: var(--text-muted); margin-bottom: 22px; }
 
 /* ---------------- Welcome / hero ---------------- */
-#screen-welcome { display: flex; min-height: 78vh; align-items: center; justify-content: center; }
+#screen-welcome.is-active { display: flex; min-height: 78vh; align-items: center; justify-content: center; }
 .hero-card {
   background: linear-gradient(160deg, var(--surface) 0%, var(--surface-2) 100%);
   border: 1px solid var(--border);
