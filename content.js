@@ -473,7 +473,7 @@ const missionContent = [
     mission: 1,
     section: "Binary",
     title: "Everything Becomes Binary",
-    type: "sorting",
+    type: "true-false",
     difficulty: "medium",
     question: "True or False: A photo, a song, and a video are all eventually stored as combinations of 0s and 1s inside a computer.",
     options: ["True", "False"],
