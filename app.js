@@ -1032,6 +1032,111 @@
   });
 
   /* ============================================================
+     15b. EXPORT — human-readable report of a tester's answers
+     ============================================================ */
+  function formatAnswerForExport(q, answer) {
+    if (answer == null) return "(no answer)";
+    switch (q.type) {
+      case "ordering":
+        return Array.isArray(answer) ? answer.join(" → ") : String(answer);
+      case "hotspot":
+        return Array.isArray(answer) && answer.length ? answer.join(", ") : "(none selected)";
+      case "matching": {
+        var keys = Object.keys(q.options[0]);
+        var keyA = keys[0];
+        return q.options.map(function (opt, idx) {
+          return opt[keyA] + " → " + (answer[idx] || "(unanswered)");
+        }).join("; ");
+      }
+      case "sorting":
+        return Object.keys(answer || {}).map(function (item) {
+          return item + ": " + (answer[item] || "(unplaced)");
+        }).join("; ");
+      case "reflection":
+        return String(answer);
+      default:
+        return String(answer);
+    }
+  }
+
+  function formatCorrectAnswerForExport(q) {
+    switch (q.type) {
+      case "ordering":
+        return q.correctAnswer.join(" → ");
+      case "hotspot":
+        return q.correctAnswer.join(", ");
+      case "matching": {
+        var keys = Object.keys(q.options[0]);
+        var keyA = keys[0], keyB = keys[1];
+        return q.options.map(function (opt) { return opt[keyA] + " → " + opt[keyB]; }).join("; ");
+      }
+      case "sorting":
+        return Object.keys(q.correctAnswer).map(function (cat) {
+          return cat + ": " + q.correctAnswer[cat].join(", ");
+        }).join(" | ");
+      default:
+        return String(q.correctAnswer);
+    }
+  }
+
+  function buildExportReport() {
+    var lines = [];
+    lines.push("ILIMNI — Review Results");
+    lines.push("Student: " + (state.studentName || "(no name entered)"));
+    lines.push("Total XP: " + state.xp);
+    lines.push("Exported: " + new Date().toLocaleString());
+    lines.push("");
+
+    MISSIONS.forEach(function (m) {
+      var stats = missionStats(m);
+      lines.push("========================================");
+      lines.push("MISSION " + m + " — " + stats.completedCount + "/" + stats.total + " attempted, " + stats.correctCount + " correct");
+      lines.push("========================================");
+
+      itemsForMission(m).forEach(function (q) {
+        var rec = state.completedQuestions[q.id];
+        lines.push("");
+        lines.push("[" + q.section + "] " + q.title + " (" + typeLabel(q.type) + ")");
+        lines.push("Q: " + q.question);
+
+        if (!rec) {
+          lines.push("-> Not attempted");
+          return;
+        }
+        if (rec.skipped) {
+          lines.push("-> Skipped (no XP earned)");
+          return;
+        }
+
+        lines.push("Tester's answer: " + formatAnswerForExport(q, rec.answer));
+
+        if (q.type === "reflection") {
+          lines.push("Result: Reflection submitted (+" + rec.xp + " XP)");
+        } else {
+          lines.push("Correct answer: " + formatCorrectAnswerForExport(q));
+          lines.push("Result: " + (rec.correct ? "CORRECT" : "INCORRECT") + " (+" + rec.xp + " XP)");
+        }
+      });
+      lines.push("");
+    });
+
+    return lines.join("\n");
+  }
+
+  $("#btn-export").addEventListener("click", function () {
+    var report = buildExportReport();
+    var blob = new Blob([report], { type: "text/plain;charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var namePart = (state.studentName || "ilimni").trim().replace(/\s+/g, "_").replace(/[^\w-]/g, "");
+    var a = el("a", { href: url, download: namePart + "_results.txt" });
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast("Results exported");
+  });
+
+  /* ============================================================
      15. INIT
      ============================================================ */
   function init() {

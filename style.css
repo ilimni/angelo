@@ -751,6 +751,7 @@ main {
 .feedback-banner--neutral { background: var(--brand-light); color: var(--brand-dark); }
 
 .explain-wrap { margin-top: 20px; display: flex; flex-direction: column; gap: 12px; animation: fadeSlideIn .35s var(--ease); }
+.explain-wrap[hidden] { display: none; }
 .explain-block {
   background: var(--surface-2);
   border: 1px solid var(--border);
