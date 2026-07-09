@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ILIMNI — Computer Appreciation Review</title>
+<meta name="description" content="An interactive review experience for Computer Appreciation — Missions 1 & 2.">
+
+<style type="text/css">@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.2.8/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.2.8/greek/wght/normal.woff2);unicode-range:U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.2.8/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.2.8/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.2.8/latin-ext/wght/normal.woff2);unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.2.8/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:400;src:url(/cf-fonts/v/inter/5.2.8/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.2.8/greek/wght/normal.woff2);unicode-range:U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.2.8/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.2.8/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.2.8/latin-ext/wght/normal.woff2);unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.2.8/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.2.8/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:500;src:url(/cf-fonts/v/inter/5.2.8/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.2.8/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.2.8/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.2.8/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.2.8/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.2.8/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.2.8/latin-ext/wght/normal.woff2);unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:600;src:url(/cf-fonts/v/inter/5.2.8/greek/wght/normal.woff2);unicode-range:U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.2.8/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.2.8/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.2.8/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.2.8/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.2.8/greek/wght/normal.woff2);unicode-range:U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.2.8/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:700;src:url(/cf-fonts/v/inter/5.2.8/latin-ext/wght/normal.woff2);unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:800;src:url(/cf-fonts/v/inter/5.2.8/cyrillic/wght/normal.woff2);unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:800;src:url(/cf-fonts/v/inter/5.2.8/latin/wght/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:800;src:url(/cf-fonts/v/inter/5.2.8/vietnamese/wght/normal.woff2);unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:800;src:url(/cf-fonts/v/inter/5.2.8/cyrillic-ext/wght/normal.woff2);unicode-range:U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:800;src:url(/cf-fonts/v/inter/5.2.8/greek-ext/wght/normal.woff2);unicode-range:U+1F00-1FFF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:800;src:url(/cf-fonts/v/inter/5.2.8/greek/wght/normal.woff2);unicode-range:U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-03FF;font-display:swap;}@font-face {font-family:Inter;font-style:normal;font-weight:800;src:url(/cf-fonts/v/inter/5.2.8/latin-ext/wght/normal.woff2);unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Poppins;font-style:normal;font-weight:600;src:url(/cf-fonts/s/poppins/5.2.7/devanagari/600/normal.woff2);unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09;font-display:swap;}@font-face {font-family:Poppins;font-style:normal;font-weight:600;src:url(/cf-fonts/s/poppins/5.2.7/latin-ext/600/normal.woff2);unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Poppins;font-style:normal;font-weight:600;src:url(/cf-fonts/s/poppins/5.2.7/latin/600/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Poppins;font-style:normal;font-weight:700;src:url(/cf-fonts/s/poppins/5.2.7/latin/700/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Poppins;font-style:normal;font-weight:700;src:url(/cf-fonts/s/poppins/5.2.7/latin-ext/700/normal.woff2);unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Poppins;font-style:normal;font-weight:700;src:url(/cf-fonts/s/poppins/5.2.7/devanagari/700/normal.woff2);unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09;font-display:swap;}@font-face {font-family:Poppins;font-style:normal;font-weight:800;src:url(/cf-fonts/s/poppins/5.2.7/latin-ext/800/normal.woff2);unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;font-display:swap;}@font-face {font-family:Poppins;font-style:normal;font-weight:800;src:url(/cf-fonts/s/poppins/5.2.7/latin/800/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:Poppins;font-style:normal;font-weight:800;src:url(/cf-fonts/s/poppins/5.2.7/devanagari/800/normal.woff2);unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09;font-display:swap;}</style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="app-header" id="app-header" hidden>
+  <div class="app-header__inner">
+    <div class="app-header__brand">
+      <span class="app-header__logo" aria-hidden="true">🖥️</span>
+      <span class="app-header__title">ILIMNI</span>
+    </div>
+
+    <nav class="mission-tabs" id="mission-tabs" aria-label="Mission navigation"></nav>
+
+    <div class="app-header__meta">
+      <span class="xp-pill" id="xp-counter" aria-live="polite">
+        <span aria-hidden="true">⚡</span> <span id="xp-counter-value">0</span> XP
+      </span>
+      <span class="student-pill" id="student-pill" aria-live="polite"></span>
+      <button class="icon-btn" id="theme-toggle" type="button" aria-pressed="false" aria-label="Toggle dark mode">
+        <span aria-hidden="true">🌙</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- WELCOME -->
+  <section class="screen" id="screen-welcome">
+    <div class="hero-card">
+      <div class="hero-card__badge">Computer Appreciation Review</div>
+      <h1 class="hero-card__title">Welcome to <span class="accent">ILIMNI</span></h1>
+      <p class="hero-card__subtitle">
+        A friendly, game-like review of everything you've already learned about computers —
+        input, processing, storage, output, binary, hardware &amp; software, and finding your way around Windows.
+      </p>
+      <ul class="hero-card__points">
+        <li><span aria-hidden="true">🎯</span> Bite-sized questions, not a scary exam</li>
+        <li><span aria-hidden="true">💡</span> Hints, explanations and fun facts on every item</li>
+        <li><span aria-hidden="true">🏆</span> Earn XP, badges, and a certificate at the end</li>
+      </ul>
+      <button class="btn btn--primary btn--lg" id="btn-start" type="button">Get Started</button>
+    </div>
+  </section>
+
+  <!-- NAME ENTRY -->
+  <section class="screen" id="screen-name">
+    <div class="card card--form">
+      <h2 class="card__title">What's your name?</h2>
+      <p class="card__subtitle">We'll use this to track your progress and print it on your certificate.</p>
+      <form id="form-name" novalidate>
+        <label class="field-label" for="input-name">Your name</label>
+        <input class="text-input" id="input-name" name="name" type="text" placeholder="e.g. Angelo" autocomplete="name" maxlength="60" required>
+        <p class="field-error" id="name-error" role="alert" hidden>Please type your name to continue.</p>
+        <button class="btn btn--primary btn--lg" id="btn-name-continue" type="submit">Continue</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- MISSION SELECT -->
+  <section class="screen" id="screen-missions">
+    <div class="screen-head">
+      <h2 class="screen-head__title" id="missions-greeting">Choose a mission</h2>
+      <p class="screen-head__subtitle">Pick up where you left off, or start a fresh mission.</p>
+    </div>
+    <div class="mission-grid" id="mission-list"></div>
+
+    <div class="card card--badges" id="badges-card" hidden>
+      <h3 class="card__title card__title--sm">Badges earned</h3>
+      <div class="badge-row" id="badge-row"></div>
+    </div>
+  </section>
+
+  <!-- QUESTION -->
+  <section class="screen" id="screen-question">
+    <div class="progress-track" role="progressbar" aria-labelledby="q-progress-text" aria-valuemin="0" aria-valuemax="100" id="q-progress-track">
+      <div class="progress-track__fill" id="q-progress-bar"></div>
+    </div>
+    <div class="question-topline">
+      <span class="pill pill--muted" id="q-mission-label"></span>
+      <span class="pill pill--muted" id="q-section-label"></span>
+      <span class="question-topline__count" id="q-progress-text"></span>
+    </div>
+
+    <article class="card card--question" id="q-card">
+      <div class="card__eyebrow" id="q-type-label"></div>
+      <h2 class="card__title" id="q-title"></h2>
+      <p class="card__question" id="q-question"></p>
+
+      <div id="q-interaction" class="interaction" aria-live="polite"></div>
+
+      <div class="hint-wrap" id="q-hint-wrap" hidden>
+        <button class="btn btn--ghost btn--sm" id="btn-hint" type="button" aria-expanded="false">
+          <span aria-hidden="true">💭</span> Show hint
+        </button>
+        <p class="hint-text" id="hint-text" hidden></p>
+      </div>
+
+      <div class="feedback-banner" id="q-feedback" hidden role="status"></div>
+
+      <div class="explain-wrap" id="q-explanation-wrap" hidden>
+        <div class="explain-block">
+          <h3 class="explain-block__label"><span aria-hidden="true">📘</span> Explanation</h3>
+          <p id="explain-text"></p>
+        </div>
+        <div class="explain-block explain-block--fact" id="funfact-block" hidden>
+          <h3 class="explain-block__label"><span aria-hidden="true">✨</span> Fun fact</h3>
+          <p id="funfact-text"></p>
+        </div>
+        <div class="explain-block explain-block--world" id="realworld-block" hidden>
+          <h3 class="explain-block__label"><span aria-hidden="true">🌍</span> Real-world example</h3>
+          <p id="realworld-text"></p>
+        </div>
+        <div class="xp-earned" id="xp-earned-banner"></div>
+      </div>
+    </article>
+
+    <div class="question-nav">
+      <button class="btn btn--ghost" id="btn-prev" type="button">← Previous</button>
+      <div class="question-nav__center">
+        <button class="btn btn--ghost" id="btn-save-exit" type="button">Save &amp; exit</button>
+        <button class="btn btn--ghost" id="btn-skip" type="button">Skip</button>
+      </div>
+      <button class="btn btn--primary" id="btn-submit" type="button">Submit</button>
+      <button class="btn btn--primary" id="btn-next" type="button" hidden>Next →</button>
+    </div>
+  </section>
+
+  <!-- MISSION SUMMARY -->
+  <section class="screen" id="screen-summary">
+    <div class="card card--summary">
+      <div class="summary-confetti" id="summary-confetti" aria-hidden="true"></div>
+      <div class="card__eyebrow">Mission complete</div>
+      <h2 class="card__title" id="summary-mission-title">Mission Complete!</h2>
+
+      <div class="summary-stats">
+        <div class="summary-stat">
+          <span class="summary-stat__value" id="summary-xp">0</span>
+          <span class="summary-stat__label">XP earned</span>
+        </div>
+        <div class="summary-stat">
+          <span class="summary-stat__value" id="summary-completion">0%</span>
+          <span class="summary-stat__label">Completion</span>
+        </div>
+        <div class="summary-stat">
+          <span class="summary-stat__value" id="summary-accuracy">0%</span>
+          <span class="summary-stat__label">Accuracy</span>
+        </div>
+      </div>
+
+      <div class="summary-reflections" id="summary-reflections-wrap" hidden>
+        <h3 class="card__title card__title--sm">Your reflections</h3>
+        <div id="summary-reflections"></div>
+      </div>
+
+      <div class="summary-actions">
+        <button class="btn btn--ghost" id="btn-back-missions" type="button">Back to missions</button>
+        <button class="btn btn--primary btn--lg" id="btn-continue-next" type="button">Continue to next mission →</button>
+        <button class="btn btn--primary btn--lg" id="btn-view-certificate" type="button" hidden>View certificate 🎓</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATE -->
+  <section class="screen" id="screen-certificate">
+    <div class="certificate" id="certificate">
+      <div class="certificate__ribbon" aria-hidden="true">🏅</div>
+      <p class="certificate__eyebrow">Certificate of Completion</p>
+      <h2 class="certificate__title">ILIMNI Computer Appreciation Review</h2>
+      <p class="certificate__awarded-to">This certifies that</p>
+      <p class="certificate__name" id="cert-name">Student Name</p>
+      <p class="certificate__body">has successfully completed all missions, earning</p>
+      <p class="certificate__xp"><span id="cert-xp">0</span> XP</p>
+      <div class="certificate__badges" id="cert-badges"></div>
+      <p class="certificate__date" id="cert-date"></p>
+    </div>
+    <div class="certificate-actions">
+      <button class="btn btn--ghost" id="btn-back-missions-from-cert" type="button">Back to missions</button>
+      <button class="btn btn--primary" id="btn-print" type="button">Print certificate</button>
+      <button class="btn btn--ghost" id="btn-restart" type="button">Restart progress</button>
+    </div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>var module = { exports: {} };</script>
+<script src="content.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
