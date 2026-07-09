@@ -160,8 +160,13 @@ button { font-family: inherit; }
 .app-header__meta {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
   white-space: nowrap;
+}
+#btn-sync-account { white-space: normal; }
+@media (max-width: 480px) {
+  #btn-sync-account { font-size: .78rem; padding: 6px 10px; }
 }
 .xp-pill, .student-pill {
   display: inline-flex;

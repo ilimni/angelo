@@ -1081,7 +1081,11 @@
       totalXp: state.xp,
       completionPct: completionPct,
       accuracyPct: accuracyPct,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      // Full per-question breakdown, same as manual Export — this is what
+      // makes it possible to reconstruct progress if local/cloud state is
+      // ever lost, without depending on someone remembering to click Export.
+      report: buildExportReport()
     });
 
     if (GAMIFICATION.confettiOnMissionComplete) fireConfetti();
