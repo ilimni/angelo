@@ -919,3 +919,32 @@ main {
   main { padding: 0; }
   body { background: #fff; }
 }
+
+
+/* ============================================================
+   AUTH SCREEN
+   ============================================================ */
+.auth-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.auth-tab {
+  flex: 1;
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: .88rem;
+  cursor: pointer;
+  transition: all .2s var(--ease);
+}
+.auth-tab.is-active {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+}
+#form-auth .text-input { margin-bottom: 14px; }
+#form-auth .btn { width: 100%; margin-top: 4px; }

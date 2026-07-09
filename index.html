@@ -27,6 +27,9 @@
         <span aria-hidden="true">⚡</span> <span id="xp-counter-value">0</span> XP
       </span>
       <span class="student-pill" id="student-pill" aria-live="polite"></span>
+      <button class="icon-btn" id="btn-signout" type="button" aria-label="Sign out" title="Sign out" hidden>
+        <span aria-hidden="true">🚪</span>
+      </button>
       <button class="icon-btn" id="btn-export" type="button" aria-label="Export results" title="Export results">
         <span aria-hidden="true">📤</span>
       </button>
@@ -54,6 +57,32 @@
         <li><span aria-hidden="true">🏆</span> Earn XP, badges, and a certificate at the end</li>
       </ul>
       <button class="btn btn--primary btn--lg" id="btn-start" type="button">Get Started</button>
+    </div>
+  </section>
+
+  <!-- AUTH -->
+  <section class="screen" id="screen-auth">
+    <div class="card card--form">
+      <h2 class="card__title" id="auth-title">Sign up</h2>
+      <p class="card__subtitle">Sign in so your progress follows you across devices &mdash; or continue as a guest.</p>
+
+      <div class="auth-tabs" id="auth-tabs">
+        <button class="auth-tab is-active" id="auth-tab-signup" type="button">Sign up</button>
+        <button class="auth-tab" id="auth-tab-login" type="button">Log in</button>
+      </div>
+
+      <form id="form-auth" novalidate>
+        <label class="field-label" for="input-email">Email</label>
+        <input class="text-input" id="input-email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+
+        <label class="field-label" for="input-password">Password</label>
+        <input class="text-input" id="input-password" name="password" type="password" placeholder="At least 6 characters" autocomplete="new-password" minlength="6" required>
+
+        <p class="field-error" id="auth-error" role="alert" hidden></p>
+        <button class="btn btn--primary btn--lg" id="btn-auth-submit" type="submit">Create account</button>
+      </form>
+
+      <button class="btn btn--ghost" id="btn-auth-guest" type="button" style="margin-top:14px;width:100%;">Continue as guest</button>
     </div>
   </section>
 
@@ -199,6 +228,10 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase-init.js"></script>
 <script>var module = { exports: {} };</script>
 <script src="content.js"></script>
 <script src="app.js"></script>

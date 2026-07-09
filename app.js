@@ -90,6 +90,44 @@
 
   function saveState() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    syncStateToCloud();
+  }
+
+  /* ============================================================
+     1b. CLOUD SYNC — mirrors state to Firestore when signed in.
+     Guests (no Firebase user) stay localStorage-only. The Sheets
+     webhook above is unrelated and keeps working independently.
+     ============================================================ */
+  var cloudSyncTimer = null;
+  function syncStateToCloud() {
+    if (!window.firebaseAuth || !window.firebaseDb) return;
+    var user = firebaseAuth.currentUser;
+    if (!user) return;
+    clearTimeout(cloudSyncTimer);
+    cloudSyncTimer = setTimeout(function () {
+      firebaseDb.collection("students").doc(user.uid).set(state).catch(function (err) {
+        console.warn("ILIMNI: could not sync progress to Firestore.", err);
+      });
+    }, 600);
+  }
+
+  function loadStateFromCloud(uid) {
+    return firebaseDb.collection("students").doc(uid).get().then(function (doc) {
+      if (doc.exists) {
+        var cloud = doc.data();
+        state = Object.assign(defaultState(), cloud);
+        state.currentIndexByMission = cloud.currentIndexByMission || {};
+        state.completedQuestions = cloud.completedQuestions || {};
+        state.reflectionAnswers = cloud.reflectionAnswers || {};
+        state.missionProgress = cloud.missionProgress || {};
+        state.earnedBadges = cloud.earnedBadges || [];
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } else {
+        firebaseDb.collection("students").doc(uid).set(state).catch(function (err) {
+          console.warn("ILIMNI: could not create cloud progress doc.", err);
+        });
+      }
+    });
   }
 
   var state = loadState();
@@ -145,13 +183,13 @@
   /* ============================================================
      3. SCREEN NAVIGATION
      ============================================================ */
-  var SCREENS = ["welcome", "name", "missions", "question", "summary", "certificate"];
+  var SCREENS = ["welcome", "auth", "name", "missions", "question", "summary", "certificate"];
   function showScreen(name) {
     SCREENS.forEach(function (s) {
       var node = $("#screen-" + s);
       if (node) node.classList.toggle("is-active", s === name);
     });
-    $("#app-header").hidden = (name === "welcome" || name === "name");
+    $("#app-header").hidden = (name === "welcome" || name === "auth" || name === "name");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -161,6 +199,8 @@
   function renderHeader() {
     $("#xp-counter-value").textContent = state.xp;
     $("#student-pill").textContent = state.studentName ? ("👤 " + state.studentName) : "";
+    var signoutBtn = $("#btn-signout");
+    if (signoutBtn) signoutBtn.hidden = !(window.firebaseAuth && firebaseAuth.currentUser);
     var tabs = $("#mission-tabs");
     tabs.innerHTML = "";
     MISSIONS.forEach(function (m) {
@@ -191,10 +231,83 @@
      5. WELCOME → NAME
      ============================================================ */
   $("#btn-start").addEventListener("click", function () {
-    showScreen("name");
-    $("#input-name").focus();
-    if (state.studentName) $("#input-name").value = state.studentName;
+    showScreen("auth");
   });
+
+  /* ============================================================
+     5b. AUTH — sign up / log in / guest
+     ============================================================ */
+  var authMode = "signup";
+  function setAuthMode(mode) {
+    authMode = mode;
+    $("#auth-tab-signup").classList.toggle("is-active", mode === "signup");
+    $("#auth-tab-login").classList.toggle("is-active", mode === "login");
+    $("#auth-title").textContent = mode === "signup" ? "Sign up" : "Log in";
+    $("#btn-auth-submit").textContent = mode === "signup" ? "Create account" : "Log in";
+    $("#auth-error").hidden = true;
+  }
+  $("#auth-tab-signup").addEventListener("click", function () { setAuthMode("signup"); });
+  $("#auth-tab-login").addEventListener("click", function () { setAuthMode("login"); });
+
+  function authErrorMessage(err) {
+    var code = (err && err.code) || "";
+    if (code === "auth/email-already-in-use") return "That email already has an account — try Log in instead.";
+    if (code === "auth/weak-password") return "Password should be at least 6 characters.";
+    if (code === "auth/invalid-email") return "That email address doesn't look right.";
+    if (code === "auth/wrong-password" || code === "auth/user-not-found" || code === "auth/invalid-credential") return "Email or password is incorrect.";
+    return (err && err.message) ? err.message : "Something went wrong — please try again.";
+  }
+
+  $("#form-auth").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var email = $("#input-email").value.trim();
+    var password = $("#input-password").value;
+    var errEl = $("#auth-error");
+    errEl.hidden = true;
+    if (!window.firebaseAuth) {
+      errEl.textContent = "Sign-in isn't available right now — try Continue as guest.";
+      errEl.hidden = false;
+      return;
+    }
+    var btn = $("#btn-auth-submit");
+    btn.disabled = true;
+    var action = authMode === "signup"
+      ? firebaseAuth.createUserWithEmailAndPassword(email, password)
+      : firebaseAuth.signInWithEmailAndPassword(email, password);
+    action.then(function (cred) {
+      return loadStateFromCloud(cred.user.uid);
+    }).then(function () {
+      btn.disabled = false;
+      applyTheme();
+      renderHeader();
+      if (state.studentName) goToMissionSelect();
+      else showScreen("name");
+    }).catch(function (err) {
+      btn.disabled = false;
+      errEl.textContent = authErrorMessage(err);
+      errEl.hidden = false;
+    });
+  });
+
+  $("#btn-auth-guest").addEventListener("click", function () {
+    if (state.studentName) goToMissionSelect();
+    else showScreen("name");
+  });
+
+  var signoutBtnEl = document.getElementById("btn-signout");
+  if (signoutBtnEl) {
+    signoutBtnEl.addEventListener("click", function () {
+      if (!window.firebaseAuth) return;
+      firebaseAuth.signOut().then(function () {
+        state = defaultState();
+        localStorage.removeItem(STORAGE_KEY);
+        applyTheme();
+        renderHeader();
+        showScreen("welcome");
+        toast("Signed out");
+      });
+    });
+  }
 
   $("#form-name").addEventListener("submit", function (e) {
     e.preventDefault();
@@ -1065,7 +1178,11 @@
   $("#btn-restart").addEventListener("click", function () {
     if (!confirm("This clears all progress, XP, and reflections. Continue?")) return;
     localStorage.removeItem(STORAGE_KEY);
+    var restartUser = window.firebaseAuth && firebaseAuth.currentUser;
     state = defaultState();
+    if (restartUser && window.firebaseDb) {
+      firebaseDb.collection("students").doc(restartUser.uid).set(state).catch(function () {});
+    }
     applyTheme();
     renderHeader();
     showScreen("welcome");
@@ -1191,7 +1308,21 @@
   function init() {
     applyTheme();
     renderHeader();
-    if (state.studentName) {
+    if (window.firebaseAuth) {
+      firebaseAuth.onAuthStateChanged(function (user) {
+        if (user) {
+          loadStateFromCloud(user.uid).then(function () {
+            renderHeader();
+            if (state.studentName) goToMissionSelect();
+            else showScreen("name");
+          });
+        } else {
+          renderHeader();
+          if (state.studentName) goToMissionSelect();
+          else showScreen("welcome");
+        }
+      });
+    } else if (state.studentName) {
       goToMissionSelect();
     } else {
       showScreen("welcome");
