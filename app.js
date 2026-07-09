@@ -24,6 +24,35 @@
   }
 
   /* ============================================================
+     0b. RESULTS SYNC — sends results to a Google Sheet via a
+     Google Apps Script Web App endpoint. See README-results-sync.md
+     for setup instructions. Leave the placeholder in place to
+     disable syncing (the app works fine without it).
+     ============================================================ */
+  var RESULTS_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzoJWKqK5i-2Ye8rG4FXMCBW1eCam3HZuK2y85xUe_MZIVLUBqXXQ9mq6K7p1mZf1Q/exec";
+
+  function resultsSyncEnabled() {
+    return !!RESULTS_WEBHOOK_URL && RESULTS_WEBHOOK_URL.indexOf("PASTE_") !== 0;
+  }
+
+  function sendResultsToSheet(payload) {
+    if (!resultsSyncEnabled()) return;
+    if (typeof fetch !== "function") return;
+    fetch(RESULTS_WEBHOOK_URL, {
+      method: "POST",
+      mode: "no-cors",
+      // text/plain avoids a CORS preflight against Apps Script, which
+      // doesn't handle OPTIONS requests. The script parses JSON.parse
+      // on the body regardless of this header.
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    }).catch(function (err) {
+      // Non-fatal: local progress (localStorage) is unaffected.
+      console.warn("ILIMNI: could not sync results to Google Sheet.", err);
+    });
+  }
+
+  /* ============================================================
      1. STORAGE
      ============================================================ */
   var STORAGE_KEY = "ilimni_progress_v1";
@@ -931,6 +960,17 @@
     $("#btn-continue-next").hidden = !(!isLastMission);
     $("#btn-view-certificate").hidden = !(isLastMission && allMissionsDone);
 
+    sendResultsToSheet({
+      event: "mission_complete",
+      studentName: state.studentName || "",
+      mission: m,
+      missionXp: missionXp,
+      totalXp: state.xp,
+      completionPct: completionPct,
+      accuracyPct: accuracyPct,
+      timestamp: new Date().toISOString()
+    });
+
     if (GAMIFICATION.confettiOnMissionComplete) fireConfetti();
     renderHeader();
     showScreen("summary");
@@ -1133,7 +1173,16 @@
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    toast("Results exported");
+
+    sendResultsToSheet({
+      event: "export",
+      studentName: state.studentName || "",
+      totalXp: state.xp,
+      report: report,
+      timestamp: new Date().toISOString()
+    });
+
+    toast(resultsSyncEnabled() ? "Results exported & saved" : "Results exported");
   });
 
   /* ============================================================
