@@ -1095,10 +1095,13 @@
       completionPct: completionPct,
       accuracyPct: accuracyPct,
       timestamp: new Date().toISOString(),
-      // Full per-question breakdown, same as manual Export — this is what
-      // makes it possible to reconstruct progress if local/cloud state is
-      // ever lost, without depending on someone remembering to click Export.
-      report: buildExportReport()
+      // Per-question breakdown for THIS mission only (not the full cumulative
+      // history — that was re-sending every prior mission's report on every
+      // completion, needlessly bloating the payload and risking Google
+      // Sheets' 50,000-character-per-cell limit as more missions get added).
+      // This is what makes it possible to reconstruct progress if local/cloud
+      // state is ever lost, without depending on someone clicking Export.
+      report: buildExportReport(m)
     });
 
     if (GAMIFICATION.confettiOnMissionComplete) fireConfetti();
@@ -1253,7 +1256,7 @@
     }
   }
 
-  function buildExportReport() {
+  function buildExportReport(missionFilter) {
     var lines = [];
     lines.push("ILIMNI — Review Results");
     lines.push("Student: " + (state.studentName || "(no name entered)"));
@@ -1261,7 +1264,9 @@
     lines.push("Exported: " + new Date().toLocaleString());
     lines.push("");
 
-    MISSIONS.forEach(function (m) {
+    var missionsToInclude = missionFilter ? [missionFilter] : MISSIONS;
+
+    missionsToInclude.forEach(function (m) {
       var stats = missionStats(m);
       lines.push("========================================");
       lines.push("MISSION " + m + " — " + stats.completedCount + "/" + stats.total + " attempted, " + stats.correctCount + " correct");
