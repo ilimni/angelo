@@ -201,6 +201,11 @@
     $("#student-pill").textContent = state.studentName ? ("👤 " + state.studentName) : "";
     var signoutBtn = $("#btn-signout");
     if (signoutBtn) signoutBtn.hidden = !(window.firebaseAuth && firebaseAuth.currentUser);
+    var syncBtn = $("#btn-sync-account");
+    if (syncBtn) {
+      var isSignedIn = !!(window.firebaseAuth && firebaseAuth.currentUser);
+      syncBtn.hidden = isSignedIn || !state.studentName;
+    }
     var tabs = $("#mission-tabs");
     tabs.innerHTML = "";
     MISSIONS.forEach(function (m) {
@@ -233,6 +238,14 @@
   $("#btn-start").addEventListener("click", function () {
     showScreen("auth");
   });
+
+  var syncAccountBtn = $("#btn-sync-account");
+  if (syncAccountBtn) {
+    syncAccountBtn.addEventListener("click", function () {
+      setAuthMode("signup");
+      showScreen("auth");
+    });
+  }
 
   /* ============================================================
      5b. AUTH — sign up / log in / guest
