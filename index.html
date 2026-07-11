@@ -77,7 +77,13 @@
         <input class="text-input" id="input-email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
 
         <label class="field-label" for="input-password">Password</label>
-        <input class="text-input" id="input-password" name="password" type="password" placeholder="At least 6 characters" autocomplete="new-password" minlength="6" required>
+        <div class="password-field">
+          <input class="text-input" id="input-password" name="password" type="password" placeholder="At least 6 characters" autocomplete="new-password" minlength="6" required>
+          <button class="password-toggle" id="btn-toggle-password" type="button" aria-label="Show password" aria-pressed="false">
+            <span aria-hidden="true">👁</span>
+          </button>
+        </div>
+        <button class="auth-link" id="btn-forgot-password" type="button">Forgot Password?</button>
 
         <p class="field-error" id="auth-error" role="alert" hidden></p>
         <button class="btn btn--primary btn--lg" id="btn-auth-submit" type="submit">Create account</button>
@@ -86,6 +92,31 @@
       <button class="btn btn--ghost" id="btn-auth-guest" type="button" style="margin-top:14px;width:100%;">Continue as guest</button>
     </div>
   </section>
+
+  <!-- PASSWORD RESET -->
+  <div class="modal-backdrop" id="password-reset-modal" hidden>
+    <section class="card password-reset-modal" role="dialog" aria-modal="true" aria-labelledby="password-reset-title" aria-describedby="password-reset-description">
+      <button class="modal-close" id="btn-close-password-reset" type="button" aria-label="Close password reset">×</button>
+      <div id="password-reset-form-wrap">
+        <h2 class="card__title" id="password-reset-title">Reset your password</h2>
+        <p class="card__subtitle" id="password-reset-description">Enter your email and we'll send you a link to reset your password.</p>
+        <form id="form-password-reset" novalidate>
+          <label class="field-label" for="input-password-reset-email">Email</label>
+          <input class="text-input" id="input-password-reset-email" name="reset-email" type="email" placeholder="you@example.com" autocomplete="email" required>
+          <p class="field-error" id="password-reset-error" role="alert" hidden></p>
+          <button class="btn btn--primary btn--lg" id="btn-send-password-reset" type="submit">Send reset email</button>
+        </form>
+      </div>
+      <div id="password-reset-success" role="status" aria-live="polite" hidden>
+        <h2 class="card__title" tabindex="-1" id="password-reset-success-title">✓ Password reset email sent.</h2>
+        <p class="card__subtitle">Please check your inbox.</p>
+        <div class="password-reset-actions">
+          <button class="btn btn--ghost" id="btn-resend-password-reset" type="button">Resend Email</button>
+          <button class="btn btn--primary" id="btn-back-to-login" type="button">Back to Login</button>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <!-- NAME ENTRY -->
   <section class="screen" id="screen-name">

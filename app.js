@@ -251,12 +251,32 @@
      5b. AUTH — sign up / log in / guest
      ============================================================ */
   var authMode = "signup";
+  var authRequestInProgress = false;
+  var resetRequestInProgress = false;
+  var resetEmail = "";
+  var passwordResetOpener = null;
+
+  function setButtonLoading(button, loading, idleLabel, loadingLabel) {
+    button.disabled = loading;
+    button.textContent = loading ? loadingLabel : idleLabel;
+  }
+
+  function setAuthRequestLoading(loading, mode) {
+    setButtonLoading($("#btn-auth-submit"), loading, mode === "signup" ? "Create account" : "Log in", mode === "signup" ? "Creating account..." : "Signing in...");
+    $("#auth-tab-signup").disabled = loading;
+    $("#auth-tab-login").disabled = loading;
+    $("#btn-auth-guest").disabled = loading;
+    $("#btn-forgot-password").disabled = loading;
+  }
+
   function setAuthMode(mode) {
     authMode = mode;
     $("#auth-tab-signup").classList.toggle("is-active", mode === "signup");
     $("#auth-tab-login").classList.toggle("is-active", mode === "login");
     $("#auth-title").textContent = mode === "signup" ? "Sign up" : "Log in";
-    $("#btn-auth-submit").textContent = mode === "signup" ? "Create account" : "Log in";
+    setAuthRequestLoading(false, mode);
+    $("#input-password").setAttribute("autocomplete", mode === "signup" ? "new-password" : "current-password");
+    $("#btn-forgot-password").hidden = mode !== "login";
     $("#auth-error").hidden = true;
   }
   $("#auth-tab-signup").addEventListener("click", function () { setAuthMode("signup"); });
@@ -265,14 +285,17 @@
   function authErrorMessage(err) {
     var code = (err && err.code) || "";
     if (code === "auth/email-already-in-use") return "That email already has an account — try Log in instead.";
-    if (code === "auth/weak-password") return "Password should be at least 6 characters.";
+    if (code === "auth/weak-password") return "Choose a stronger password with at least 6 characters.";
     if (code === "auth/invalid-email") return "That email address doesn't look right.";
     if (code === "auth/wrong-password" || code === "auth/user-not-found" || code === "auth/invalid-credential") return "Email or password is incorrect.";
-    return (err && err.message) ? err.message : "Something went wrong — please try again.";
+    if (code === "auth/too-many-requests") return "Too many attempts. Please wait a moment, then try again.";
+    if (code === "auth/network-request-failed") return "We couldn't connect. Check your internet connection and try again.";
+    return "Something went wrong. Please try again.";
   }
 
   $("#form-auth").addEventListener("submit", function (e) {
     e.preventDefault();
+    if (authRequestInProgress) return;
     var email = $("#input-email").value.trim();
     var password = $("#input-password").value;
     var errEl = $("#auth-error");
@@ -282,24 +305,117 @@
       errEl.hidden = false;
       return;
     }
-    var btn = $("#btn-auth-submit");
-    btn.disabled = true;
-    var action = authMode === "signup"
+    authRequestInProgress = true;
+    var requestMode = authMode;
+    setAuthRequestLoading(true, requestMode);
+    var action = requestMode === "signup"
       ? firebaseAuth.createUserWithEmailAndPassword(email, password)
       : firebaseAuth.signInWithEmailAndPassword(email, password);
     action.then(function (cred) {
       return loadStateFromCloud(cred.user.uid);
     }).then(function () {
-      btn.disabled = false;
+      authRequestInProgress = false;
+      setAuthRequestLoading(false, requestMode);
       applyTheme();
       renderHeader();
       if (state.studentName) goToMissionSelect();
       else showScreen("name");
     }).catch(function (err) {
-      btn.disabled = false;
+      authRequestInProgress = false;
+      setAuthRequestLoading(false, requestMode);
       errEl.textContent = authErrorMessage(err);
       errEl.hidden = false;
     });
+  });
+
+  function modalFocusableElements() {
+    return $$("button:not([disabled]), input:not([disabled])", $("#password-reset-modal")).filter(function (node) {
+      return !node.closest("[hidden]");
+    });
+  }
+
+  function openPasswordResetModal() {
+    passwordResetOpener = document.activeElement;
+    resetEmail = $("#input-email").value.trim();
+    $("#input-password-reset-email").value = resetEmail;
+    $("#password-reset-form-wrap").hidden = false;
+    $("#password-reset-success").hidden = true;
+    $("#password-reset-error").hidden = true;
+    $("#password-reset-modal").hidden = false;
+    $("#input-password-reset-email").focus();
+  }
+
+  function closePasswordResetModal() {
+    if (resetRequestInProgress) return;
+    $("#password-reset-modal").hidden = true;
+    if (passwordResetOpener) passwordResetOpener.focus();
+  }
+
+  function showPasswordResetSuccess() {
+    $("#password-reset-form-wrap").hidden = true;
+    $("#password-reset-success").hidden = false;
+    $("#password-reset-success-title").focus();
+  }
+
+  function setResetControlsDisabled(disabled) {
+    $("#btn-close-password-reset").disabled = disabled;
+    $("#btn-send-password-reset").disabled = disabled;
+    $("#btn-resend-password-reset").disabled = disabled;
+    $("#btn-back-to-login").disabled = disabled;
+  }
+
+  function sendPasswordReset(button) {
+    if (resetRequestInProgress) return;
+    var error = $("#password-reset-error");
+    resetEmail = $("#input-password-reset-email").value.trim() || resetEmail;
+    error.hidden = true;
+    if (!window.firebaseAuth) {
+      error.textContent = "Password reset isn't available right now. Please try again later.";
+      error.hidden = false;
+      return;
+    }
+    resetRequestInProgress = true;
+    button = button || $("#btn-send-password-reset");
+    setResetControlsDisabled(true);
+    setButtonLoading(button, true, "", "Sending email...");
+    firebaseAuth.sendPasswordResetEmail(resetEmail).then(function () {
+      resetRequestInProgress = false;
+      setResetControlsDisabled(false);
+      setButtonLoading($("#btn-send-password-reset"), false, "Send reset email", "");
+      setButtonLoading($("#btn-resend-password-reset"), false, "Resend Email", "");
+      showPasswordResetSuccess();
+    }).catch(function (err) {
+      resetRequestInProgress = false;
+      setResetControlsDisabled(false);
+      setButtonLoading($("#btn-send-password-reset"), false, "Send reset email", "");
+      setButtonLoading($("#btn-resend-password-reset"), false, "Resend Email", "");
+      error.textContent = authErrorMessage(err);
+      error.hidden = false;
+    });
+  }
+
+  $("#btn-toggle-password").addEventListener("click", function () {
+    var input = $("#input-password");
+    var showing = input.type === "text";
+    input.type = showing ? "password" : "text";
+    this.setAttribute("aria-pressed", String(!showing));
+    this.setAttribute("aria-label", showing ? "Show password" : "Hide password");
+  });
+  $("#btn-forgot-password").addEventListener("click", openPasswordResetModal);
+  $("#btn-close-password-reset").addEventListener("click", closePasswordResetModal);
+  $("#form-password-reset").addEventListener("submit", function (e) { e.preventDefault(); sendPasswordReset($("#btn-send-password-reset")); });
+  $("#btn-resend-password-reset").addEventListener("click", function () { sendPasswordReset(this); });
+  $("#btn-back-to-login").addEventListener("click", closePasswordResetModal);
+  document.addEventListener("keydown", function (e) {
+    if ($("#password-reset-modal").hidden) return;
+    if (e.key === "Escape") { e.preventDefault(); closePasswordResetModal(); return; }
+    if (e.key !== "Tab") return;
+    var focusable = modalFocusableElements();
+    if (!focusable.length) return;
+    var first = focusable[0];
+    var last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   });
 
   $("#btn-auth-guest").addEventListener("click", function () {
