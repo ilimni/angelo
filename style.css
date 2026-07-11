@@ -160,13 +160,8 @@ button { font-family: inherit; }
 .app-header__meta {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
   gap: 10px;
   white-space: nowrap;
-}
-#btn-sync-account { white-space: normal; }
-@media (max-width: 480px) {
-  #btn-sync-account { font-size: .78rem; padding: 6px 10px; }
 }
 .xp-pill, .student-pill {
   display: inline-flex;
@@ -197,6 +192,13 @@ button { font-family: inherit; }
   transition: transform .2s var(--ease), background .2s;
 }
 .icon-btn:hover { transform: scale(1.08); background: var(--brand-light); }
+
+/* The [hidden] attribute only hides an element via the browser's default
+   stylesheet, which any class that sets `display` (like .icon-btn or .btn
+   above) silently overrides. This makes [hidden] win unconditionally,
+   everywhere in the app, so JS-driven show/hide (renderHeader, etc.)
+   actually works instead of being fought by CSS. */
+[hidden] { display: none !important; }
 
 /* ---------------- Layout / screens ---------------- */
 main {
