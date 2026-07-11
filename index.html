@@ -44,21 +44,60 @@
 <main id="main">
 
   <!-- WELCOME -->
-  <section class="screen" id="screen-welcome">
-    <div class="hero-card">
-      <div class="hero-card__badge">Computer Appreciation Review</div>
-      <h1 class="hero-card__title">Welcome to <span class="accent">ILIMNI</span></h1>
-      <p class="hero-card__subtitle">
-        A friendly, game-like review of everything you've already learned about computers —
-        input, processing, storage, output, binary, hardware &amp; software, and finding your way around Windows.
-      </p>
-      <ul class="hero-card__points">
-        <li><span aria-hidden="true">🎯</span> Bite-sized questions, not a scary exam</li>
-        <li><span aria-hidden="true">💡</span> Hints, explanations and fun facts on every item</li>
-        <li><span aria-hidden="true">🏆</span> Earn XP, badges, and a certificate at the end</li>
-      </ul>
-      <button class="btn btn--primary btn--lg" id="btn-start" type="button">Get Started</button>
+  <section class="screen welcome-page" id="screen-welcome" aria-labelledby="welcome-title">
+    <!-- Hero: purpose, learning approach, and the next action are visible immediately. -->
+    <div class="welcome-hero">
+      <p class="welcome-hero__brand">ILIMNI</p>
+      <p class="welcome-hero__subject">Computer Appreciation</p>
+      <h1 class="welcome-hero__title" id="welcome-title">Learn Computer Appreciation through interactive missions.</h1>
+      <p class="welcome-hero__copy">Discover how computers work by exploring, experimenting, and solving real challenges—not by memorizing notes.</p>
+      <div class="welcome-hero__actions">
+        <button class="btn btn--primary btn--lg" id="btn-start" type="button">Start Learning</button>
+        <button class="btn btn--ghost btn--lg" id="btn-welcome-signin" type="button">Sign In</button>
+      </div>
     </div>
+
+    <!-- Key benefits -->
+    <section class="welcome-section" aria-labelledby="welcome-features-title">
+      <h2 class="welcome-section__title" id="welcome-features-title">A better way to learn</h2>
+      <div class="welcome-features">
+        <article class="welcome-feature-card">
+          <span class="welcome-feature-card__icon" aria-hidden="true">⌕</span>
+          <h3>Explore</h3><p>Understand computers through guided discovery.</p>
+        </article>
+        <article class="welcome-feature-card">
+          <span class="welcome-feature-card__icon" aria-hidden="true">◈</span>
+          <h3>Practice</h3><p>Reinforce learning with interactive challenges.</p>
+        </article>
+        <article class="welcome-feature-card">
+          <span class="welcome-feature-card__icon" aria-hidden="true">↗</span>
+          <h3>Grow</h3><p>Track your progress, earn achievements, and build confidence.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Modular discovery card: its copy can be replaced independently in future. -->
+    <aside class="today-discovery" aria-labelledby="discovery-title">
+      <div class="today-discovery__mark" aria-hidden="true">✦</div>
+      <div><p class="today-discovery__label">Today’s Discovery</p><h2 id="discovery-title">Did you know?</h2><p>The QWERTY keyboard layout was designed more than 150 years ago—and millions of people still use it today.</p></div>
+    </aside>
+
+    <section class="welcome-section welcome-section--journey" aria-labelledby="journey-title">
+      <h2 class="welcome-section__title" id="journey-title">Your learning journey</h2>
+      <ol class="learning-journey" aria-label="Explore, Learn, Practice, Reflect, Master">
+        <li>Explore</li><li>Learn</li><li>Practice</li><li>Reflect</li><li>Master</li>
+      </ol>
+    </section>
+
+    <!-- Visual-only example; it does not represent or change student progress. -->
+    <section class="progress-preview" aria-labelledby="progress-preview-title">
+      <div><p class="progress-preview__eyebrow">A clear path forward</p><h2 id="progress-preview-title">See your progress grow</h2><p>Small missions make it easy to see what you have learned and where to go next.</p></div>
+      <div class="progress-preview__missions" aria-label="Example progress preview">
+        <div><span>Mission 1</span><b class="preview-status preview-status--complete">Completed</b></div>
+        <div><span>Mission 2</span><b class="preview-status preview-status--progress">In Progress</b></div>
+        <div><span>Mission 3</span><b class="preview-status preview-status--locked">Locked</b></div>
+      </div>
+    </section>
   </section>
 
   <!-- AUTH -->
@@ -139,6 +178,12 @@
       <p class="screen-head__subtitle">Pick up where you left off, or start a fresh mission.</p>
     </div>
     <div class="mission-grid" id="mission-list"></div>
+
+    <button class="weekend-invite" id="btn-weekend-treat" type="button" aria-describedby="weekend-invite-copy">
+      <span class="weekend-invite__icon" aria-hidden="true">🕵️</span>
+      <span><strong>Weekend Treat: Keyboard Detective</strong><small id="weekend-invite-copy">A 15–20 minute computer-lab mystery · earn a special badge</small></span>
+      <span class="weekend-invite__arrow" aria-hidden="true">→</span>
+    </button>
 
     <div class="card card--badges" id="badges-card" hidden>
       <h3 class="card__title card__title--sm">Badges earned</h3>
@@ -256,6 +301,11 @@
     </div>
   </section>
 
+  <!-- WEEKEND TREAT: intentionally separate from missionContent and the mission renderer. -->
+  <section class="screen weekend-screen" id="screen-weekend" aria-labelledby="weekend-title">
+    <div id="weekend-app"></div>
+  </section>
+
 </main>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
@@ -267,5 +317,6 @@
 <script>var module = { exports: {} };</script>
 <script src="content.js"></script>
 <script src="app.js"></script>
+<script src="weekend-treat.js"></script>
 </body>
 </html>
