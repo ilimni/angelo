@@ -23,6 +23,21 @@
     return ALL_QUESTIONS.filter(function (q) { return q.mission === m; });
   }
 
+  function isMissionComplete(m, candidateState) {
+    var progressState = candidateState || state;
+    var items = itemsForMission(m);
+    return items.length > 0 && items.every(function (q) {
+      return !!progressState.completedQuestions[q.id];
+    });
+  }
+
+  function reconcileMissionProgress(candidateState) {
+    MISSIONS.forEach(function (m) {
+      var progress = candidateState.missionProgress[m];
+      if (progress) progress.completed = isMissionComplete(m, candidateState);
+    });
+  }
+
   /* ============================================================
      0b. RESULTS SYNC — sends results to a Google Sheet via a
      Google Apps Script Web App endpoint. See README-results-sync.md
@@ -82,6 +97,7 @@
       merged.reflectionAnswers = parsed.reflectionAnswers || {};
       merged.missionProgress = parsed.missionProgress || {};
       merged.earnedBadges = parsed.earnedBadges || [];
+      reconcileMissionProgress(merged);
       return merged;
     } catch (e) {
       return defaultState();
@@ -121,6 +137,7 @@
         state.reflectionAnswers = cloud.reflectionAnswers || {};
         state.missionProgress = cloud.missionProgress || {};
         state.earnedBadges = cloud.earnedBadges || [];
+        reconcileMissionProgress(state);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       } else {
         firebaseDb.collection("students").doc(uid).set(state).catch(function (err) {
@@ -524,6 +541,7 @@
   }
 
   function startMission(m) {
+    reconcileMissionProgress(state);
     state.currentMission = m;
     if (!state.missionProgress[m]) state.missionProgress[m] = { started: true, completed: false };
     else state.missionProgress[m].started = true;
@@ -1166,6 +1184,15 @@
   function goToSummary() {
     var m = state.currentMission;
     var items = itemsForMission(m);
+    if (!isMissionComplete(m)) {
+      var firstIncomplete = items.findIndex(function (q) { return !state.completedQuestions[q.id]; });
+      state.currentIndexByMission[m] = firstIncomplete;
+      if (state.missionProgress[m]) state.missionProgress[m].completed = false;
+      saveState();
+      toast("Complete every item before finishing this mission.");
+      renderQuestionScreen();
+      return;
+    }
     if (state.missionProgress[m]) state.missionProgress[m].completed = true;
     else state.missionProgress[m] = { started: true, completed: true };
     saveState();

@@ -9,7 +9,7 @@
   var STORE = "ilimni_keyboard_detective_v1";
   var keys = ["Ctrl", "Alt", "Shift", "Windows", "Enter", "Backspace", "Spacebar", "Arrow Keys", "Home", "End"];
   var groups = {
-    "Typing Keys": ["A", "G", "Z"], "Function Keys": ["F1", "F5"], "Modifier Keys": ["Ctrl", "Alt", "Shift"],
+    "Alphabet Keys": ["A", "G", "Z"], "Function Keys": ["F1", "F5"], "Modifier Keys": ["Ctrl", "Alt", "Shift"],
     "Navigation Keys": ["Home", "End", "←"], "Numeric Keypad": ["Num 7", "Num +"], "Special Keys": ["Enter", "Backspace", "Spacebar"]
   };
   var shortcuts = [
