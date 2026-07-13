@@ -1457,6 +1457,310 @@ const missionContent = [
     realWorldExample: "The next time you use a school or home computer, try one shortcut and one navigation key on purpose — small real-life practice is how these skills become automatic.",
     xp: 25,
     hint: "Be honest — questions and confusion are useful feedback, not mistakes."
+  },
+
+  // ============================================================
+  // MISSION 4 — Working Smarter with Computers
+  // ============================================================
+  {
+    id: "m4-intro-01",
+    mission: 4,
+    section: "Working Smarter",
+    title: "Mission 4: Work Smarter",
+    type: "reflection",
+    difficulty: "easy",
+    question: "Think back to class: what is one small computer habit that could help someone work faster, more comfortably, or more independently?",
+    options: null,
+    correctAnswer: null,
+    explanation: "There is no single right answer. This mission is about noticing that computers are most useful when they help people save effort, stay comfortable, and take part in work in ways that suit them.",
+    funFact: "A feature does not have to look dramatic to be useful — a shortcut, a larger pointer, or a better chair position can make a real difference over a whole day.",
+    realWorldExample: "A student might use a keyboard shortcut to finish work faster, then adjust their screen so their neck does not ache while reading the next task.",
+    xp: 10,
+    hint: "Think about shortcuts, accessibility tools, or how a computer workspace is arranged."
+  },
+
+  // ============================================================
+  // MISSION 4 — SECTION 1: Productivity
+  // ============================================================
+  {
+    id: "m4-productivity-01",
+    mission: 4,
+    section: "Productivity",
+    title: "Why Shortcuts Help",
+    type: "mcq",
+    difficulty: "easy",
+    question: "Why can a keyboard shortcut improve productivity when you use a computer often?",
+    options: [
+      "It makes the computer's electricity stronger",
+      "It can complete a common action with fewer steps and less switching between mouse and keyboard",
+      "It permanently removes the need to learn any computer skills",
+      "It makes every program open at exactly the same speed"
+    ],
+    correctAnswer: "It can complete a common action with fewer steps and less switching between mouse and keyboard",
+    explanation: "Shortcuts can save time because they let you trigger common actions directly instead of hunting through menus with a mouse. The important idea is not that every shortcut must be memorised — it is that useful repeated actions can become quicker and smoother.",
+    funFact: "Many people use a small number of shortcuts every day without thinking about them, such as Ctrl+C and Ctrl+V.",
+    realWorldExample: "If you repeatedly copy notes from one part of a document to another, using Ctrl+C and Ctrl+V can be quicker than opening menus each time.",
+    xp: 15,
+    hint: "Think about the number of actions needed with a mouse compared with pressing a useful key combination."
+  },
+  {
+    id: "m4-productivity-02",
+    mission: 4,
+    section: "Productivity",
+    title: "Fast Is Not the Only Goal",
+    type: "true-false",
+    difficulty: "medium",
+    question: "True or False: A shortcut is only useful if every computer user can memorise it immediately.",
+    options: ["True", "False"],
+    correctAnswer: "False",
+    explanation: "Shortcuts are optional tools, not a test of who can memorise the most keys. A shortcut becomes useful when it helps a person with a task they do often; someone else may work better with menus, a mouse, touch, or an accessibility tool.",
+    funFact: "Professional designers often include both keyboard shortcuts and visible buttons so different people can choose the method that suits them.",
+    realWorldExample: "A learner may prefer clicking Save while practising, then start using Ctrl+S later once the shortcut feels natural.",
+    xp: 15,
+    hint: "Think about whether people always learn and work in exactly the same way."
+  },
+  {
+    id: "m4-productivity-03",
+    mission: 4,
+    section: "Productivity",
+    title: "Practical Challenge: Open Task Manager",
+    type: "ordering",
+    difficulty: "medium",
+    question: "Put these steps in order for using the keyboard shortcut from class to open Task Manager.",
+    options: ["Task Manager opens", "Press Esc while still holding Ctrl and Shift", "Hold down Ctrl and Shift"],
+    correctAnswer: ["Hold down Ctrl and Shift", "Press Esc while still holding Ctrl and Shift", "Task Manager opens"],
+    explanation: "Ctrl+Shift+Esc is a direct shortcut for opening Task Manager. The key lesson is that a well-chosen shortcut can reduce the steps needed for a regular task, especially when you know exactly what you want to open.",
+    funFact: "Task Manager can show which programs are running and how much of the computer's resources they are using.",
+    realWorldExample: "If a program stops responding, Task Manager can help an adult or teacher identify the program instead of restarting the whole computer immediately.",
+    xp: 20,
+    hint: "The modifier keys need to be held before the final key can complete the shortcut."
+  },
+  {
+    id: "m4-productivity-04",
+    mission: 4,
+    section: "Productivity",
+    title: "Custom Shortcut Curiosity",
+    type: "guess-reveal",
+    difficulty: "easy",
+    question: "Before revealing the answer: why might someone create a custom shortcut for a program they use every day?",
+    options: [
+      "To reach that program more quickly",
+      "To make the program impossible to close",
+      "To change every keyboard into a touchscreen",
+      "To remove all other programs from the computer"
+    ],
+    correctAnswer: "To reach that program more quickly",
+    explanation: "A custom shortcut can make a frequently used program easier to open. You only needed to recognise this idea in class — the important point is that people can sometimes adapt a computer setup to support their own routine.",
+    funFact: "People who use a particular tool many times a day often save small amounts of time that add up across a week.",
+    realWorldExample: "A school office worker who opens the same attendance program every morning may benefit from an easy way to launch it.",
+    xp: 10,
+    hint: "Think about what would help if you opened the same program again and again."
+  },
+
+  // ============================================================
+  // MISSION 4 — SECTION 2: Accessibility & Inclusive Design
+  // ============================================================
+  {
+    id: "m4-access-01",
+    mission: 4,
+    section: "Accessibility",
+    title: "Technology Adapts to People",
+    type: "scenario",
+    difficulty: "medium",
+    question: "A student has one arm in a cast for a few weeks and finds pressing two keys together difficult. Which idea best shows accessible technology helping them?",
+    options: [
+      "Use Sticky Keys so key combinations can be pressed one key at a time",
+      "Tell the student computers are only for people with two free hands",
+      "Remove the keyboard and do all work on paper",
+      "Make the student work faster to keep up"
+    ],
+    correctAnswer: "Use Sticky Keys so key combinations can be pressed one key at a time",
+    explanation: "Sticky Keys can make key combinations easier by allowing modifier keys such as Ctrl, Shift, or Alt to be pressed separately. It can help someone with a temporary injury, a permanent disability, or anyone who finds holding several keys down difficult.",
+    funFact: "Accessibility features are useful because people can have different needs at different times — even a short-term injury can change how someone uses a computer.",
+    realWorldExample: "Someone carrying a bag, recovering from an injury, or having shaky hands may find a feature that reduces tricky key combinations helpful.",
+    xp: 20,
+    hint: "Look for the option that changes the computer to suit the person's current need."
+  },
+  {
+    id: "m4-access-02",
+    mission: 4,
+    section: "Accessibility",
+    title: "Match the Support Tool",
+    type: "matching",
+    difficulty: "medium",
+    question: "Match each accessibility tool or idea to what it can help with.",
+    options: [
+      { tool: "Sticky Keys", support: "Using key combinations one key at a time" },
+      { tool: "Filter Keys", support: "Reducing unwanted repeated key presses" },
+      { tool: "Speech-to-text", support: "Turning spoken words into typed text" },
+      { tool: "Recorded-lecture explanation tool", support: "Helping a learner review and understand spoken lesson content" }
+    ],
+    correctAnswer: "tool-support pairs as listed",
+    explanation: "Accessibility tools support different needs. Sticky Keys can simplify combinations, Filter Keys can reduce accidental repeated input, speech-to-text can turn speech into writing, and tools that explain recordings can help learners revisit lesson content.",
+    funFact: "A feature first designed for accessibility often becomes useful to many other people too — speech-to-text can be handy when your hands are busy.",
+    realWorldExample: "A learner who missed part of a lesson may replay a recording and use an explanation tool to check a confusing section at their own pace.",
+    xp: 20,
+    hint: "Match each name to the kind of input, typing, or learning support it suggests."
+  },
+  {
+    id: "m4-access-03",
+    mission: 4,
+    section: "Accessibility",
+    title: "Observation: Choose the Inclusive Design",
+    type: "hotspot",
+    difficulty: "medium",
+    question: "A school is improving its computer room. Click EVERY choice that helps make the space more inclusive for different learners.",
+    options: ["Keep clear space for wheelchair movement", "Offer accessibility settings on the computers", "Use labels that are easy to read", "Block the ramp with storage boxes", "Say everyone must use the same input method"],
+    correctAnswer: ["Keep clear space for wheelchair movement", "Offer accessibility settings on the computers", "Use labels that are easy to read"],
+    explanation: "Inclusive design considers different people from the beginning. Clear space, readable labels, and accessible computer settings can help more learners take part; blocking ramps or forcing one method on everyone creates unnecessary barriers.",
+    funFact: "Curb cuts — the sloped parts of pavements — were designed to help wheelchair users, but they also help people pushing prams, trolleys, and bicycles.",
+    realWorldExample: "A ramp into a building and a keyboard setting that makes typing easier follow the same idea: change the environment so more people can use it.",
+    xp: 15,
+    hint: "Choose the options that remove barriers instead of creating them."
+  },
+  {
+    id: "m4-access-04",
+    mission: 4,
+    section: "Accessibility",
+    title: "Accessible for Everyone",
+    type: "true-false",
+    difficulty: "easy",
+    question: "True or False: Accessibility features can be useful to people with temporary needs as well as permanent disabilities.",
+    options: ["True", "False"],
+    correctAnswer: "True",
+    explanation: "This is true. Someone with a broken arm, shaky hands, tired eyes, a noisy room, or a long recorded lesson may benefit from accessibility features even if their need is temporary. Technology should adapt to people, not demand that every person works in one fixed way.",
+    funFact: "Captions can support deaf and hard-of-hearing viewers, but they are also useful when watching a video in a noisy place or when you need to keep the sound off.",
+    realWorldExample: "A student on a quiet bus may use captions to follow an educational video without disturbing other passengers.",
+    xp: 15,
+    hint: "Think about needs that can change after an injury or depending on where someone is working."
+  },
+  {
+    id: "m4-access-05",
+    mission: 4,
+    section: "Accessibility",
+    title: "Reflection: Ramps and Settings",
+    type: "reflection",
+    difficulty: "medium",
+    question: "How is an accessibility setting on a computer similar to a ramp into a building? Give one example of who each one could help.",
+    options: null,
+    correctAnswer: null,
+    explanation: "There is no single required wording. A strong reflection notices that both remove a barrier so more people can enter, use, and take part. A ramp can help a wheelchair user, while a computer setting can help someone who finds typing, seeing, hearing, or controlling a mouse difficult.",
+    funFact: "Designing for inclusion from the start is usually easier than adding barriers first and trying to remove them later.",
+    realWorldExample: "A classroom with a ramp and computers with accessible settings gives more learners choices for participating independently.",
+    xp: 15,
+    hint: "Think about the barrier each one removes, rather than the exact shape of the ramp or setting."
+  },
+
+  // ============================================================
+  // MISSION 4 — SECTION 3: Ergonomics
+  // ============================================================
+  {
+    id: "m4-ergo-01",
+    mission: 4,
+    section: "Ergonomics",
+    title: "Set Up for Comfort",
+    type: "sorting",
+    difficulty: "medium",
+    question: "Sort these habits into 'Healthy workspace habit' and 'Habit to avoid': feet flat on the floor, screen at a comfortable height, wrists bent sharply while typing, sitting far forward with no back support, elbows relaxed near a right angle, taking short movement breaks.",
+    options: ["Feet flat on the floor", "Screen at a comfortable height", "Wrists bent sharply while typing", "Sitting far forward with no back support", "Elbows relaxed near a right angle", "Taking short movement breaks"],
+    correctAnswer: {
+      "Healthy workspace habit": ["Feet flat on the floor", "Screen at a comfortable height", "Elbows relaxed near a right angle", "Taking short movement breaks"],
+      "Habit to avoid": ["Wrists bent sharply while typing", "Sitting far forward with no back support"]
+    },
+    explanation: "Ergonomics means arranging work so the body can stay comfortable and work safely. Feet supported, a comfortable screen height, relaxed elbows, and movement breaks can reduce strain; sharply bent wrists and unsupported sitting can create discomfort over time.",
+    funFact: "Ergonomics is used far beyond computers — it also helps designers think about school desks, car seats, tools, and kitchen equipment.",
+    realWorldExample: "Before a long homework session, adjusting a chair and placing the screen at a sensible height can make reading and typing more comfortable.",
+    xp: 20,
+    hint: "Choose habits that keep the body supported and relaxed, rather than held in an awkward position."
+  },
+  {
+    id: "m4-ergo-02",
+    mission: 4,
+    section: "Ergonomics",
+    title: "RSI Prevention",
+    type: "drag-drop",
+    difficulty: "easy",
+    question: "Drag the best ending into the sentence: 'Taking regular short breaks and keeping a comfortable wrist position can help reduce the risk of ___. '",
+    options: ["repetitive strain injury (RSI)", "a faster internet connection", "a new file extension", "a larger monitor"],
+    correctAnswer: "repetitive strain injury (RSI)",
+    explanation: "RSI means Repetitive Strain Injury. It can be linked to repeating the same movements in uncomfortable positions over a long time, so healthy posture, sensible setup, and short breaks are useful prevention habits.",
+    funFact: "The word 'repetitive' matters: small movements can become a problem when they are repeated again and again without enough rest.",
+    realWorldExample: "Someone who types, games, or uses a mouse for a long time can pause, stretch gently, and check their wrist position before discomfort builds up.",
+    xp: 15,
+    hint: "This is the term your class used for strain connected with repeated movements and poor long-term habits."
+  },
+  {
+    id: "m4-ergo-03",
+    mission: 4,
+    section: "Ergonomics",
+    title: "Scenario: The Aching Neck",
+    type: "scenario",
+    difficulty: "medium",
+    question: "Angelo spends a long time looking down at a laptop on a very low table and his neck feels uncomfortable. What is the best first change to try?",
+    options: [
+      "Raise the screen to a more comfortable viewing height while keeping it stable",
+      "Lean closer and keep working without a break",
+      "Bend his wrists more sharply while typing",
+      "Turn the brightness to zero so he cannot see the screen"
+    ],
+    correctAnswer: "Raise the screen to a more comfortable viewing height while keeping it stable",
+    explanation: "Looking down for a long time can strain the neck. Raising a laptop safely to a more comfortable viewing height can help; if the laptop is raised for a longer setup, an external keyboard and mouse can keep the wrists comfortable too.",
+    funFact: "Small changes to screen height can affect how much a person bends their neck over many minutes of reading.",
+    realWorldExample: "At home, a learner might place a laptop on a stable stand or a few sturdy books, then use a separate keyboard if available.",
+    xp: 20,
+    hint: "Choose the option that improves the viewing position instead of adding another awkward posture."
+  },
+  {
+    id: "m4-ergo-04",
+    mission: 4,
+    section: "Ergonomics",
+    title: "Observation: A Healthy Desk",
+    type: "hotspot",
+    difficulty: "easy",
+    question: "Imagine a computer desk setup. Click EVERY feature that supports a healthier working position.",
+    options: ["Feet supported on the floor", "Screen at a comfortable viewing height", "Wrists kept as straight and relaxed as possible", "Shoulders raised tightly while typing", "No breaks during a long session"],
+    correctAnswer: ["Feet supported on the floor", "Screen at a comfortable viewing height", "Wrists kept as straight and relaxed as possible"],
+    explanation: "A healthy workspace supports the body: feet are supported, the screen can be viewed without excessive bending, and wrists stay relaxed. Tense shoulders and no breaks can make a long session more uncomfortable.",
+    funFact: "There is no single perfect desk position for every body — comfort includes making sensible adjustments and changing position from time to time.",
+    realWorldExample: "In a shared computer lab, even a quick chair-height check before starting can help a learner sit more comfortably.",
+    xp: 15,
+    hint: "Look for choices that let the body stay supported, relaxed, and able to move."
+  },
+
+  // ============================================================
+  // MISSION 4 — END OF MISSION REFLECTION
+  // ============================================================
+  {
+    id: "m4-reflect-01",
+    mission: 4,
+    section: "Mission 4 Reflection",
+    title: "Your Smarter Computer Habit",
+    type: "reflection",
+    difficulty: "easy",
+    question: "Choose one habit from this mission — a shortcut, an accessibility idea, or an ergonomic change. How could it help you or someone else in real life?",
+    options: null,
+    correctAnswer: null,
+    explanation: "There is no single right choice. The important part is connecting one practical idea to a person and a real situation, because technology works best when it helps people do what matters to them.",
+    funFact: "The best computer habit is often the one you can keep doing regularly, not the most complicated one.",
+    realWorldExample: "You might decide to use Ctrl+S more often, turn on a helpful accessibility setting, or take a short stretch break during long typing tasks.",
+    xp: 15,
+    hint: "Pick one small action you could realistically use, then explain who it helps and why."
+  },
+  {
+    id: "m4-reflect-02",
+    mission: 4,
+    section: "Mission 4 Reflection",
+    title: "Teacher Feedback and Your Question",
+    type: "reflection",
+    difficulty: "easy",
+    question: "What was most useful in this mission? What would you like to practise again? What question should your teacher answer next?",
+    options: null,
+    correctAnswer: null,
+    explanation: "Great work completing Mission 4! Your feedback helps your teacher see which practical skills felt useful, which need more time, and what you are ready to explore next.",
+    funFact: "Good technology lessons improve when learners share what worked for them and what still feels difficult.",
+    realWorldExample: "Your question could lead to the next class practising a shortcut, exploring another accessibility tool, or improving a computer workspace together.",
+    xp: 25,
+    hint: "Be honest — useful feedback can include something you enjoyed, something that was confusing, and one question you still have."
   }
 
 ];
@@ -1473,7 +1777,8 @@ const gamification = {
     { id: "mission-1-complete", label: "Computer Fundamentals Graduate", criteria: "Finish all Mission 1 items" },
     { id: "mission-2-complete", label: "Windows Navigator", criteria: "Finish all Mission 2 items" },
     { id: "shortcut-sprinter", label: "Shortcut Sprinter", criteria: "Complete all Keyboard Shortcuts section items correctly" },
-    { id: "mission-3-complete", label: "Keyboard Commander", criteria: "Finish all Mission 3 items" }
+    { id: "mission-3-complete", label: "Keyboard Commander", criteria: "Finish all Mission 3 items" },
+    { id: "mission-4-complete", label: "Smart Computer User", criteria: "Finish all Mission 4 items" }
   ],
   encouragingMessages: [
     "Nice thinking — that's exactly the kind of reasoning that sticks.",
