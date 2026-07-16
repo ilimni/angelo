@@ -1780,12 +1780,55 @@ const gamification = {
     { id: "mission-3-complete", label: "Keyboard Commander", criteria: "Finish all Mission 3 items" },
     { id: "mission-4-complete", label: "Smart Computer User", criteria: "Finish all Mission 4 items" }
   ],
-  encouragingMessages: [
-    "Nice thinking — that's exactly the kind of reasoning that sticks.",
-    "Even if that wasn't quite right, you're closer than you think.",
-    "You just cleared up a mix-up a lot of learners never notice!",
-    "That's the kind of question real computer scientists ask too."
-  ],
+  encouragingMessages: {
+    correct: {
+      general: [
+        "Correct — you used the key idea well.",
+        "Well done — that shows careful thinking.",
+        "Yes! You connected the clue to the right concept.",
+        "Strong answer — keep building on that understanding."
+      ],
+      selection: [
+        "Good choice — you identified the best answer.",
+        "Correct — you ruled out the distractors and found the key idea.",
+        "Nice decision-making — that option fits the situation."
+      ],
+      arrangement: [
+        "Well organised — the relationships are in the right places.",
+        "Correct — you sorted the clues using the right rule.",
+        "Nice work — each part now connects where it belongs."
+      ],
+      written: [
+        "Correct — your answer uses the right term or value.",
+        "Good work checking the details before you answered.",
+        "Exactly — you completed the missing piece accurately."
+      ],
+      reflection: [
+        "Thanks for sharing your thinking — reflection helps learning stick.",
+        "That is a useful connection to make from your own experience.",
+        "Good reflection — noticing what helps you is an important skill."
+      ]
+    },
+    retry: {
+      general: [
+        "Not quite yet — use the explanation to strengthen the idea.",
+        "A useful attempt — check the key clue and try to spot the difference.",
+        "Keep going — mistakes can show exactly what to practise next."
+      ],
+      selection: [
+        "Not quite — compare each option with the main clue in the question.",
+        "Look again at what the situation needs, not just a familiar word."
+      ],
+      arrangement: [
+        "Almost there — check the rule for each item or step again.",
+        "Review how the parts connect, then use the explanation as a guide."
+      ],
+      written: [
+        "Check the wording, spelling, or calculation against the clue.",
+        "Try breaking the answer into smaller steps before checking it again."
+      ]
+    }
+  },
   confettiOnMissionComplete: true,
   progressBar: true
 };

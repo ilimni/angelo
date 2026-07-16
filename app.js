@@ -167,6 +167,12 @@
     (children || []).forEach(function (c) { if (c) node.appendChild(c); });
     return node;
   }
+  function icon(name, className) {
+    return el("i", { class: "ui-icon" + (className ? " " + className : ""), "data-lucide": name, "aria-hidden": "true" });
+  }
+  function refreshIcons() {
+    if (window.refreshIcons) window.refreshIcons();
+  }
   function escapeHtml(str) {
     return String(str == null ? "" : str)
       .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -215,7 +221,7 @@
      ============================================================ */
   function renderHeader() {
     $("#xp-counter-value").textContent = state.xp;
-    $("#student-pill").textContent = state.studentName ? ("👤 " + state.studentName) : "";
+    $("#student-pill").innerHTML = state.studentName ? "<i class='ui-icon ui-icon--sm' data-lucide='user-round' aria-hidden='true'></i> " + escapeHtml(state.studentName) : "";
     var signoutBtn = $("#btn-signout");
     if (signoutBtn) signoutBtn.hidden = !(window.firebaseAuth && firebaseAuth.currentUser);
     var syncBtn = $("#btn-sync-account");
@@ -240,7 +246,8 @@
     document.documentElement.setAttribute("data-theme", state.theme);
     var btn = $("#theme-toggle");
     btn.setAttribute("aria-pressed", state.theme === "dark");
-    btn.innerHTML = state.theme === "dark" ? "<span aria-hidden='true'>☀️</span>" : "<span aria-hidden='true'>🌙</span>";
+    btn.innerHTML = "<i class='ui-icon' data-lucide='" + (state.theme === "dark" ? "sun" : "moon") + "' aria-hidden='true'></i>";
+    refreshIcons();
   }
 
   $("#theme-toggle").addEventListener("click", function () {
@@ -493,7 +500,7 @@
 
   function goToMissionSelect() {
     $("#missions-greeting").textContent = state.studentName
-      ? ("Welcome back, " + state.studentName + " 👋")
+      ? ("Welcome back, " + state.studentName)
       : "Choose a mission";
     var list = $("#mission-list");
     list.innerHTML = "";
@@ -505,7 +512,7 @@
       var statusClass = stats.pct === 100 ? "done" : (stats.pct > 0 ? "progress" : "new");
 
       var card = el("div", { class: "mission-card", tabindex: "0", role: "button", "aria-label": "Open Mission " + m }, [
-        el("div", { class: "mission-card__icon", "aria-hidden": "true" }, [document.createTextNode(m === 1 ? "🧠" : "🗂️")]),
+        el("div", { class: "mission-card__icon", "aria-hidden": "true" }, [icon(m === 1 ? "brain-circuit" : "folder-cog")]),
         el("div", { class: "mission-card__title", text: "Mission " + m }),
         el("div", { class: "mission-card__desc", text: sections.slice(0, 3).join(" · ") + (sections.length > 3 ? "…" : "") }),
         el("div", { class: "mission-card__bar-track" }, [
@@ -523,6 +530,7 @@
 
     renderBadgesCard();
     renderHeader();
+    refreshIcons();
     showScreen("missions");
   }
 
@@ -534,9 +542,7 @@
     if (!earned.length) { wrap.hidden = true; return; }
     wrap.hidden = false;
     earned.forEach(function (b) {
-      row.appendChild(el("span", { class: "badge-chip" }, [
-        document.createTextNode("🏅 " + b.label)
-      ]));
+      row.appendChild(el("span", { class: "badge-chip" }, [icon("award", "ui-icon--sm"), document.createTextNode(" " + b.label)]));
     });
   }
 
@@ -592,7 +598,7 @@
       hintText.hidden = true;
       hintText.textContent = currentQuestion.hint;
       hintBtn.setAttribute("aria-expanded", "false");
-      hintBtn.innerHTML = "<span aria-hidden='true'>💭</span> Show hint";
+      hintBtn.innerHTML = "<i class='ui-icon ui-icon--sm' data-lucide='lightbulb' aria-hidden='true'></i> Show hint";
     } else {
       hintWrap.hidden = true;
     }
@@ -621,6 +627,7 @@
     }
 
     $("#btn-prev").disabled = currentIndex === 0;
+    refreshIcons();
   }
 
   function typeLabel(type) {
@@ -646,8 +653,9 @@
     t.hidden = !expanded;
     this.setAttribute("aria-expanded", String(expanded));
     this.innerHTML = expanded
-      ? "<span aria-hidden='true'>💭</span> Hide hint"
-      : "<span aria-hidden='true'>💭</span> Show hint";
+      ? "<i class='ui-icon ui-icon--sm' data-lucide='lightbulb-off' aria-hidden='true'></i> Hide hint"
+      : "<i class='ui-icon ui-icon--sm' data-lucide='lightbulb' aria-hidden='true'></i> Show hint";
+    refreshIcons();
   });
 
   /* ============================================================
@@ -666,7 +674,7 @@
     if (q.type === "image-id") {
       root.appendChild(el("div", { class: "hotspot-board", style: "margin-bottom:16px;grid-template-columns:1fr;" }, [
         el("div", { class: "hotspot-item", style: "cursor:default;" }, [
-          el("div", { class: "hotspot-item__icon", text: "🖼️" }),
+          el("div", { class: "hotspot-item__icon" }, [icon("image")]),
           el("div", { text: "Picture reference — read the question for what's shown" })
         ])
       ]));
@@ -868,11 +876,11 @@
   RENDERERS.hotspot = function (q, root, onChange) {
     var board = el("div", { class: "hotspot-board" });
     var selected = [];
-    var iconMap = { Keyboard: "⌨️", Monitor: "🖥️", Mouse: "🖱️", Speakers: "🔊", Speaker: "🔊" };
+    var iconMap = { Keyboard: "keyboard", Monitor: "monitor", Mouse: "mouse", Speakers: "volume-2", Speaker: "volume-2" };
 
     q.options.forEach(function (opt) {
       var tile = el("button", { class: "hotspot-item", type: "button" }, [
-        el("div", { class: "hotspot-item__icon", "aria-hidden": "true", text: iconMap[opt] || "🔹" }),
+        el("div", { class: "hotspot-item__icon", "aria-hidden": "true" }, [icon(iconMap[opt] || "circle")]),
         el("div", { text: opt })
       ]);
       tile.addEventListener("click", function () {
@@ -1052,13 +1060,13 @@
     if (!skipped) {
       if (correct === true) {
         feedback.className = "feedback-banner feedback-banner--correct";
-        feedback.textContent = "✅ " + pickEncouragement(true);
+        feedback.innerHTML = "<i class='ui-icon' data-lucide='circle-check-big' aria-hidden='true'></i> " + escapeHtml(pickEncouragement(q, "correct"));
       } else if (correct === false) {
         feedback.className = "feedback-banner feedback-banner--incorrect";
-        feedback.textContent = "❌ Not quite — here's why:";
+        feedback.innerHTML = "<i class='ui-icon' data-lucide='circle-x' aria-hidden='true'></i> " + escapeHtml(pickEncouragement(q, "retry")) + " Here's why:";
       } else {
         feedback.className = "feedback-banner feedback-banner--neutral";
-        feedback.textContent = "✅ Thanks for reflecting!";
+        feedback.innerHTML = "<i class='ui-icon' data-lucide='circle-check-big' aria-hidden='true'></i> " + escapeHtml(pickEncouragement(q, "correct"));
       }
     }
 
@@ -1076,6 +1084,7 @@
     $("#btn-submit").hidden = true;
     $("#btn-next").hidden = false;
     $("#btn-skip").hidden = true;
+    refreshIcons();
   }
 
   function revealCorrectness(q, answer) {
@@ -1140,10 +1149,32 @@
     }
   }
 
-  function pickEncouragement(correct) {
-    var msgs = GAMIFICATION.encouragingMessages || [];
-    if (!msgs.length) return correct ? "Correct!" : "Keep going!";
-    return msgs[Math.floor(Math.random() * msgs.length)];
+  function pickEncouragement(q, outcome) {
+    var messages = GAMIFICATION.encouragingMessages || [];
+    // Retain support for older content files that use one flat message list.
+    if (Array.isArray(messages)) {
+      if (!messages.length) return outcome === "retry" ? "Keep going!" : "Correct!";
+      return messages[Math.floor(Math.random() * messages.length)];
+    }
+
+    var group = messages[outcome] || {};
+    var typeGroups = {
+      "mcq": "selection",
+      "true-false": "selection",
+      "scenario": "selection",
+      "image-id": "selection",
+      "guess-reveal": "selection",
+      "ordering": "arrangement",
+      "matching": "arrangement",
+      "sorting": "arrangement",
+      "drag-drop": "arrangement",
+      "hotspot": "arrangement",
+      "fill-blank": "written",
+      "reflection": "reflection"
+    };
+    var messagesForType = group[typeGroups[q.type]] || group.general || [];
+    if (!messagesForType.length) return outcome === "retry" ? "Keep going!" : "Correct!";
+    return messagesForType[Math.floor(Math.random() * messagesForType.length)];
   }
 
   /* ============================================================
@@ -1334,11 +1365,12 @@
     var badgesWrap = $("#cert-badges");
     badgesWrap.innerHTML = "";
     computeEarnedBadges().forEach(function (b) {
-      badgesWrap.appendChild(el("span", { class: "badge-chip", text: "🏅 " + b.label }));
+      badgesWrap.appendChild(el("span", { class: "badge-chip" }, [icon("award", "ui-icon--sm"), document.createTextNode(" " + b.label)]));
     });
     var today = new Date();
     $("#cert-date").textContent = "Issued " + today.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
     showScreen("certificate");
+    refreshIcons();
   }
 
   $("#btn-print").addEventListener("click", function () { window.print(); });

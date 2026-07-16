@@ -16,7 +16,7 @@
 <header class="app-header" id="app-header" hidden>
   <div class="app-header__inner">
     <div class="app-header__brand">
-      <span class="app-header__logo" aria-hidden="true">🖥️</span>
+      <i class="app-header__logo ui-icon ui-icon--brand" data-lucide="monitor" aria-hidden="true"></i>
       <span class="app-header__title">ILIMNI</span>
     </div>
 
@@ -24,18 +24,18 @@
 
     <div class="app-header__meta">
       <span class="xp-pill" id="xp-counter" aria-live="polite">
-        <span aria-hidden="true">⚡</span> <span id="xp-counter-value">0</span> XP
+        <i class="ui-icon ui-icon--sm" data-lucide="zap" aria-hidden="true"></i> <span id="xp-counter-value">0</span> XP
       </span>
       <span class="student-pill" id="student-pill" aria-live="polite"></span>
       <button class="btn btn--ghost btn--sm" id="btn-sync-account" type="button" hidden>Save progress to account</button>
       <button class="icon-btn" id="btn-signout" type="button" aria-label="Sign out" title="Sign out" hidden>
-        <span aria-hidden="true">🚪</span>
+        <i class="ui-icon" data-lucide="log-out" aria-hidden="true"></i>
       </button>
       <button class="icon-btn" id="btn-export" type="button" aria-label="Export results" title="Export results">
-        <span aria-hidden="true">📤</span>
+        <i class="ui-icon" data-lucide="download" aria-hidden="true"></i>
       </button>
       <button class="icon-btn" id="theme-toggle" type="button" aria-pressed="false" aria-label="Toggle dark mode">
-        <span aria-hidden="true">🌙</span>
+        <i class="ui-icon" data-lucide="moon" aria-hidden="true"></i>
       </button>
     </div>
   </div>
@@ -119,7 +119,7 @@
         <div class="password-field">
           <input class="text-input" id="input-password" name="password" type="password" placeholder="At least 6 characters" autocomplete="new-password" minlength="6" required>
           <button class="password-toggle" id="btn-toggle-password" type="button" aria-label="Show password" aria-pressed="false">
-            <span aria-hidden="true">👁</span>
+            <i class="ui-icon" data-lucide="eye" aria-hidden="true"></i>
           </button>
         </div>
         <button class="auth-link" id="btn-forgot-password" type="button">Forgot Password?</button>
@@ -180,7 +180,7 @@
     <div class="mission-grid" id="mission-list"></div>
 
     <button class="weekend-invite" id="btn-weekend-treat" type="button" aria-describedby="weekend-invite-copy">
-      <span class="weekend-invite__icon" aria-hidden="true">🕵️</span>
+      <i class="weekend-invite__icon ui-icon" data-lucide="search" aria-hidden="true"></i>
       <span><strong>Weekend Treat: Keyboard Detective</strong><small id="weekend-invite-copy">A 15–20 minute computer-lab mystery · earn a special badge</small></span>
       <span class="weekend-invite__arrow" aria-hidden="true">→</span>
     </button>
@@ -211,7 +211,7 @@
 
       <div class="hint-wrap" id="q-hint-wrap" hidden>
         <button class="btn btn--ghost btn--sm" id="btn-hint" type="button" aria-expanded="false">
-          <span aria-hidden="true">💭</span> Show hint
+          <i class="ui-icon ui-icon--sm" data-lucide="lightbulb" aria-hidden="true"></i> Show hint
         </button>
         <p class="hint-text" id="hint-text" hidden></p>
       </div>
@@ -220,15 +220,15 @@
 
       <div class="explain-wrap" id="q-explanation-wrap" hidden>
         <div class="explain-block">
-          <h3 class="explain-block__label"><span aria-hidden="true">📘</span> Explanation</h3>
+          <h3 class="explain-block__label"><i class="ui-icon ui-icon--sm" data-lucide="book-open" aria-hidden="true"></i> Explanation</h3>
           <p id="explain-text"></p>
         </div>
         <div class="explain-block explain-block--fact" id="funfact-block" hidden>
-          <h3 class="explain-block__label"><span aria-hidden="true">✨</span> Fun fact</h3>
+          <h3 class="explain-block__label"><i class="ui-icon ui-icon--sm" data-lucide="sparkles" aria-hidden="true"></i> Fun fact</h3>
           <p id="funfact-text"></p>
         </div>
         <div class="explain-block explain-block--world" id="realworld-block" hidden>
-          <h3 class="explain-block__label"><span aria-hidden="true">🌍</span> Real-world example</h3>
+          <h3 class="explain-block__label"><i class="ui-icon ui-icon--sm" data-lucide="globe-2" aria-hidden="true"></i> Real-world example</h3>
           <p id="realworld-text"></p>
         </div>
         <div class="xp-earned" id="xp-earned-banner"></div>
@@ -276,7 +276,7 @@
       <div class="summary-actions">
         <button class="btn btn--ghost" id="btn-back-missions" type="button">Back to missions</button>
         <button class="btn btn--primary btn--lg" id="btn-continue-next" type="button">Continue to next mission →</button>
-        <button class="btn btn--primary btn--lg" id="btn-view-certificate" type="button" hidden>View certificate 🎓</button>
+        <button class="btn btn--primary btn--lg" id="btn-view-certificate" type="button" hidden>View certificate</button>
       </div>
     </div>
   </section>
@@ -284,7 +284,7 @@
   <!-- CERTIFICATE -->
   <section class="screen" id="screen-certificate">
     <div class="certificate" id="certificate">
-      <div class="certificate__ribbon" aria-hidden="true">🏅</div>
+      <div class="certificate__ribbon" aria-hidden="true"><i class="ui-icon ui-icon--xl" data-lucide="award"></i></div>
       <p class="certificate__eyebrow">Certificate of Completion</p>
       <h2 class="certificate__title">ILIMNI Computer Appreciation Review</h2>
       <p class="certificate__awarded-to">This certifies that</p>
@@ -316,6 +316,12 @@
 <script src="firebase-init.js"></script>
 <script>var module = { exports: {} };</script>
 <script src="content.js"></script>
+<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+<script>
+  window.refreshIcons = function () {
+    if (window.lucide) window.lucide.createIcons({ attrs: { "stroke-width": 2 } });
+  };
+</script>
 <script src="app.js"></script>
 <script src="weekend-treat.js"></script>
 </body>
