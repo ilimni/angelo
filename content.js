@@ -1761,6 +1761,238 @@ const missionContent = [
     realWorldExample: "Your question could lead to the next class practising a shortcut, exploring another accessibility tool, or improving a computer workspace together.",
     xp: 25,
     hint: "Be honest — useful feedback can include something you enjoyed, something that was confusing, and one question you still have."
+  },
+
+  // ============================================================
+  // MISSION 5 — SECTION 1: Workspaces and Organisation
+  // ============================================================
+  {
+    id: "m5-workspace-01",
+    mission: 5,
+    section: "Workspaces and Organisation",
+    title: "Two Spaces, One Computer",
+    type: "scenario",
+    difficulty: "easy",
+    question: "Angelo wants one clean space for homework and a separate space for games, without closing either activity. Which feature from class would help most?",
+    options: ["Virtual Desktops (Workspaces)", "High Contrast", "Control Panel", "A search bar"],
+    correctAnswer: "Virtual Desktops (Workspaces)",
+    explanation: "Virtual Desktops, also called Workspaces, let you organise open apps into separate screen spaces on the same computer. Angelo could keep school work in one workspace and games in another, then switch between them when needed.",
+    funFact: "People who work with many apps often use separate workspaces for different jobs, such as writing, research, and communication.",
+    realWorldExample: "A student could keep a browser and document open for an assignment in one workspace, while leaving a music app or game in another workspace for later.",
+    xp: 15,
+    hint: "Think about the feature that creates more than one organised screen space without needing another computer."
+  },
+  {
+    id: "m5-workspace-02",
+    mission: 5,
+    section: "Workspaces and Organisation",
+    title: "Why Separate Workspaces Help",
+    type: "hotspot",
+    difficulty: "medium",
+    question: "Click EVERY benefit of using different Virtual Desktops (Workspaces).",
+    options: ["Keeping homework apps separate from games", "Reducing clutter when many apps are open", "Using different groups of apps for different tasks", "Making the computer permanently delete other apps", "Replacing the need to save work"],
+    correctAnswer: ["Keeping homework apps separate from games", "Reducing clutter when many apps are open", "Using different groups of apps for different tasks"],
+    explanation: "Workspaces help organise what is already open. They can reduce clutter and keep tasks separate, but they do not delete apps or replace saving your work. Organisation makes it easier to focus and return to a task.",
+    funFact: "The same organising idea appears outside computers: people use separate exercise books, folders, and shelves for different subjects.",
+    realWorldExample: "During revision, one workspace could hold a science presentation while another holds a browser with research for ICT.",
+    xp: 15,
+    hint: "Choose the ideas that make work easier to organise, not ideas that make files disappear or save themselves."
+  },
+  {
+    id: "m5-workspace-03",
+    mission: 5,
+    section: "Workspaces and Organisation",
+    title: "Practical Challenge: Plan Your Workspaces",
+    type: "sorting",
+    difficulty: "medium",
+    question: "Sort these open apps into the workspace where they would make the most sense while Angelo is doing homework and taking a break.",
+    options: ["Assignment document", "Research browser tab", "Calculator for homework", "Game", "Music player", "Chat with friends"],
+    correctAnswer: {
+      "Homework workspace": ["Assignment document", "Research browser tab", "Calculator for homework"],
+      "Break workspace": ["Game", "Music player", "Chat with friends"]
+    },
+    explanation: "There can be more than one good way to organise a computer, but this arrangement keeps the homework tools together and the break activities together. The important idea is choosing a system that makes the current task clearer and easier to continue.",
+    funFact: "A workspace is not a second computer. It is another organised view of the apps already running on the same computer.",
+    realWorldExample: "Try creating another Virtual Desktop in class, move or open an app there, then switch back to compare the two spaces.",
+    xp: 20,
+    hint: "Put the apps needed to complete the assignment together, then put leisure apps in the other space."
+  },
+
+  // ============================================================
+  // MISSION 5 — SECTION 2: Finding and Changing Settings
+  // ============================================================
+  {
+    id: "m5-settings-01",
+    mission: 5,
+    section: "Finding and Changing Settings",
+    title: "Where Would You Start?",
+    type: "scenario",
+    difficulty: "easy",
+    question: "A student wants to change a common computer option but cannot remember exactly where it is. Which place would usually be the best first place to explore?",
+    options: ["Settings", "A game", "The Recycle Bin", "A music player"],
+    correctAnswer: "Settings",
+    explanation: "Settings is usually the best first place for common modern computer options because it groups many controls in one easy-to-explore area. If an older or more detailed option is not there, Control Panel may still contain it.",
+    funFact: "Settings and Control Panel can both lead to useful controls, but their layouts and history are different.",
+    realWorldExample: "In class, open Settings and Control Panel side by side. Look for one area that seems related in both places, then notice how the screens are organised differently.",
+    xp: 15,
+    hint: "Choose the place designed for changing how the computer works."
+  },
+  {
+    id: "m5-settings-02",
+    mission: 5,
+    section: "Finding and Changing Settings",
+    title: "Settings and Control Panel",
+    type: "matching",
+    difficulty: "medium",
+    question: "Match each place or idea to the best description.",
+    options: [
+      { place: "Settings", description: "A modern place to explore many common computer options" },
+      { place: "Control Panel", description: "An older interface that still contains useful controls" },
+      { place: "Both", description: "Can sometimes lead to related computer controls" },
+      { place: "Search", description: "A quick way to help find an app, setting, or tool" }
+    ],
+    correctAnswer: "place-description pairs as listed",
+    explanation: "Settings and Control Panel are related, but they are not exactly the same. Windows has changed gradually, so newer Settings screens exist alongside older Control Panel tools. Search can help locate either one, but Search is only a finding tool, not the main idea of the lesson.",
+    funFact: "Keeping older controls can help people and organisations continue using tools they already understand.",
+    realWorldExample: "If you cannot find a control in Settings, you can ask a good question, check the name of the feature, and explore whether Control Panel has a related option.",
+    xp: 20,
+    hint: "Think about whether each choice is a modern settings area, an older settings area, both, or a way to find things."
+  },
+  {
+    id: "m5-settings-03",
+    mission: 5,
+    section: "Finding and Changing Settings",
+    title: "Search Is a Helper",
+    type: "true-false",
+    difficulty: "easy",
+    question: "True or False: Search can help you find an app or setting faster, but understanding what you are looking for is still important.",
+    options: ["True", "False"],
+    correctAnswer: "True",
+    explanation: "This is true. Search can save time, especially when a computer has many menus. But it works best when you understand the goal: for example, knowing that you want a display or accessibility option gives you useful words to search for.",
+    funFact: "Good search skills are really question skills: the clearer your words, the easier it is to find a useful result.",
+    realWorldExample: "Instead of searching random words, a learner could search for 'high contrast' after noticing that text is difficult to see.",
+    xp: 15,
+    hint: "Search is useful, but it cannot decide your goal for you."
+  },
+
+  // ============================================================
+  // MISSION 5 — SECTION 3: Technology Changes, Concepts Remain
+  // ============================================================
+  {
+    id: "m5-concepts-01",
+    mission: 5,
+    section: "Technology Changes, Concepts Remain",
+    title: "Old Ideas in New Software",
+    type: "mcq",
+    difficulty: "medium",
+    question: "Why might a newer version of Windows still contain an older-looking interface such as Control Panel?",
+    options: ["New software must never change", "Older tools can remain useful and help with compatibility", "Computers are unable to create new settings", "It is only there to make the screen confusing"],
+    correctAnswer: "Older tools can remain useful and help with compatibility",
+    explanation: "Software usually evolves gradually. Newer tools are added, while useful older parts may remain so people, devices, and programs can continue working. Seeing an older interface does not mean the computer has stopped improving.",
+    funFact: "Many operating systems keep older technologies so that important programs and devices do not suddenly stop working after an update.",
+    realWorldExample: "A school may use a program that was designed for an older interface, so keeping some familiar controls can make the transition smoother.",
+    xp: 20,
+    hint: "Think about what could happen if every older tool disappeared the moment a new version arrived."
+  },
+  {
+    id: "m5-concepts-02",
+    mission: 5,
+    section: "Technology Changes, Concepts Remain",
+    title: "A Gradual Upgrade",
+    type: "ordering",
+    difficulty: "medium",
+    question: "Put this sensible learning approach in order when a computer tool changes.",
+    options: ["Use the new tool for the task", "Understand the goal of the task", "Explore where the new tool keeps related controls", "Ask a clear question if you get stuck"],
+    correctAnswer: ["Understand the goal of the task", "Explore where the new tool keeps related controls", "Use the new tool for the task", "Ask a clear question if you get stuck"],
+    explanation: "Start with the goal, not with a button. Next explore how the new tool is organised, then use it for the task. If you still need help, ask a clear question about the goal or the feature. This approach stays useful even when screens and menu names change.",
+    funFact: "Professional computer users often learn new software by looking for familiar concepts, such as files, settings, sharing, or accessibility, rather than memorising every menu first.",
+    realWorldExample: "When a phone app updates, you can first decide what you want to do, look for the related area, try it, and then ask for help using the correct idea.",
+    xp: 20,
+    hint: "Begin with what you are trying to achieve, then explore the new layout before asking for help."
+  },
+  {
+    id: "m5-concepts-03",
+    mission: 5,
+    section: "Technology Changes, Concepts Remain",
+    title: "Buttons Change, Ideas Travel",
+    type: "guess-reveal",
+    difficulty: "medium",
+    question: "You begin using a brand-new operating system. Which learning habit will help you most? Make your guess, then reveal the answer.",
+    options: ["Understand ideas such as organising work, changing settings, and finding help", "Memorise the exact position of every Windows button", "Avoid trying any unfamiliar tool", "Assume every new system works exactly like the old one"],
+    correctAnswer: "Understand ideas such as organising work, changing settings, and finding help",
+    explanation: "Understanding concepts travels with you. The names, icons, and menu positions may change, but computers still need ways to organise work, adjust settings, support different users, and find information. Memorising one screen can help for a short time; understanding the idea helps for much longer.",
+    funFact: "The best computer users are not people who know every button by heart. They are people who can explore calmly, recognise patterns, and ask useful questions.",
+    realWorldExample: "If a new tablet has no familiar Windows Start button, you can still look for the idea you need: apps, settings, search, workspaces, or accessibility.",
+    xp: 20,
+    hint: "Choose the habit that will still work after the names and buttons have changed."
+  },
+
+  // ============================================================
+  // MISSION 5 — SECTION 4: Accessibility and Good Questions
+  // ============================================================
+  {
+    id: "m5-access-01",
+    mission: 5,
+    section: "Accessibility and Good Questions",
+    title: "Making Text Easier to See",
+    type: "scenario",
+    difficulty: "easy",
+    question: "A person finds it hard to read text because the colours on the screen blend together. Which feature from class could help make the content easier to see?",
+    options: ["High Contrast", "Virtual Desktop", "Custom application shortcut", "A game controller"],
+    correctAnswer: "High Contrast",
+    explanation: "High Contrast changes the screen colours so text and important parts stand out more clearly. It is an accessibility feature: computers can be adjusted because different people see and use screens in different ways.",
+    funFact: "Accessibility features often help many people, not only people with disabilities. Stronger contrast can also be helpful in bright sunlight or when a screen is difficult to see.",
+    realWorldExample: "In class, try locating where High Contrast can be enabled. You do not need to keep it on; the important thing is knowing that the option exists and what problem it can help solve.",
+    xp: 15,
+    hint: "Look for the feature that changes colours so words and screen parts stand out more clearly."
+  },
+  {
+    id: "m5-access-02",
+    mission: 5,
+    section: "Accessibility and Good Questions",
+    title: "Ask a Better Question",
+    type: "mcq",
+    difficulty: "medium",
+    question: "Which question would help a student get the most useful support when text is difficult to see?",
+    options: ["Computer help?", "Why is this computer bad?", "Where can I find a display or accessibility setting that makes text easier to see?", "Can someone do my work for me?"],
+    correctAnswer: "Where can I find a display or accessibility setting that makes text easier to see?",
+    explanation: "A good question explains the problem and the goal. This question says that text is difficult to see and asks for a relevant type of setting. Clear questions help teachers, classmates, search tools, and support pages give better answers.",
+    funFact: "Researchers often improve a question several times before searching, because a precise question usually leads to more precise information.",
+    realWorldExample: "Instead of saying 'I cannot find it,' try saying what you want to change and what you have already checked.",
+    xp: 20,
+    hint: "Choose the question that clearly states both the problem and the kind of help needed."
+  },
+  {
+    id: "m5-reflect-01",
+    mission: 5,
+    section: "Mission 5 Reflection",
+    title: "What Stayed With You?",
+    type: "reflection",
+    difficulty: "easy",
+    question: "What surprised you most today: workspaces, Settings and Control Panel, older tools inside newer software, High Contrast, or asking good questions? Explain why.",
+    options: null,
+    correctAnswer: null,
+    explanation: "There is no single correct answer. The important part is noticing an idea from today's class and explaining why it stood out to you. Curiosity is useful because it helps you explore technology instead of being afraid when something looks new.",
+    funFact: "Many useful discoveries in technology begin with someone noticing a small difference and asking, 'Why does it work this way?'",
+    realWorldExample: "Your answer might mention that two workspaces can reduce clutter, that Control Panel has not completely disappeared, or that High Contrast can make a screen easier to read.",
+    xp: 15,
+    hint: "Choose one demonstration you remember clearly, then describe what it made you realise."
+  },
+  {
+    id: "m5-reflect-02",
+    mission: 5,
+    section: "Mission 5 Reflection",
+    title: "The Idea Behind the Tool",
+    type: "reflection",
+    difficulty: "medium",
+    question: "Why is learning computer concepts useful when software changes? Give one example from today's class.",
+    options: null,
+    correctAnswer: null,
+    explanation: "The best computer users do not simply memorise tools — they understand the ideas behind them. When tools change, their understanding stays useful. Your example could be organising workspaces, finding settings, improving visibility with High Contrast, or asking a good question to explore something new.",
+    funFact: "Software changes often, but ideas such as organisation, accessibility, compatibility, and problem-solving remain valuable across many devices.",
+    realWorldExample: "If a future computer has a different-looking settings app, you can still recognise the concept of changing how the computer works and explore from there.",
+    xp: 25,
+    hint: "Name one idea that would still help you even if the buttons, colours, or menu names changed."
   }
 
 ];
