@@ -660,12 +660,14 @@
         progress: stats.pct,
         glow: statusClass === "done" || statusClass === "progress",
         active: statusClass === "progress",
-        completed: statusClass === "done"
+        completed: statusClass === "done",
+        level: String(m)
       };
 
       var cardAttrs = {
         class: "mission-card mission-card--" + statusClass,
         type: "button",
+        style: "--mission-index:" + (m - 1),
         "aria-label": (locked ? "Mission " + m + " is locked" : "Open Mission " + m) + ", " + statusLabel
       };
       if (locked) cardAttrs.disabled = "disabled";
@@ -705,7 +707,18 @@
     var wrap = $("#badges-card");
     var row = $("#badge-row");
     row.innerHTML = "";
-    if (!earned.length) { wrap.hidden = true; return; }
+    wrap.classList.toggle("card--badges-empty", !earned.length);
+    if (!earned.length) {
+      wrap.hidden = false;
+      row.appendChild(el("div", { class: "achievement-empty" }, [
+        IconContainer("map", { variant: "explore", size: "compact", active: true }),
+        el("div", {}, [
+          el("strong", { text: "Your achievement path is ready" }),
+          el("span", { text: "Complete a mission to reveal the first badge." })
+        ])
+      ]));
+      return;
+    }
     wrap.hidden = false;
     earned.forEach(function (b, index) {
       row.appendChild(el("span", { class: "badge-chip badge-chip--achievement", style: "--achievement-index:" + index }, [
@@ -1689,6 +1702,12 @@
      15. INIT
      ============================================================ */
   function init() {
+    var headerLogo = $(".app-header__logo");
+    if (headerLogo) {
+      var dashboardIcon = IconContainer("monitor", { variant: "dashboard", size: "compact", glow: true });
+      dashboardIcon.classList.add("app-header__logo");
+      headerLogo.replaceWith(dashboardIcon);
+    }
     applyTheme();
     renderTodaysBigIdea();
     renderHeader();
