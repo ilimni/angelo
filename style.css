@@ -1,5 +1,5 @@
 /* =========================================================
-   ILIMNI — Computer Appreciation Review
+   ILIMNI — Digital Literacy & Computing Foundations Review
    Design system: soft shadows, rounded cards, light/dark
    ========================================================= */
 
@@ -251,8 +251,11 @@ main {
 .welcome-feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 25px; box-shadow: var(--shadow-sm); }
 .welcome-feature-card__icon { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 11px; background: var(--brand-light); color: var(--brand-dark); font-size: 1.35rem; font-weight: 800; }
 .welcome-feature-card h3 { font-size: 1.05rem; margin: 18px 0 7px; }.welcome-feature-card p { color: var(--text-muted); font-size: .92rem; }
-.today-discovery { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: start; max-width: 800px; margin: 0 auto 70px; padding: 24px 27px; border: 1px solid color-mix(in srgb, var(--brand) 22%, var(--border)); border-radius: var(--radius-md); background: linear-gradient(115deg, var(--surface), var(--brand-light)); }
-.today-discovery__mark { width: 38px; height: 38px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 50%; color: #fff; background: var(--brand); }.today-discovery__label, .progress-preview__eyebrow { color: var(--brand-dark); font-size: .76rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 800; margin-bottom: 5px; }.today-discovery h2 { font-size: 1.1rem; margin-bottom: 5px; }.today-discovery p:last-child { color: var(--text-muted); }
+.big-idea-card { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: start; padding: 24px 27px; border: 1px solid color-mix(in srgb, var(--brand) 22%, var(--border)); border-radius: var(--radius-md); background: linear-gradient(115deg, var(--surface), var(--brand-light)); box-shadow: var(--shadow-sm); }
+.big-idea-card--landing { max-width: 800px; margin: 0 auto 70px; animation: bigIdeaReveal .5s var(--ease) both; }
+.big-idea-card--latest { margin-top: 24px; }
+.big-idea-card__mark { width: 38px; height: 38px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 50%; background: var(--brand-light); font-size: 1.15rem; }.big-idea-card__label, .progress-preview__eyebrow { color: var(--brand-dark); font-size: .76rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 800; margin-bottom: 5px; }.big-idea-card h2, .big-idea-card h3 { font-size: 1.1rem; margin-bottom: 5px; }.big-idea-card__idea { font-family: var(--font-display); font-weight: 700; line-height: 1.45; }.big-idea-card__explanation { color: var(--text-muted); font-size: .92rem; margin-top: 5px; }
+@keyframes bigIdeaReveal { from { opacity: 0; transform: translateY(6px) scale(.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
 .welcome-section--journey { max-width: 760px; }.learning-journey { display: flex; flex-direction: column; align-items: center; list-style: none; margin: 0; padding: 0; gap: 5px; }.learning-journey li { display: flex; flex-direction: column; align-items: center; color: var(--text-muted); font-size: .88rem; font-weight: 700; }.learning-journey li:not(:last-child)::after { content: "↓"; color: var(--brand); font-size: 1.2rem; line-height: 1.1; margin-top: 5px; }
 .progress-preview { display: grid; grid-template-columns: 1fr 1.1fr; gap: 42px; align-items: center; padding: 34px; margin: 0 auto 25px; border-radius: var(--radius-lg); background: linear-gradient(135deg, #292964, #5551c7); color: #fff; box-shadow: var(--shadow-md); }.progress-preview h2 { font-size: 1.55rem; margin-bottom: 9px; }.progress-preview p:last-child { color: #e0e0ff; }.progress-preview__eyebrow { color: #c9c7ff; }.progress-preview__missions { padding: 8px 17px; border-radius: var(--radius-md); background: rgba(255,255,255,.11); }.progress-preview__missions > div { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 13px 0; font-size: .9rem; }.progress-preview__missions > div + div { border-top: 1px solid rgba(255,255,255,.18); }.preview-status { font-size: .72rem; padding: 5px 9px; border-radius: var(--radius-pill); }.preview-status--complete { background: #c9f8df; color: #166342; }.preview-status--progress { background: #fff1ba; color: #765300; }.preview-status--locked { background: rgba(255,255,255,.16); color: #eeeeff; }
 
@@ -366,6 +369,11 @@ main {
 .modal-close:hover { background: var(--surface-2); color: var(--text); }
 #form-password-reset .btn { width: 100%; margin-top: 4px; }
 .password-reset-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.big-idea-modal { width: min(100%, 500px); margin: 0; text-align: center; animation: bigIdeaReveal .28s var(--ease) both; }
+.big-idea-modal__icon { font-size: 2rem; margin-bottom: 8px; }
+.big-idea-modal__idea { font-family: var(--font-display); font-size: 1.18rem; font-weight: 700; line-height: 1.45; margin: 14px 0 8px; }
+.big-idea-modal__explanation { color: var(--text-muted); }
+.big-idea-modal__actions { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
 
 /* ---------------- Mission select ---------------- */
 .screen-head { margin-bottom: 22px; }
@@ -375,38 +383,56 @@ main {
 .mission-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 18px;
+  gap: 20px;
 }
 .mission-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 24px;
-  box-shadow: var(--shadow-sm);
+  --card-accent: var(--brand);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  border: 1px solid color-mix(in srgb, var(--card-accent) 18%, var(--border));
+  border-radius: 22px;
+  padding: 22px;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--surface) 88%, var(--brand-light)), var(--surface));
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-md);
+  color: var(--text);
+  font: inherit;
   cursor: pointer;
-  transition: transform .2s var(--ease), box-shadow .2s var(--ease), border-color .2s;
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease), background .25s var(--ease);
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
+  isolation: isolate;
 }
-.mission-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--brand); }
-.mission-card__icon { color: var(--brand); }
-.mission-card__icon .ui-icon { width: 1.8rem; height: 1.8rem; vertical-align: 0; }
+.mission-card::before { content: ""; position: absolute; inset: 0; z-index: -1; opacity: .68; background: radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--card-accent) 14%, transparent), transparent 43%); }
+.mission-card:hover { transform: translateY(-5px) scale(1.01); box-shadow: var(--shadow-lg); border-color: color-mix(in srgb, var(--card-accent) 48%, var(--border)); }
+.mission-card:active { transform: translateY(-2px) scale(.995); }
+.mission-card:focus-visible { outline: 3px solid var(--brand); outline-offset: 3px; }
+.mission-card--progress { --card-accent: var(--brand); }
+.mission-card--done { --card-accent: #c99532; background: linear-gradient(145deg, color-mix(in srgb, var(--surface) 88%, #fff6dc), var(--surface)); }
+.mission-card--locked { --card-accent: var(--text-faint); background: var(--surface-2); box-shadow: var(--shadow-sm); cursor: not-allowed; opacity: .7; }
+.mission-card--locked::before { display: none; }
+.mission-card--locked:hover { transform: none; box-shadow: var(--shadow-sm); border-color: var(--border); }
+.mission-card__top { display: flex; align-items: center; gap: 14px; }
+.mission-card__heading { min-width: 0; }
 .mission-card__title { font-weight: 700; font-size: 1.15rem; }
-.mission-card__desc { color: var(--text-muted); font-size: .88rem; }
+.mission-card__desc { color: var(--text-muted); font-size: .88rem; margin-top: 3px; }
+.mission-card__progress-label { display: flex; justify-content: space-between; color: var(--text-muted); font-size: .76rem; font-weight: 700; letter-spacing: .01em; }
 .mission-card__bar-track {
-  height: 8px;
+  height: 7px;
   border-radius: var(--radius-pill);
-  background: var(--surface-2);
+  background: color-mix(in srgb, var(--card-accent) 12%, var(--surface-2));
   overflow: hidden;
 }
 .mission-card__bar-fill {
   height: 100%;
   border-radius: var(--radius-pill);
-  background: linear-gradient(90deg, var(--brand), var(--accent));
+  background: linear-gradient(90deg, var(--card-accent), color-mix(in srgb, var(--card-accent) 62%, #fff));
   transition: width .5s var(--ease);
 }
+.mission-card--progress .mission-card__bar-fill { animation: progressSheen 2.8s ease-in-out infinite; }
 .mission-card__footer {
   display: flex;
   justify-content: space-between;
@@ -426,6 +452,26 @@ main {
 .mission-card__status--done { background: var(--success-bg); color: var(--success); }
 .mission-card__status--progress { background: var(--brand-light); color: var(--brand-dark); }
 .mission-card__status--new { background: var(--surface-2); color: var(--text-faint); }
+.mission-card__status--locked { background: color-mix(in srgb, var(--text-faint) 12%, var(--surface)); color: var(--text-muted); }
+
+/* Reusable Lucide icon treatment for mission cards and future learning surfaces. */
+.icon-container { --ring-color: var(--brand); position: relative; flex: 0 0 auto; width: 58px; height: 58px; display: grid; place-items: center; border: 1px solid color-mix(in srgb, var(--ring-color) 24%, var(--border)); border-radius: 18px; color: var(--ring-color); background: linear-gradient(145deg, color-mix(in srgb, var(--ring-color) 17%, var(--surface)), color-mix(in srgb, var(--ring-color) 7%, var(--surface))); box-shadow: inset 0 1px 0 rgba(255,255,255,.5), var(--shadow-sm); transition: transform .25s var(--ease), box-shadow .25s var(--ease); }
+.mission-card:hover .icon-container { transform: translateY(-2px) scale(1.045); box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 10px 20px color-mix(in srgb, var(--ring-color) 16%, transparent); }
+.icon-container__icon { position: relative; width: 1.7rem; height: 1.7rem; vertical-align: 0; }
+.icon-container__ring { position: absolute; inset: -4px; border-radius: 21px; opacity: 0; pointer-events: none; }
+.icon-container--progress { --ring-color: var(--brand); }
+.icon-container--progress .icon-container__ring { opacity: 1; background: conic-gradient(var(--ring-color) var(--progress), color-mix(in srgb, var(--ring-color) 13%, transparent) 0); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; padding: 2px; animation: missionRingPulse 2.4s ease-in-out infinite; }
+.icon-container--done { --ring-color: #c99532; }
+.icon-container--done .icon-container__ring { opacity: 1; border: 2px solid var(--ring-color); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring-color) 14%, transparent), 0 0 16px color-mix(in srgb, var(--ring-color) 24%, transparent); }
+.icon-container--done::after { content: "✦"; position: absolute; top: -10px; right: -8px; color: var(--ring-color); font-size: .85rem; text-shadow: 0 0 10px color-mix(in srgb, var(--ring-color) 50%, transparent); animation: sparkleSoft 2.2s ease-in-out infinite; }
+.icon-container--locked { --ring-color: var(--text-faint); filter: grayscale(.25); }
+.icon-container__badge { position: absolute; right: -6px; bottom: -6px; width: 22px; height: 22px; display: grid; place-items: center; border: 2px solid var(--surface); border-radius: 50%; color: #fff; background: var(--success); box-shadow: var(--shadow-sm); }
+.icon-container--active { animation: iconActivePulse 2.4s ease-in-out infinite; }
+.icon-container--glow { box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 8px 20px color-mix(in srgb, var(--ring-color) 15%, transparent); }
+@keyframes missionRingPulse { 50% { filter: brightness(1.12); transform: scale(1.025); } }
+@keyframes iconActivePulse { 50% { transform: translateY(-1px); } }
+@keyframes sparkleSoft { 50% { opacity: .45; transform: scale(.8) rotate(18deg); } }
+@keyframes progressSheen { 50% { filter: brightness(1.12); } }
 
 .card--badges { margin-top: 24px; }
 .weekend-invite {
@@ -993,7 +1039,7 @@ main {
   .question-nav__center { margin-left: 0; order: 3; width: 100%; justify-content: center; }
   .certificate { padding: 36px 20px; }
   .weekend-card { padding: 27px 16px; }.weekend-invite { padding: 16px; }.keyboard-board { grid-template-columns: repeat(3, 1fr); gap: 7px; padding: 10px; }.keycap--space { grid-column: span 3; }.group-zones { grid-template-columns: repeat(2, 1fr); }.choice-grid { grid-template-columns: 1fr; }
-  .welcome-page { padding-top: 8px; }.welcome-hero { margin: 28px auto 54px; }.welcome-hero__copy { font-size: 1rem; }.welcome-features { grid-template-columns: 1fr; }.welcome-feature-card { padding: 20px; }.today-discovery { padding: 20px; margin-bottom: 52px; }.progress-preview { grid-template-columns: 1fr; gap: 22px; padding: 26px 20px; }.progress-preview__missions { padding: 6px 14px; }
+  .welcome-page { padding-top: 8px; }.welcome-hero { margin: 28px auto 54px; }.welcome-hero__copy { font-size: 1rem; }.welcome-features { grid-template-columns: 1fr; }.welcome-feature-card { padding: 20px; }.big-idea-card { padding: 20px; }.big-idea-card--landing { margin-bottom: 52px; }.progress-preview { grid-template-columns: 1fr; gap: 22px; padding: 26px 20px; }.progress-preview__missions { padding: 6px 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

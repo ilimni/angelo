@@ -1,5 +1,5 @@
 /**
- * ILIMNI — Computer Appreciation Review Experience
+ * ILIMNI — Digital Literacy & Computing Foundations Review Experience
  * app.js — generic rendering engine driven entirely by content.js
  *
  * Nothing here hardcodes a question. Every interaction type has one
@@ -15,6 +15,7 @@
      ============================================================ */
   var ALL_QUESTIONS = (typeof missionContent !== "undefined" ? missionContent : []);
   var GAMIFICATION = (typeof gamification !== "undefined" ? gamification : { xpPerLevel: 150, badges: [], encouragingMessages: [], confettiOnMissionComplete: true });
+  var BIG_IDEAS = (typeof bigIdeas !== "undefined" ? bigIdeas : []);
 
   var MISSIONS = Array.from(new Set(ALL_QUESTIONS.map(function (q) { return q.mission; })))
     .sort(function (a, b) { return a - b; });
@@ -82,7 +83,8 @@
       reflectionAnswers: {},       // { id: text }
       missionProgress: {},         // { missionNum: { started: bool, completed: bool } }
       theme: "light",
-      earnedBadges: []
+      earnedBadges: [],
+      latestBigIdeaId: null
     };
   }
 
@@ -170,6 +172,26 @@
   function icon(name, className) {
     return el("i", { class: "ui-icon" + (className ? " " + className : ""), "data-lucide": name, "aria-hidden": "true" });
   }
+  // Shared visual wrapper for Lucide icons. It keeps glyphs consistent while
+  // each surface can opt into a ring, glow, ribbon, or level marker.
+  function IconContainer(iconName, options) {
+    options = options || {};
+    var variant = options.variant || "new";
+    var container = el("span", {
+      class: "icon-container icon-container--" + variant + (options.size ? " icon-container--" + options.size : "") + (options.glow ? " icon-container--glow" : "") + (options.active ? " icon-container--active" : ""),
+      style: "--progress:" + (options.progress || 0) + "%",
+      "aria-hidden": "true"
+    }, [
+      el("span", { class: "icon-container__ring" }),
+      icon(iconName, "icon-container__icon")
+    ]);
+    if (options.completed) {
+      container.appendChild(el("span", { class: "icon-container__badge" }, [icon("check", "ui-icon--sm")]));
+    }
+    if (options.ribbon) container.appendChild(el("span", { class: "icon-container__ribbon", text: options.ribbon }));
+    if (options.level) container.appendChild(el("span", { class: "icon-container__level", text: options.level }));
+    return container;
+  }
   function refreshIcons() {
     if (window.refreshIcons) window.refreshIcons();
   }
@@ -192,6 +214,55 @@
   }
   function normalizeText(s) {
     return String(s == null ? "" : s).toLowerCase().replace(/\s+/g, "").replace(/[.]$/g, "");
+  }
+
+  /* ============================================================
+     2b. BIG IDEAS — data selection shared by every experience
+     ============================================================ */
+  function hashText(text) {
+    var hash = 0;
+    for (var i = 0; i < text.length; i++) hash = ((hash << 5) - hash) + text.charCodeAt(i) | 0;
+    return Math.abs(hash);
+  }
+
+  function utcDateKey() {
+    var now = new Date();
+    return [now.getUTCFullYear(), String(now.getUTCMonth() + 1).padStart(2, "0"), String(now.getUTCDate()).padStart(2, "0")].join("-");
+  }
+
+  function pickBigIdea(candidates, seed) {
+    if (!candidates.length) return null;
+    return candidates[hashText(seed) % candidates.length];
+  }
+
+  function getTodaysBigIdea() {
+    return pickBigIdea(BIG_IDEAS, "today-" + utcDateKey());
+  }
+
+  function getBigIdeaForMission(missionId) {
+    var missionIdeas = BIG_IDEAS.filter(function (idea) { return idea.missionId === missionId; });
+    return pickBigIdea(missionIdeas.length ? missionIdeas : BIG_IDEAS, "mission-" + missionId + "-" + utcDateKey());
+  }
+
+  function getBigIdeaById(id) {
+    return BIG_IDEAS.find(function (idea) { return idea.id === id; }) || null;
+  }
+
+  function renderTodaysBigIdea() {
+    var idea = getTodaysBigIdea();
+    if (!idea) return;
+    $("#today-big-idea-title").textContent = idea.title;
+    $("#today-big-idea").textContent = idea.idea;
+    $("#today-big-idea-explanation").textContent = idea.explanation;
+  }
+
+  function renderLatestBigIdeaCard() {
+    var card = $("#latest-big-idea-card");
+    var idea = getBigIdeaById(state.latestBigIdeaId);
+    card.hidden = !idea;
+    if (!idea) return;
+    $("#latest-big-idea-heading").textContent = idea.title;
+    $("#latest-big-idea").textContent = idea.idea;
   }
 
   var toastTimer = null;
@@ -220,8 +291,17 @@
      4. HEADER (xp, student pill, mission tabs, theme)
      ============================================================ */
   function renderHeader() {
-    $("#xp-counter-value").textContent = state.xp;
-    $("#student-pill").innerHTML = state.studentName ? "<i class='ui-icon ui-icon--sm' data-lucide='user-round' aria-hidden='true'></i> " + escapeHtml(state.studentName) : "";
+    var xpCounter = $("#xp-counter");
+    xpCounter.innerHTML = "";
+    xpCounter.appendChild(IconContainer("zap", { variant: "xp", size: "compact", glow: state.xp > 0, active: state.xp > 0 }));
+    xpCounter.appendChild(el("span", { id: "xp-counter-value", text: state.xp }));
+    xpCounter.appendChild(document.createTextNode(" XP"));
+    var studentPill = $("#student-pill");
+    studentPill.innerHTML = "";
+    if (state.studentName) {
+      studentPill.appendChild(IconContainer("user-round", { variant: "student", size: "compact" }));
+      studentPill.appendChild(document.createTextNode(state.studentName));
+    }
     var signoutBtn = $("#btn-signout");
     if (signoutBtn) signoutBtn.hidden = !(window.firebaseAuth && firebaseAuth.currentUser);
     var syncBtn = $("#btn-sync-account");
@@ -240,6 +320,7 @@
       });
       tabs.appendChild(btn);
     });
+    refreshIcons();
   }
 
   function applyTheme() {
@@ -356,8 +437,8 @@
     });
   });
 
-  function modalFocusableElements() {
-    return $$("button:not([disabled]), input:not([disabled])", $("#password-reset-modal")).filter(function (node) {
+  function modalFocusableElements(modal) {
+    return $$("button:not([disabled]), input:not([disabled])", modal).filter(function (node) {
       return !node.closest("[hidden]");
     });
   }
@@ -438,7 +519,47 @@
     if ($("#password-reset-modal").hidden) return;
     if (e.key === "Escape") { e.preventDefault(); closePasswordResetModal(); return; }
     if (e.key !== "Tab") return;
-    var focusable = modalFocusableElements();
+    var focusable = modalFocusableElements($("#password-reset-modal"));
+    if (!focusable.length) return;
+    var first = focusable[0];
+    var last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+
+  var bigIdeaModalOpener = null;
+  var bigIdeaModalTimer = null;
+  function setCompletionActionsDisabled(disabled) {
+    ["#btn-back-missions", "#btn-continue-next", "#btn-view-certificate"].forEach(function (selector) {
+      var button = $(selector);
+      if (button) button.disabled = disabled;
+    });
+  }
+
+  function openBigIdeaModal(idea) {
+    if (!idea) return;
+    bigIdeaModalOpener = document.activeElement;
+    $("#big-idea-modal-title").textContent = idea.title;
+    $("#big-idea-modal-idea").textContent = idea.idea;
+    $("#big-idea-modal-explanation").textContent = idea.explanation;
+    $("#big-idea-modal").hidden = false;
+    $("#btn-remember-big-idea").focus();
+  }
+
+  function closeBigIdeaModal() {
+    $("#big-idea-modal").hidden = true;
+    setCompletionActionsDisabled(false);
+    if (bigIdeaModalOpener && document.contains(bigIdeaModalOpener)) bigIdeaModalOpener.focus();
+  }
+
+  $("#btn-remember-big-idea").addEventListener("click", closeBigIdeaModal);
+  $("#btn-continue-big-idea").addEventListener("click", closeBigIdeaModal);
+  document.addEventListener("keydown", function (e) {
+    var modal = $("#big-idea-modal");
+    if (modal.hidden) return;
+    if (e.key === "Escape") { e.preventDefault(); closeBigIdeaModal(); return; }
+    if (e.key !== "Tab") return;
+    var focusable = modalFocusableElements(modal);
     if (!focusable.length) return;
     var first = focusable[0];
     var last = focusable[focusable.length - 1];
@@ -498,6 +619,28 @@
     };
   }
 
+  function isMissionLocked(m) {
+    return MISSIONS.some(function (earlierMission) {
+      return earlierMission < m && !isMissionComplete(earlierMission);
+    });
+  }
+
+  var MISSION_ICON_MAP = {
+    1: "monitor", 2: "keyboard", 3: "mouse-pointer-2", 4: "accessibility",
+    5: "compass", 6: "file", 7: "folder", 8: "globe-2", 9: "brain-circuit", 10: "shield-check"
+  };
+
+  function achievementIconName(label) {
+    var name = String(label || "").toLowerCase();
+    if (name.indexOf("curious") !== -1) return "lightbulb";
+    if (name.indexOf("fast") !== -1) return "zap";
+    if (name.indexOf("access") !== -1) return "accessibility";
+    if (name.indexOf("problem") !== -1) return "puzzle";
+    if (name.indexOf("detective") !== -1) return "search-check";
+    if (name.indexOf("consistency") !== -1) return "calendar-check";
+    return "award";
+  }
+
   function goToMissionSelect() {
     $("#missions-greeting").textContent = state.studentName
       ? ("Welcome back, " + state.studentName)
@@ -508,13 +651,36 @@
     MISSIONS.forEach(function (m) {
       var stats = missionStats(m);
       var sections = Array.from(new Set(itemsForMission(m).map(function (q) { return q.section; })));
-      var statusLabel = stats.pct === 100 ? "Completed" : (stats.pct > 0 ? "In progress" : "Not started");
-      var statusClass = stats.pct === 100 ? "done" : (stats.pct > 0 ? "progress" : "new");
+      var locked = isMissionLocked(m);
+      var statusLabel = locked ? "Locked" : (stats.pct === 100 ? "Completed" : (stats.pct > 0 ? "In progress" : "Not started"));
+      var statusClass = locked ? "locked" : (stats.pct === 100 ? "done" : (stats.pct > 0 ? "progress" : "new"));
+      var iconName = MISSION_ICON_MAP[m] || "book-open";
+      var iconOptions = {
+        variant: statusClass,
+        progress: stats.pct,
+        glow: statusClass === "done" || statusClass === "progress",
+        active: statusClass === "progress",
+        completed: statusClass === "done"
+      };
 
-      var card = el("div", { class: "mission-card", tabindex: "0", role: "button", "aria-label": "Open Mission " + m }, [
-        el("div", { class: "mission-card__icon", "aria-hidden": "true" }, [icon(m === 1 ? "brain-circuit" : "folder-cog")]),
-        el("div", { class: "mission-card__title", text: "Mission " + m }),
-        el("div", { class: "mission-card__desc", text: sections.slice(0, 3).join(" · ") + (sections.length > 3 ? "…" : "") }),
+      var cardAttrs = {
+        class: "mission-card mission-card--" + statusClass,
+        type: "button",
+        "aria-label": (locked ? "Mission " + m + " is locked" : "Open Mission " + m) + ", " + statusLabel
+      };
+      if (locked) cardAttrs.disabled = "disabled";
+      var card = el("button", cardAttrs, [
+        el("div", { class: "mission-card__top" }, [
+          IconContainer(iconName, iconOptions),
+          el("div", { class: "mission-card__heading" }, [
+            el("div", { class: "mission-card__title", text: "Mission " + m }),
+            el("div", { class: "mission-card__desc", text: sections.slice(0, 3).join(" · ") + (sections.length > 3 ? "…" : "") })
+          ])
+        ]),
+        el("div", { class: "mission-card__progress-label" }, [
+          el("span", { text: "Learning progress" }),
+          el("span", { text: stats.pct + "%" })
+        ]),
         el("div", { class: "mission-card__bar-track" }, [
           el("div", { class: "mission-card__bar-fill", style: "width:" + stats.pct + "%" })
         ]),
@@ -523,12 +689,12 @@
           el("span", { class: "mission-card__status mission-card__status--" + statusClass, text: statusLabel })
         ])
       ]);
-      card.addEventListener("click", function () { startMission(m); });
-      card.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); startMission(m); } });
+      if (!locked) card.addEventListener("click", function () { startMission(m); });
       list.appendChild(card);
     });
 
     renderBadgesCard();
+    renderLatestBigIdeaCard();
     renderHeader();
     refreshIcons();
     showScreen("missions");
@@ -541,8 +707,11 @@
     row.innerHTML = "";
     if (!earned.length) { wrap.hidden = true; return; }
     wrap.hidden = false;
-    earned.forEach(function (b) {
-      row.appendChild(el("span", { class: "badge-chip" }, [icon("award", "ui-icon--sm"), document.createTextNode(" " + b.label)]));
+    earned.forEach(function (b, index) {
+      row.appendChild(el("span", { class: "badge-chip badge-chip--achievement", style: "--achievement-index:" + index }, [
+        IconContainer(achievementIconName(b.label), { variant: "achievement", size: "compact", glow: true, completed: true }),
+        el("span", { text: b.label })
+      ]));
     });
   }
 
@@ -1226,6 +1395,8 @@
     }
     if (state.missionProgress[m]) state.missionProgress[m].completed = true;
     else state.missionProgress[m] = { started: true, completed: true };
+    var missionBigIdea = getBigIdeaForMission(m);
+    if (missionBigIdea) state.latestBigIdeaId = missionBigIdea.id;
     saveState();
 
     var completed = items.filter(function (q) { return state.completedQuestions[q.id] && !state.completedQuestions[q.id].skipped; });
@@ -1285,6 +1456,11 @@
     if (GAMIFICATION.confettiOnMissionComplete) fireConfetti();
     renderHeader();
     showScreen("summary");
+    setCompletionActionsDisabled(!!missionBigIdea);
+    clearTimeout(bigIdeaModalTimer);
+    // Let the completion screen's XP and achievement feedback settle before
+    // presenting the lesson that the learner should carry forward.
+    bigIdeaModalTimer = setTimeout(function () { openBigIdeaModal(missionBigIdea); }, 600);
   }
 
   $("#btn-back-missions").addEventListener("click", goToMissionSelect);
@@ -1364,9 +1540,15 @@
     $("#cert-xp").textContent = state.xp;
     var badgesWrap = $("#cert-badges");
     badgesWrap.innerHTML = "";
-    computeEarnedBadges().forEach(function (b) {
-      badgesWrap.appendChild(el("span", { class: "badge-chip" }, [icon("award", "ui-icon--sm"), document.createTextNode(" " + b.label)]));
+    computeEarnedBadges().forEach(function (b, index) {
+      badgesWrap.appendChild(el("span", { class: "badge-chip badge-chip--achievement", style: "--achievement-index:" + index }, [
+        IconContainer(achievementIconName(b.label), { variant: "achievement", size: "compact", glow: true, completed: true }),
+        el("span", { text: b.label })
+      ]));
     });
+    var certificateIcon = $("#certificate-icon");
+    certificateIcon.innerHTML = "";
+    certificateIcon.appendChild(IconContainer("award", { variant: "certificate", glow: true, ribbon: "ILIMNI" }));
     var today = new Date();
     $("#cert-date").textContent = "Issued " + today.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
     showScreen("certificate");
@@ -1508,6 +1690,7 @@
      ============================================================ */
   function init() {
     applyTheme();
+    renderTodaysBigIdea();
     renderHeader();
     if (window.firebaseAuth) {
       firebaseAuth.onAuthStateChanged(function (user) {

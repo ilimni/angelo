@@ -1,5 +1,5 @@
 /**
- * ILIMNI — Computer Appreciation Review Experience
+ * ILIMNI — Digital Literacy & Computing Foundations Review Experience
  * Missions 001 & 002 | Learner: Angelo (JSS3)
  *
  * This is a REVIEW, not an exam. Every interaction exists because it either
