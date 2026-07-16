@@ -1993,6 +1993,133 @@ const missionContent = [
     realWorldExample: "If a future computer has a different-looking settings app, you can still recognise the concept of changing how the computer works and explore from there.",
     xp: 25,
     hint: "Name one idea that would still help you even if the buttons, colours, or menu names changed."
+  },
+
+  // ============================================================
+  // MISSION 6 — Files: Names, Formats & Identity
+  // A classroom-discovery mission: observe, predict, test, explain, reflect.
+  // ============================================================
+  {
+    id: "m6-review-01", mission: 6, section: "Quick Review: Task Manager", title: "Practical Challenge: Open Task Manager", type: "ordering", difficulty: "easy",
+    question: "Before today's file investigation, recreate the shortcut your class used. Put the actions in order.",
+    options: ["Task Manager opens", "Press Esc while still holding Ctrl and Shift", "Hold Ctrl and Shift"],
+    correctAnswer: ["Hold Ctrl and Shift", "Press Esc while still holding Ctrl and Shift", "Task Manager opens"],
+    explanation: "Ctrl+Shift+Esc opens Task Manager directly. It is useful because it lets you inspect what is happening before making a decision.", funFact: "Task Manager is an observer first: it shows information about running apps and resources.", realWorldExample: "Use it with your teacher when an app stops responding; do not end tasks just because they look unfamiliar.", xp: 15, hint: "Hold the two modifier keys before pressing Esc.",
+    learningIntelligence: m6LIL({ competencyIds: ["COMP-003", "COMP-006"], activityIds: ["ACT-005"], learningObjective: "Learner can open Task Manager using Ctrl+Shift+Esc.", cognitiveLevel: "Apply", instructionalStrategy: "STR-011", tags: ["task-manager", "shortcut", "practical"] })
+  },
+  {
+    id: "m6-review-02", mission: 6, section: "Quick Review: Task Manager", title: "Guess Before Reveal: Frozen App", type: "guess-reveal", difficulty: "medium",
+    question: "A document app has stopped responding, but the rest of the computer still works. What is the safest first investigation? Make your best guess before revealing the explanation.",
+    options: ["Open Task Manager and identify the app that is not responding", "Immediately switch off the computer at the wall", "End every process you can see", "Delete the document app"],
+    correctAnswer: "Open Task Manager and identify the app that is not responding",
+    explanation: "Start by observing the specific problem. Task Manager can help identify the frozen app; only then should an adult or teacher decide whether ending that one task is appropriate.", funFact: "A frozen window does not always mean the whole computer has failed.", realWorldExample: "This is the same careful habit you will use with files today: investigate before you act.", xp: 20, hint: "Choose the option that gathers information without making a risky change.",
+    learningIntelligence: m6LIL({ competencyIds: ["COMP-006", "COMP-014"], misconceptionIds: ["MIS-003"], activityIds: ["ACT-005"], learningObjective: "Learner can choose a safe first response to one frozen application.", cognitiveLevel: "Apply", instructionalStrategy: "STR-001", tags: ["task-manager", "frozen-app", "prediction"] })
+  },
+  {
+    id: "m6-review-03", mission: 6, section: "Quick Review: Task Manager", title: "Teacher Echo: End One Task, Not Everything", type: "mcq", difficulty: "easy",
+    question: "Complete the classroom reminder: “Task Manager helps us identify the problem first; we only end the ___ that is causing the problem.”",
+    options: ["specific app or task", "whole computer", "internet", "every running process"], correctAnswer: "specific app or task",
+    explanation: "Ending a specific unresponsive task can be useful, but ending everything can interrupt important system work or lose work in other apps.", funFact: "Some processes belong to Windows itself, which is why random ending is unsafe.", realWorldExample: "Say the reminder aloud with a partner before trying it on a classroom computer.", xp: 15, hint: "The safe choice is narrow and targeted.",
+    learningIntelligence: m6LIL({ competencyIds: ["COMP-006", "COMP-014"], misconceptionIds: ["MIS-003"], activityIds: ["ACT-005"], learningObjective: "Learner can state the safe scope of an End Task action.", cognitiveLevel: "Understand", instructionalStrategy: "STR-002", tags: ["task-manager", "teacher-echo", "safety"] })
+  },
+  {
+    id: "m6-review-04", mission: 6, section: "Quick Review: Task Manager", title: "Match the Resource Clue", type: "matching", difficulty: "medium",
+    question: "Match each Task Manager clue to what it describes.",
+    options: [
+      { clue: "CPU", meaning: "How much processing work is being used" },
+      { clue: "Memory", meaning: "How much working memory apps are using" },
+      { clue: "Disk", meaning: "How busy storage is reading or writing" }
+    ], correctAnswer: "clue-meaning pairs as listed",
+    explanation: "Resource figures are clues, not automatic diagnoses. They help you notice what the computer is busy doing and ask a better next question.", funFact: "A high number can be normal when a large file is opening or saving.", realWorldExample: "If a class computer is slow, observe which resource is busy before guessing at a solution.", xp: 20, hint: "Think about processing, working space, and saved storage.",
+    learningIntelligence: m6LIL({ competencyIds: ["COMP-006", "COMP-012"], activityIds: ["ACT-005"], learningObjective: "Learner can interpret basic CPU, memory, and disk resource labels.", cognitiveLevel: "Understand", instructionalStrategy: "STR-007", tags: ["task-manager", "resources", "matching"] })
+  },
+  {
+    id: "m6-review-05", mission: 6, section: "Quick Review: Task Manager", title: "Sort: Safe or Risky Troubleshooting", type: "sorting", difficulty: "medium",
+    question: "Sort these responses to a frozen app into “Safe first step” and “Risky action”.",
+    options: ["Observe which app is frozen", "Ask a teacher before ending an unfamiliar task", "End every process at once", "Pull the power cable immediately"],
+    correctAnswer: { "Safe first step": ["Observe which app is frozen", "Ask a teacher before ending an unfamiliar task"], "Risky action": ["End every process at once", "Pull the power cable immediately"] },
+    explanation: "Good troubleshooting is careful and specific. Observe, identify, and ask for support when needed; broad or sudden actions can create a bigger problem and lose work.", funFact: "Troubleshooters often keep notes of what they observed before changing anything.", realWorldExample: "This is a useful rule for files too: do not rename, delete, or force-open something until you have looked for clues.", xp: 20, hint: "Safe actions collect information or ask for help; risky actions affect too much too quickly.",
+    learningIntelligence: m6LIL({ competencyIds: ["COMP-006", "COMP-014"], misconceptionIds: ["MIS-003"], activityIds: ["ACT-005"], learningObjective: "Learner can distinguish safe observation-led troubleshooting from risky actions.", cognitiveLevel: "Analyse", instructionalStrategy: "STR-008", tags: ["task-manager", "safe-troubleshooting", "sorting"] })
+  },
+  {
+    id: "m6-review-06", mission: 6, section: "Quick Review: Task Manager", title: "Scenario: Preserve the Work", type: "scenario", difficulty: "medium",
+    question: "A browser has frozen while a classmate is typing in a different app. Why is “End Task” for the browser safer than restarting the whole computer straight away?",
+    options: ["It targets the problem app and may protect work in other apps", "It makes all files permanently disappear", "It gives the browser more internet data", "It repairs every computer problem"], correctAnswer: "It targets the problem app and may protect work in other apps",
+    explanation: "Targeting one confirmed problem limits disruption. It still may lose unsaved work in that app, so it should be used thoughtfully and with support when needed.", funFact: "Many programs have their own recovery tools, but saving work regularly is still the best protection.", realWorldExample: "Before ending a task in class, tell your teacher what you observed and which app you think is affected.", xp: 20, hint: "Think about which choice changes the smallest possible part of the computer.",
+    learningIntelligence: m6LIL({ competencyIds: ["COMP-006", "COMP-014", "COMP-013"], misconceptionIds: ["MIS-003"], activityIds: ["ACT-005"], learningObjective: "Learner can explain why targeted troubleshooting is safer than a broad restart.", cognitiveLevel: "Apply", instructionalStrategy: "STR-006", tags: ["task-manager", "scenario", "safe-troubleshooting"] })
+  },
+
+  // ------------------------------------------------------------
+  // SECTION B — Today's Main Discovery: classroom file experiments
+  // ------------------------------------------------------------
+  {
+    id: "m6-files-01", mission: 6, section: "Today's Main Discovery: Files", title: "Observe First: Three Familiar-Looking Files", type: "guess-reveal", difficulty: "easy",
+    question: "In class, the teacher showed three files named holiday.jpg, holiday.txt, and holiday.docx. Before opening any of them, what is the dot-and-letters part most useful for predicting?",
+    options: ["The file format and a likely app to open it", "Who created the file", "Whether the file is safe forever", "The exact words or picture inside"], correctAnswer: "The file format and a likely app to open it",
+    explanation: "The extension is a helpful clue about a file’s format and the kind of reader that may open it. It does not reveal every detail of the content.", funFact: "Windows can be set to hide extensions, which makes careful investigation even more important.", realWorldExample: "The class first observed names and extensions, then tested what happened when each file was opened.", xp: 15, hint: "A name is a clue, not a full description.",
+    learningIntelligence: m6LIL({ competencyIds: ["COMP-007"], bigIdeaIds: ["BIG-003"], misconceptionIds: ["MIS-006"], activityIds: ["ACT-002"], learningObjective: "Learner can predict what an extension suggests about a file.", cognitiveLevel: "Understand", instructionalStrategy: "STR-001", tags: ["files", "extensions", "observation", "prediction"] })
+  },
+  {
+    id: "m6-files-02", mission: 6, section: "Today's Main Discovery: Files", title: "Prediction: Change the Label?", type: "guess-reveal", difficulty: "medium",
+    question: "Before the classroom experiment, predict what happens if notes.txt is renamed notes.jpg without changing anything else inside the file.",
+    options: ["It becomes a real photograph", "Its label changes, but its text content does not turn into image data", "It becomes a website", "Every app can now open it"], correctAnswer: "Its label changes, but its text content does not turn into image data",
+    explanation: "Renaming an extension changes a label, not the underlying format. A photo reader may reject the renamed text file because the contents do not match what that reader expects.", funFact: "File conversion tools create a new format by changing or re-encoding the contents, not merely by changing a name.", realWorldExample: "This is why the class made a copy before experimenting: investigating should not damage the original work.", xp: 25, hint: "Ask whether changing a label can rewrite all the data inside.",
+    learningIntelligence: m6LIL({ competencyIds: ["COMP-007"], bigIdeaIds: ["BIG-003"], misconceptionIds: ["MIS-001"], activityIds: ["ACT-002"], learningObjective: "Learner can predict the difference between renaming a file and converting its format.", cognitiveLevel: "Analyse", instructionalStrategy: "STR-001", tags: ["files", "extensions", "prediction", "misconception"] })
+  },
+  {
+    id: "m6-files-03", mission: 6, section: "Today's Main Discovery: Files", title: "Classroom Experiment: Rename a Copy", type: "scenario", difficulty: "medium",
+    question: "Your group copied a text file, renamed the copy with .jpg, then tried to open it in an image viewer. The viewer says it cannot read the file. What is the best explanation?",
+    options: ["The content is still text, even though the copy now has an image-looking label", "The computer has turned off", "The image viewer can read every format", "The original text file has become a photograph"], correctAnswer: "The content is still text, even though the copy now has an image-looking label",
+    explanation: "The experiment reveals that a label and the underlying information are not the same thing. The viewer expects image data; the copied file still contains text data.", funFact: "Programs often inspect more than an extension when deciding whether they can read a file.", realWorldExample: "Always experiment on a copy, exactly as your group did, so the original remains safe.", xp: 25, hint: "Remember what was actually changed in the experiment.",
+    learningIntelligence: m6LIL({ competencyIds: ["COMP-007", "COMP-014"], bigIdeaIds: ["BIG-003"], misconceptionIds: ["MIS-001", "MIS-002"], activityIds: ["ACT-002"], learningObjective: "Learner can explain the result of a safe extension-renaming experiment.", cognitiveLevel: "Analyse", instructionalStrategy: "STR-005", tags: ["files", "experiment", "format", "safe-practice"] })
+  },
+  {
+    id: "m6-files-04", mission: 6, section: "Today's Main Discovery: Files", title: "Teacher Echo: Names Help, Understanding Confirms", type: "mcq", difficulty: "easy",
+    question: "Complete today’s class idea: “A file name helps us recognise something; checking its ___ helps us know what it really is.”",
+    options: ["format and content", "screen colour", "owner’s favourite app", "folder icon only"], correctAnswer: "format and content",
+    explanation: "Names and extensions are useful starting clues. Opening a file appropriately and checking its content and format gives stronger evidence.", funFact: "Two files can have similar names but contain completely different information.", realWorldExample: "Repeat this sentence before your group sorts the next set of classroom files.", xp: 15, hint: "The answer should explain what is inside, not just what is written on the label.",
+    learningIntelligence: m6LIL({ competencyIds: ["COMP-007"], bigIdeaIds: ["BIG-003"], misconceptionIds: ["MIS-006"], activityIds: ["ACT-002"], learningObjective: "Learner can state the Mission 6 Big Idea about file identity.", cognitiveLevel: "Understand", instructionalStrategy: "STR-002", tags: ["files", "teacher-echo", "big-idea"] })
+  },
+  {
+    id: "m6-files-05", mission: 6, section: "Today's Main Discovery: Files", title: "Match Format to Reader", type: "matching", difficulty: "easy",
+    question: "Match each classroom file format to a likely reader.",
+    options: [
+      { format: ".jpg image", reader: "Photo or image viewer" },
+      { format: ".mp3 audio", reader: "Music or media player" },
+      { format: ".docx document", reader: "Word processor" },
+      { format: ".pdf document", reader: "PDF reader" }
+    ], correctAnswer: "format-reader pairs as listed",
+    explanation: "A reader is an application that understands a particular kind of stored information. One app may support several formats, but no app automatically understands every possible format.", funFact: "A PDF is designed to preserve a page’s layout across many devices.", realWorldExample: "Notice which app Windows suggests when you double-click each classroom sample file.", xp: 20, hint: "Match the type of information to the app built to read it.",
+    learningIntelligence: m6LIL({ competencyIds: ["COMP-007", "COMP-002"], bigIdeaIds: ["BIG-003"], misconceptionIds: ["MIS-002"], activityIds: ["ACT-002"], learningObjective: "Learner can match common file formats to appropriate reader applications.", cognitiveLevel: "Understand", instructionalStrategy: "STR-007", tags: ["files", "formats", "readers", "matching"] })
+  },
+  {
+    id: "m6-files-06", mission: 6, section: "Today's Main Discovery: Files", title: "Sort: Label Clue or Stronger Evidence?", type: "sorting", difficulty: "medium",
+    question: "Sort each observation into “Label clue” or “Stronger evidence about the file”.",
+    options: ["The file is named science.jpg", "The extension shown is .jpg", "An image viewer successfully displays a photograph", "Opening the file shows a page of typed notes"],
+    correctAnswer: { "Label clue": ["The file is named science.jpg", "The extension shown is .jpg"], "Stronger evidence about the file": ["An image viewer successfully displays a photograph", "Opening the file shows a page of typed notes"] },
+    explanation: "Names and extensions help us predict. Observing how the contents behave in an appropriate reader gives stronger evidence of what the file really contains.", funFact: "Investigators use several clues together rather than trusting only one label.", realWorldExample: "Your class did this when it compared the renamed copy with the original file.", xp: 25, hint: "Which observations show what the file actually does or contains?",
+    learningIntelligence: m6LIL({ competencyIds: ["COMP-007", "COMP-014"], bigIdeaIds: ["BIG-003"], misconceptionIds: ["MIS-001", "MIS-006"], activityIds: ["ACT-002"], learningObjective: "Learner can distinguish file labels from evidence obtained by investigating content.", cognitiveLevel: "Analyse", instructionalStrategy: "STR-008", tags: ["files", "identity", "sorting", "evidence"] })
+  },
+  {
+    id: "m6-files-07", mission: 6, section: "Today's Main Discovery: Files", title: "Operating System Association", type: "scenario", difficulty: "medium",
+    question: "On one classroom computer, double-clicking a .pdf opens a PDF reader. On another, it opens a web browser. What does this show?",
+    options: ["The operating system can associate the same format with different suitable reader apps", "The file has changed into a website", "A PDF can only ever be opened one way", "The name decides which app is installed"], correctAnswer: "The operating system can associate the same format with different suitable reader apps",
+    explanation: "An operating system uses file associations to choose a default app. The association can vary by computer while the underlying file format remains the same.", funFact: "You can often choose “Open with” to use another compatible app without changing the file itself.", realWorldExample: "Observe the suggested app on your own classroom computer instead of assuming every screen will match a friend’s.", xp: 25, hint: "Focus on the difference between the file format and the computer’s chosen app.",
+    learningIntelligence: m6LIL({ competencyIds: ["COMP-002", "COMP-007"], bigIdeaIds: ["BIG-003"], misconceptionIds: ["MIS-002"], activityIds: ["ACT-002"], learningObjective: "Learner can explain an operating system’s file association as a default reader choice.", cognitiveLevel: "Apply", instructionalStrategy: "STR-006", tags: ["files", "operating-system", "associations", "scenario"] })
+  },
+  {
+    id: "m6-files-08", mission: 6, section: "Today's Main Discovery: Files", title: "Practical Challenge: Choose a Safe Next Step", type: "mcq", difficulty: "medium",
+    question: "You receive a file called holiday_photo.jpg, but Windows warns that the type is unfamiliar and it will not open in an image viewer. What is the safest next step?",
+    options: ["Pause, inspect the file details or ask a teacher before opening it with another app", "Rename it repeatedly until it opens", "Assume it is definitely a photo because of its name", "Run every application until one accepts it"], correctAnswer: "Pause, inspect the file details or ask a teacher before opening it with another app",
+    explanation: "When clues disagree, pause and investigate. A name alone is not enough evidence, and trying random apps or changing labels can create confusion or risk.", funFact: "Good digital investigators treat unexpected warnings as useful information, not something to ignore.", realWorldExample: "In class, show the teacher the filename, extension, and warning instead of guessing.", xp: 25, hint: "Choose the response that gathers evidence and keeps the computer safe.",
+    learningIntelligence: m6LIL({ competencyIds: ["COMP-007", "COMP-013", "COMP-014"], bigIdeaIds: ["BIG-003"], misconceptionIds: ["MIS-001", "MIS-006"], activityIds: ["ACT-002"], learningObjective: "Learner can choose a safe response when a file’s label and behaviour disagree.", cognitiveLevel: "Apply", instructionalStrategy: "STR-011", tags: ["files", "safe-practice", "practical-challenge", "identity"] })
+  },
+  {
+    id: "m6-files-09", mission: 6, section: "Today's Main Discovery: Files", title: "Reflection: Digital Investigator", type: "reflection", difficulty: "medium",
+    question: "You’ve become a Digital Investigator. Describe one clue you would check before deciding what an unfamiliar file really is, and explain why you would not trust its name alone.",
+    options: null, correctAnswer: null,
+    explanation: "Computers do not simply trust labels: they use clues such as formats, file associations, and whether a suitable reader can understand the information. Great learners do the same — they observe, investigate, and then decide.", funFact: "The most useful discoveries often begin with a careful question: “What evidence do I have?”", realWorldExample: "Today’s discovery: Names help us recognise things. Understanding helps us know what they really are.", xp: 25, hint: "You could mention an extension, file details, the content, or a compatible reader.",
+    learningIntelligence: m6LIL({ competencyIds: ["COMP-007", "COMP-014"], bigIdeaIds: ["BIG-003"], misconceptionIds: ["MIS-001", "MIS-002", "MIS-006"], activityIds: ["ACT-002"], learningObjective: "Learner can reflect on an evidence-based approach to file identity.", cognitiveLevel: "Evaluate", instructionalStrategy: "STR-003", questionPurpose: "metacognitive-reflection", tags: ["files", "reflection", "digital-investigator", "big-idea"] })
   }
 
 ];
@@ -2066,3 +2193,33 @@ const gamification = {
 };
 
 module.exports = { missionContent, gamification };
+
+// Mission-level learning data is consumed by the renderer only when present;
+// it leaves every earlier mission's existing display unchanged.
+var missionDetails = {
+  6: {
+    title: "Files: Names, Formats & Identity",
+    bigIdeaId: "BIG-003",
+    completionTitle: "You've become a Digital Investigator.",
+    completionInsight: "Today's discovery: Computers don't simply trust labels. They investigate information. Great learners do the same."
+  }
+};
+
+// Mission 6 is authored directly against the LIL contract. The helper keeps
+// each item explicit while avoiding duplicate mission-level context.
+function m6LIL(overrides) {
+  return Object.assign({
+    competencyIds: ["COMP-007"],
+    bigIdeaIds: ["BIG-003"],
+    misconceptionIds: [],
+    activityIds: ["ACT-002"],
+    learningObjective: "Learner can investigate a file using names, formats, and compatible readers.",
+    cognitiveLevel: "Understand",
+    instructionalStrategy: "STR-004",
+    questionPurpose: "formative-practice",
+    classroomOrigin: { source: "ILIMNI classroom file investigation", mission: 6, section: "Files: Names, Formats & Identity" },
+    difficulty: "medium",
+    estimatedTime: 90,
+    tags: ["mission-6", "files", "names-formats-identity"]
+  }, overrides || {});
+}

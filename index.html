@@ -78,7 +78,7 @@
     </section>
 
     <aside class="big-idea-card big-idea-card--landing" aria-labelledby="today-big-idea-title" aria-live="polite">
-      <div class="big-idea-card__mark" aria-hidden="true">💡</div>
+      <i class="big-idea-card__mark ui-icon" data-lucide="lightbulb" aria-hidden="true"></i>
       <div>
         <p class="big-idea-card__label">Today's Big Idea</p>
         <h2 id="today-big-idea-title"></h2>
@@ -185,11 +185,13 @@
     <div class="mission-grid" id="mission-list"></div>
 
     <aside class="big-idea-card big-idea-card--latest" id="latest-big-idea-card" aria-labelledby="latest-big-idea-heading" hidden>
-      <div class="big-idea-card__mark" aria-hidden="true">💡</div>
+      <i class="big-idea-card__mark ui-icon" data-lucide="lightbulb" aria-hidden="true"></i>
       <div>
         <p class="big-idea-card__label">Latest Big Idea</p>
         <h3 id="latest-big-idea-heading"></h3>
         <p class="big-idea-card__idea" id="latest-big-idea"></p>
+        <p class="big-idea-card__explanation" id="latest-big-idea-explanation"></p>
+        <p class="big-idea-card__journal" id="latest-big-idea-journal" aria-live="polite"></p>
       </div>
     </aside>
 
@@ -203,6 +205,10 @@
       <h3 class="card__title card__title--sm">Badges earned</h3>
       <div class="badge-row" id="badge-row"></div>
     </div>
+    <aside class="empty-state empty-state--certificate" id="certificate-preview">
+      <i class="ui-icon" data-lucide="award" aria-hidden="true"></i>
+      <div><strong>Your certificate is waiting</strong><span>Complete every mission to unlock it.</span></div>
+    </aside>
   </section>
 
   <!-- QUESTION -->
@@ -266,6 +272,7 @@
       <div class="summary-confetti" id="summary-confetti" aria-hidden="true"></div>
       <div class="card__eyebrow">Mission complete</div>
       <h2 class="card__title" id="summary-mission-title">Mission Complete!</h2>
+      <p class="card__subtitle" id="summary-mission-insight" hidden></p>
 
       <div class="summary-stats">
         <div class="summary-stat">
@@ -326,7 +333,7 @@
 
 <div class="modal-backdrop" id="big-idea-modal" hidden>
   <section class="card big-idea-modal" role="dialog" aria-modal="true" aria-labelledby="big-idea-modal-title" aria-describedby="big-idea-modal-idea big-idea-modal-explanation">
-    <div class="big-idea-modal__icon" aria-hidden="true">💡</div>
+    <i class="big-idea-modal__icon ui-icon" data-lucide="sparkles" aria-hidden="true"></i>
     <p class="big-idea-card__label">Today's Big Idea</p>
     <h2 class="card__title" id="big-idea-modal-title"></h2>
     <p class="big-idea-modal__idea" id="big-idea-modal-idea"></p>
@@ -344,6 +351,12 @@
 <script src="firebase-init.js"></script>
 <script>var module = { exports: {} };</script>
 <script src="content.js"></script>
+<script src="learning-intelligence/competencies.js"></script>
+<script src="learning-intelligence/big-ideas.js"></script>
+<script src="learning-intelligence/misconceptions.js"></script>
+<script src="learning-intelligence/activities.js"></script>
+<script src="learning-intelligence/instructional-strategies.js"></script>
+<script src="learning-intelligence/learning-intelligence.js"></script>
 <script src="bigIdeas.js"></script>
 <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
 <script>

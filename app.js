@@ -16,6 +16,7 @@
   var ALL_QUESTIONS = (typeof missionContent !== "undefined" ? missionContent : []);
   var GAMIFICATION = (typeof gamification !== "undefined" ? gamification : { xpPerLevel: 150, badges: [], encouragingMessages: [], confettiOnMissionComplete: true });
   var BIG_IDEAS = (typeof bigIdeas !== "undefined" ? bigIdeas : []);
+  var MISSION_DETAILS = (typeof missionDetails !== "undefined" ? missionDetails : {});
 
   var MISSIONS = Array.from(new Set(ALL_QUESTIONS.map(function (q) { return q.mission; })))
     .sort(function (a, b) { return a - b; });
@@ -84,7 +85,10 @@
       missionProgress: {},         // { missionNum: { started: bool, completed: bool } }
       theme: "light",
       earnedBadges: [],
-      latestBigIdeaId: null
+      latestBigIdeaId: null,
+      // Wisdom Journal foundation: display is intentionally lightweight, but
+      // this durable list is ready for a future collection surface.
+      collectedBigIdeaIds: []
     };
   }
 
@@ -99,6 +103,7 @@
       merged.reflectionAnswers = parsed.reflectionAnswers || {};
       merged.missionProgress = parsed.missionProgress || {};
       merged.earnedBadges = parsed.earnedBadges || [];
+      merged.collectedBigIdeaIds = parsed.collectedBigIdeaIds || [];
       reconcileMissionProgress(merged);
       return merged;
     } catch (e) {
@@ -139,6 +144,7 @@
         state.reflectionAnswers = cloud.reflectionAnswers || {};
         state.missionProgress = cloud.missionProgress || {};
         state.earnedBadges = cloud.earnedBadges || [];
+        state.collectedBigIdeaIds = cloud.collectedBigIdeaIds || [];
         reconcileMissionProgress(state);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       } else {
@@ -240,12 +246,15 @@
   }
 
   function getBigIdeaForMission(missionId) {
+    var detail = MISSION_DETAILS[missionId];
+    if (detail && detail.bigIdeaId) return getBigIdeaById(detail.bigIdeaId);
     var missionIdeas = BIG_IDEAS.filter(function (idea) { return idea.missionId === missionId; });
     return pickBigIdea(missionIdeas.length ? missionIdeas : BIG_IDEAS, "mission-" + missionId + "-" + utcDateKey());
   }
 
   function getBigIdeaById(id) {
-    return BIG_IDEAS.find(function (idea) { return idea.id === id; }) || null;
+    // `legacyId` keeps Big Ideas remembered by earlier versions resolvable.
+    return BIG_IDEAS.find(function (idea) { return idea.id === id || idea.legacyId === id; }) || null;
   }
 
   function renderTodaysBigIdea() {
@@ -263,6 +272,11 @@
     if (!idea) return;
     $("#latest-big-idea-heading").textContent = idea.title;
     $("#latest-big-idea").textContent = idea.idea;
+    $("#latest-big-idea-explanation").textContent = idea.explanation;
+    var journalStatus = $("#latest-big-idea-journal");
+    var collected = state.collectedBigIdeaIds.indexOf(idea.id) !== -1;
+    journalStatus.textContent = collected ? "Saved in your Wisdom Journal" : "Choose “I’ll Remember This” after a mission to save it.";
+    journalStatus.classList.toggle("is-collected", collected);
   }
 
   var toastTimer = null;
@@ -529,6 +543,7 @@
 
   var bigIdeaModalOpener = null;
   var bigIdeaModalTimer = null;
+  var activeBigIdea = null;
   function setCompletionActionsDisabled(disabled) {
     ["#btn-back-missions", "#btn-continue-next", "#btn-view-certificate"].forEach(function (selector) {
       var button = $(selector);
@@ -538,6 +553,7 @@
 
   function openBigIdeaModal(idea) {
     if (!idea) return;
+    activeBigIdea = idea;
     bigIdeaModalOpener = document.activeElement;
     $("#big-idea-modal-title").textContent = idea.title;
     $("#big-idea-modal-idea").textContent = idea.idea;
@@ -552,7 +568,18 @@
     if (bigIdeaModalOpener && document.contains(bigIdeaModalOpener)) bigIdeaModalOpener.focus();
   }
 
-  $("#btn-remember-big-idea").addEventListener("click", closeBigIdeaModal);
+  function collectBigIdea(idea) {
+    if (!idea || state.collectedBigIdeaIds.indexOf(idea.id) !== -1) return false;
+    state.collectedBigIdeaIds.push(idea.id);
+    saveState();
+    return true;
+  }
+
+  $("#btn-remember-big-idea").addEventListener("click", function () {
+    var newlyCollected = collectBigIdea(activeBigIdea);
+    closeBigIdeaModal();
+    toast(newlyCollected ? "Big Idea saved to your Wisdom Journal" : "Already saved in your Wisdom Journal");
+  });
   $("#btn-continue-big-idea").addEventListener("click", closeBigIdeaModal);
   document.addEventListener("keydown", function (e) {
     var modal = $("#big-idea-modal");
@@ -641,6 +668,21 @@
     return "award";
   }
 
+  // Shared, icon-led empty state for learning surfaces that have no data yet.
+  function createEmptyState(iconName, title, description) {
+    return el("div", { class: "empty-state", role: "status" }, [
+      IconContainer(iconName, { variant: "explore", size: "compact", active: true }),
+      el("div", {}, [el("strong", { text: title }), el("span", { text: description })])
+    ]);
+  }
+
+  function renderCertificatePreview() {
+    var preview = $("#certificate-preview");
+    if (!preview) return;
+    var allComplete = MISSIONS.length > 0 && MISSIONS.every(function (m) { return isMissionComplete(m); });
+    preview.hidden = allComplete;
+  }
+
   function goToMissionSelect() {
     $("#missions-greeting").textContent = state.studentName
       ? ("Welcome back, " + state.studentName)
@@ -648,8 +690,13 @@
     var list = $("#mission-list");
     list.innerHTML = "";
 
+    if (!MISSIONS.length) {
+      list.appendChild(createEmptyState("book-open", "Your learning path is being prepared", "New missions will appear here when they are ready."));
+    }
     MISSIONS.forEach(function (m) {
       var stats = missionStats(m);
+      var missionDetail = MISSION_DETAILS[m] || {};
+      var missionTitle = "Mission " + m + (missionDetail.title ? ": " + missionDetail.title : "");
       var sections = Array.from(new Set(itemsForMission(m).map(function (q) { return q.section; })));
       var locked = isMissionLocked(m);
       var statusLabel = locked ? "Locked" : (stats.pct === 100 ? "Completed" : (stats.pct > 0 ? "In progress" : "Not started"));
@@ -668,14 +715,14 @@
         class: "mission-card mission-card--" + statusClass,
         type: "button",
         style: "--mission-index:" + (m - 1),
-        "aria-label": (locked ? "Mission " + m + " is locked" : "Open Mission " + m) + ", " + statusLabel
+        "aria-label": (locked ? missionTitle + " is locked" : "Open " + missionTitle) + ", " + statusLabel
       };
       if (locked) cardAttrs.disabled = "disabled";
       var card = el("button", cardAttrs, [
         el("div", { class: "mission-card__top" }, [
           IconContainer(iconName, iconOptions),
           el("div", { class: "mission-card__heading" }, [
-            el("div", { class: "mission-card__title", text: "Mission " + m }),
+            el("div", { class: "mission-card__title", text: missionTitle }),
             el("div", { class: "mission-card__desc", text: sections.slice(0, 3).join(" · ") + (sections.length > 3 ? "…" : "") })
           ])
         ]),
@@ -696,6 +743,7 @@
     });
 
     renderBadgesCard();
+    renderCertificatePreview();
     renderLatestBigIdeaCard();
     renderHeader();
     refreshIcons();
@@ -1422,7 +1470,13 @@
     var completionPct = items.length ? Math.round((attempted.length / items.length) * 100) : 0;
     var accuracyPct = completed.length ? Math.round((correct.length / completed.length) * 100) : 0;
 
-    $("#summary-mission-title").textContent = "Mission " + m + " Complete!";
+    var missionDetail = MISSION_DETAILS[m] || {};
+    $("#summary-mission-title").textContent = missionDetail.completionTitle || ("Mission " + m + " Complete!");
+    var insight = $("#summary-mission-insight");
+    if (insight) {
+      insight.textContent = missionDetail.completionInsight || "";
+      insight.hidden = !missionDetail.completionInsight;
+    }
     $("#summary-xp").textContent = missionXp;
     $("#summary-completion").textContent = completionPct + "%";
     $("#summary-accuracy").textContent = accuracyPct + "%";
