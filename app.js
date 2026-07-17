@@ -323,14 +323,14 @@
   /* ============================================================
      3. SCREEN NAVIGATION
      ============================================================ */
-  var SCREENS = ["welcome", "auth", "name", "missions", "journey", "ideas", "journal", "question", "summary", "certificate"];
+  var SCREENS = ["welcome", "auth", "name", "missions", "journey", "ideas", "journal", "question", "summary", "certificate", "weekend"];
   function showScreen(name) {
     SCREENS.forEach(function (s) {
       var node = $("#screen-" + s);
       if (node) node.classList.toggle("is-active", s === name);
     });
     $("#app-header").hidden = (name === "welcome" || name === "auth" || name === "name");
-    var navScreen = name === "missions" || name === "question" || name === "summary" ? "missions" : name;
+    var navScreen = name === "question" || name === "summary" ? "dashboard" : name;
     $$(".primary-nav__link").forEach(function (link) {
       var active = link.getAttribute("data-nav-target") === navScreen;
       if (active) link.setAttribute("aria-current", "page");
@@ -1981,7 +1981,13 @@
     $$(".primary-nav__link").forEach(function (link) {
       link.addEventListener("click", function () {
         var target = link.getAttribute("data-nav-target");
-        if (target === "dashboard" || target === "missions") { goToMissionSelect(); return; }
+        if (target === "dashboard") {
+          var nextMission = MISSIONS.find(function (m) { return !isMissionComplete(m) && !isMissionLocked(m); });
+          if (nextMission) startMission(nextMission);
+          else goToMissionSelect();
+          return;
+        }
+        if (target === "missions") { goToMissionSelect(); return; }
         if (target === "journey") { renderLearningJourney(); showScreen("journey"); return; }
         if (target === "ideas") { renderBigIdeasPage(); showScreen("ideas"); return; }
         if (target === "weekend") { $("#btn-weekend-treat").click(); return; }

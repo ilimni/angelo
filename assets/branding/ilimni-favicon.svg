@@ -1,4 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#312e81"/>
-  <image href="ilimni-logo-icon.svg" x="11" y="11" width="42" height="42" preserveAspectRatio="xMidYMid meet"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="ILIMNI Learning">
+  <circle cx="32" cy="32" r="29" fill="#5b21b6"/>
+  <image href="ilimni-logo-icon.svg" x="17" y="10" width="30" height="39" preserveAspectRatio="xMidYMid meet"/>
+  <path d="M15 47.5c5.7-3.2 11.3-3.2 17 0 5.7-3.2 11.3-3.2 17 0V53c-5.7-3.2-11.3-3.2-17 0-5.7-3.2-11.3-3.2-17 0z" fill="none" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
 </svg>

@@ -1,4 +1,4 @@
-# ILIMNI Learning Portal
+# ILIMNI Learning
 
 Static learning portal prepared for a future framework migration. The application remains a browser-loaded static site; script order in `index.html` is intentional.
 

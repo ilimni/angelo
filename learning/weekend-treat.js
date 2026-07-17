@@ -38,8 +38,14 @@
   function save() { localStorage.setItem(STORE, JSON.stringify(state)); }
   function student() { try { return (JSON.parse(localStorage.getItem("ilimni_progress_v1") || "{}").studentName || "Angelo"); } catch (e) { return "Angelo"; } }
   function escape(s) { var d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
-  function hideOtherScreens() { document.querySelectorAll(".screen").forEach(function (el) { el.classList.toggle("is-active", el.id === "screen-weekend"); }); document.getElementById("app-header").hidden = false; window.scrollTo({ top: 0, behavior: "smooth" }); }
-  function back() { document.getElementById("screen-weekend").classList.remove("is-active"); document.getElementById("screen-missions").classList.add("is-active"); }
+  function setActiveNav(target) {
+    document.querySelectorAll(".primary-nav__link").forEach(function (link) {
+      if (link.getAttribute("data-nav-target") === target) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    });
+  }
+  function hideOtherScreens() { document.querySelectorAll(".screen").forEach(function (el) { el.classList.toggle("is-active", el.id === "screen-weekend"); }); document.getElementById("app-header").hidden = false; setActiveNav("weekend"); window.scrollTo({ top: 0, behavior: "smooth" }); }
+  function back() { document.getElementById("screen-weekend").classList.remove("is-active"); document.getElementById("screen-missions").classList.add("is-active"); setActiveNav("missions"); }
   function progress() { var labels = { intro: 0, keys: 1, groups: 2, shortcuts: 3, myths: 4, boss: 5, celebration: 6, certificate: 6 }; return Math.round((labels[state.stage] || 0) / 6 * 100); }
   function shell(title, eyebrow, body, controls) {
     host.innerHTML = '<div class="weekend-shell"><div class="weekend-top"><button class="btn btn--ghost btn--sm" id="weekend-back" type="button">← Missions</button><span class="weekend-score"><i class="ui-icon ui-icon--sm" data-lucide="star" aria-hidden="true"></i> ' + state.stars + ' <b>·</b> <i class="ui-icon ui-icon--sm" data-lucide="zap" aria-hidden="true"></i> ' + state.xp + ' Weekend XP</span></div><div class="weekend-progress" aria-label="Adventure progress"><i style="width:' + progress() + '%"></i></div><div class="weekend-card"><p class="weekend-eyebrow">' + eyebrow + '</p><h2 id="weekend-title">' + title + '</h2>' + body + (controls ? '<div class="weekend-controls">' + controls + '</div>' : '') + '</div></div>';
