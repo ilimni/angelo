@@ -2115,10 +2115,10 @@ const missionContent = [
     learningIntelligence: m6LIL({ competencyIds: ["COMP-007", "COMP-013", "COMP-014"], bigIdeaIds: ["BIG-003"], misconceptionIds: ["MIS-001", "MIS-006"], activityIds: ["ACT-002"], learningObjective: "Learner can choose a safe response when a file’s label and behaviour disagree.", cognitiveLevel: "Apply", instructionalStrategy: "STR-011", tags: ["files", "safe-practice", "practical-challenge", "identity"] })
   },
   {
-    id: "m6-files-09", mission: 6, section: "Today's Main Discovery: Files", title: "Reflection: Digital Investigator", type: "reflection", difficulty: "medium",
-    question: "You’ve become a Digital Investigator. Describe one clue you would check before deciding what an unfamiliar file really is, and explain why you would not trust its name alone.",
+    id: "m6-files-09", mission: 6, section: "Today's Main Discovery: Files", title: "Reflection: Checking File Clues", type: "reflection", difficulty: "medium",
+    question: "Think about the file activity. Name one clue you checked, and explain how it helped you learn more than the file name alone.",
     options: null, correctAnswer: null,
-    explanation: "Computers do not simply trust labels: they use clues such as formats, file associations, and whether a suitable reader can understand the information. Great learners do the same — they observe, investigate, and then decide.", funFact: "The most useful discoveries often begin with a careful question: “What evidence do I have?”", realWorldExample: "Today’s discovery: Names help us recognise things. Understanding helps us know what they really are.", xp: 25, hint: "You could mention an extension, file details, the content, or a compatible reader.",
+    explanation: "In this activity, the file name and extension were starting clues. Checking a file in a suitable app gave more information about it.", funFact: "A file name can be changed without changing what is inside the file.", realWorldExample: "You compared a renamed copy with the original file during the classroom activity.", xp: 25, hint: "You could mention the extension, the file details, or what happened when the file was opened.",
     learningIntelligence: m6LIL({ competencyIds: ["COMP-007", "COMP-014"], bigIdeaIds: ["BIG-003"], misconceptionIds: ["MIS-001", "MIS-002", "MIS-006"], activityIds: ["ACT-002"], learningObjective: "Learner can reflect on an evidence-based approach to file identity.", cognitiveLevel: "Evaluate", instructionalStrategy: "STR-003", questionPurpose: "metacognitive-reflection", tags: ["files", "reflection", "digital-investigator", "big-idea"] })
   }
 
@@ -2130,10 +2130,10 @@ const missionContent = [
 const gamification = {
   xpPerLevel: 150,
   badges: [
-    { id: "input-explorer", label: "Input Explorer", criteria: "Complete all Input section items correctly" },
-    { id: "binary-explorer", label: "Binary Explorer", criteria: "Complete all Binary section items correctly" },
-    { id: "task-manager-explorer", label: "Task Manager Explorer", criteria: "Finish all Mission 6 items" },
-    { id: "shortcut-strategist", label: "Shortcut Strategist", criteria: "Complete all Keyboard Shortcuts section items correctly" }
+    { id: "input-explorer", label: "Input activities completed", criteria: "Complete all Input section items correctly" },
+    { id: "binary-explorer", label: "Binary activities completed", criteria: "Complete all Binary section items correctly" },
+    { id: "task-manager-explorer", label: "Mission 6 activities completed", criteria: "Finish all Mission 6 items" },
+    { id: "shortcut-strategist", label: "Keyboard shortcut activities completed", criteria: "Complete all Keyboard Shortcuts section items correctly" }
   ],
   encouragingMessages: {
     correct: {
@@ -2196,8 +2196,8 @@ var missionDetails = {
   6: {
     title: "Files: Names, Formats & Identity",
     bigIdeaId: "BIG-003",
-    completionTitle: "You've become a Digital Investigator.",
-    completionInsight: "Today's discovery: Computers don't simply trust labels. They investigate information. Great learners do the same."
+    completionTitle: "You completed today's file investigation.",
+    completionInsight: "You explored how file names, formats, and contents can give different clues."
   }
 };
 

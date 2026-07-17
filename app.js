@@ -330,11 +330,17 @@
       if (node) node.classList.toggle("is-active", s === name);
     });
     $("#app-header").hidden = (name === "welcome" || name === "auth" || name === "name");
+    var navScreen = name === "missions" || name === "question" || name === "summary" ? "missions" : name;
+    $$(".primary-nav__link").forEach(function (link) {
+      var active = link.getAttribute("data-nav-target") === navScreen;
+      if (active) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    });
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   /* ============================================================
-     4. HEADER (xp, student pill, mission tabs, theme)
+     4. HEADER (learning navigation, progress, theme)
      ============================================================ */
   function renderHeader() {
     var xpCounter = $("#xp-counter");
@@ -355,17 +361,6 @@
       var isSignedIn = !!(window.firebaseAuth && firebaseAuth.currentUser);
       syncBtn.hidden = isSignedIn || !state.studentName;
     }
-    var tabs = $("#mission-tabs");
-    tabs.innerHTML = "";
-    MISSIONS.forEach(function (m) {
-      var btn = el("button", {
-        class: "mission-tab" + (state.currentMission === m ? " is-active" : ""),
-        type: "button",
-        text: "Mission " + m,
-        onclick: function () { goToMissionSelect(); }
-      });
-      tabs.appendChild(btn);
-    });
     refreshIcons();
   }
 
@@ -388,6 +383,10 @@
      ============================================================ */
   $("#btn-start").addEventListener("click", function () {
     showScreen("auth");
+  });
+  $("#btn-view-journey").addEventListener("click", function () {
+    renderLearningJourney();
+    showScreen("journey");
   });
   $("#btn-welcome-signin").addEventListener("click", function () {
     setAuthMode("login");
@@ -417,7 +416,7 @@
   }
 
   function setAuthRequestLoading(loading, mode) {
-    setButtonLoading($("#btn-auth-submit"), loading, mode === "signup" ? "Create account" : "Log in", mode === "signup" ? "Creating account..." : "Signing in...");
+    setButtonLoading($("#btn-auth-submit"), loading, mode === "signup" ? "Create account" : "Log in", "Preparing your learning space...");
     $("#auth-tab-signup").disabled = loading;
     $("#auth-tab-login").disabled = loading;
     $("#btn-auth-guest").disabled = loading;
@@ -653,7 +652,7 @@
     if (activeBigIdea && saveBigIdeaForMission(activeBigIdeaMission)) {
       state.latestBigIdeaId = activeBigIdea.id;
       saveState();
-      toast("Saved to My Big Ideas");
+      toast("This idea is now saved in My Big Ideas.");
     }
     closeBigIdeaModal();
   });
@@ -779,15 +778,15 @@
     completedMissions.forEach(function (m) {
       var answers = itemsForMission(m).map(function (q) { return state.completedQuestions[q.id]; }).filter(Boolean);
       var latest = answers.map(function (answer) { return answer.completedAt; }).filter(Boolean).sort().pop();
-      events.push({ id: "mission-completed-" + m, type: "MISSION_COMPLETED", title: missionName(m) + " completed", description: "You completed every learning activity in this mission.", mission: m, section: (MISSION_DETAILS[m] || {}).title || "Digital Literacy & Computing Foundations", status: "COMPLETED", timestamp: latest || "", relatedLink: "mission:" + m });
+      events.push({ id: "mission-completed-" + m, type: "MISSION_COMPLETED", title: missionName(m) + " completed", description: "You completed the activities in this mission.", mission: m, section: (MISSION_DETAILS[m] || {}).title || "Digital Literacy & Computing Foundations", status: "COMPLETED", timestamp: latest || "", relatedLink: "mission:" + m });
     });
     collectedBigIdeas().forEach(function (entry) {
       events.push({ id: "big-idea-" + entry.idea.id, type: "BIG_IDEA_DISCOVERED", title: "Big Idea saved: " + entry.idea.title, description: entry.idea.idea, mission: entry.unlock.mission, section: "My Big Ideas", status: "SAVED", timestamp: entry.unlock.savedAt || "", relatedLink: "ideas" });
     });
     computeEarnedBadges().forEach(function (badge) {
-      events.push({ id: "recognition-" + (badge.id || badge.label), type: "RECOGNITION_EARNED", title: "Recognition earned: " + badge.label, description: "A learning achievement has been added to your journey.", status: "EARNED", timestamp: "", relatedLink: null });
+      events.push({ id: "recognition-" + (badge.id || badge.label), type: "RECOGNITION_EARNED", title: "Recognition added: " + badge.label, description: "This recognition records completed activities.", status: "EARNED", timestamp: "", relatedLink: null });
     });
-    events.push({ id: "weekend-activity", type: "WEEKEND_ACTIVITY_AVAILABLE", title: "Weekend Activity: Keyboard Detective", description: "A short computer-lab mystery that connects classroom learning with review.", status: "AVAILABLE", timestamp: "", relatedLink: "weekend" });
+    events.push({ id: "weekend-activity", type: "WEEKEND_ACTIVITY_AVAILABLE", title: "Weekend Activity: Keyboard Practice", description: "An optional short keyboard activity.", status: "AVAILABLE", timestamp: "", relatedLink: "weekend" });
     if (completedMissions.length === MISSIONS.length && MISSIONS.length) events.push({ id: "certificate-awarded", type: "CERTIFICATE_AWARDED", title: "Course certificate ready", description: "You completed every mission in this learning pathway.", status: "AWARDED", timestamp: "", relatedLink: "certificate" });
     var milestones = [];
     if (completedMissions.length === CURRICULUM_TOTAL_MISSIONS) milestones.push({ title: "Completed the learning pathway", description: "You completed every mission in this curriculum." });
@@ -826,7 +825,7 @@
       var missionTitle = "Mission " + m + (missionDetail.title ? ": " + missionDetail.title : "");
       var sections = Array.from(new Set(itemsForMission(m).map(function (q) { return q.section; })));
       var locked = isMissionLocked(m);
-      var statusLabel = locked ? "Locked" : (stats.pct === 100 ? "Completed" : (stats.pct > 0 ? "In progress" : "Not started"));
+      var statusLabel = locked ? "Available soon" : (stats.pct === 100 ? "Completed" : (stats.pct > 0 ? "Ready to continue" : "Ready to explore"));
       var statusClass = locked ? "locked" : (stats.pct === 100 ? "done" : (stats.pct > 0 ? "progress" : "new"));
       var iconName = MISSION_ICON_MAP[m] || "book-open";
       var iconOptions = {
@@ -949,7 +948,7 @@
         IconContainer("map", { variant: "explore", size: "compact", active: true }),
         el("div", {}, [
           el("strong", { text: "Your achievement path is ready" }),
-          el("span", { text: "Complete a mission to reveal the first badge." })
+          el("span", { text: "Your first learning achievement will appear here after you complete a mission." })
         ])
       ]));
       return;
@@ -1622,7 +1621,7 @@
 
   $("#btn-save-exit").addEventListener("click", function () {
     saveState();
-    toast("Progress saved");
+    toast("Your progress is saved. You can return whenever you're ready.");
     goToMissionSelect();
   });
 
@@ -1637,7 +1636,7 @@
       state.currentIndexByMission[m] = firstIncomplete;
       if (state.missionProgress[m]) state.missionProgress[m].completed = false;
       saveState();
-      toast("Complete every item before finishing this mission.");
+      toast("Take a moment to complete each activity before finishing this mission.");
       renderQuestionScreen();
       return;
     }
@@ -1663,7 +1662,7 @@
     var accuracyPct = completed.length ? Math.round((correct.length / completed.length) * 100) : 0;
 
     var missionDetail = MISSION_DETAILS[m] || {};
-    $("#summary-mission-title").textContent = missionDetail.completionTitle || ("Mission " + m + " Complete!");
+    $("#summary-mission-title").textContent = missionDetail.completionTitle || ("You completed Mission " + m + ".");
     var insight = $("#summary-mission-insight");
     if (insight) {
       insight.textContent = missionDetail.completionInsight || "";
@@ -1983,12 +1982,25 @@
      15. INIT
      ============================================================ */
   function init() {
-    var headerLogo = $(".app-header__logo");
-    if (headerLogo) {
-      var dashboardIcon = IconContainer("monitor", { variant: "dashboard", size: "compact", glow: true });
-      dashboardIcon.classList.add("app-header__logo");
-      headerLogo.replaceWith(dashboardIcon);
-    }
+    $$(".primary-nav__link").forEach(function (link) {
+      link.addEventListener("click", function () {
+        var target = link.getAttribute("data-nav-target");
+        if (target === "dashboard" || target === "missions") { goToMissionSelect(); return; }
+        if (target === "journey") { renderLearningJourney(); showScreen("journey"); return; }
+        if (target === "ideas") { renderBigIdeasPage(); showScreen("ideas"); return; }
+        if (target === "weekend") { $("#btn-weekend-treat").click(); return; }
+        if (target === "achievements") {
+          goToMissionSelect();
+          setTimeout(function () { var badges = $("#badges-card"); if (badges && !badges.hidden) badges.scrollIntoView({ behavior: "smooth", block: "center" }); else toast("Your learning achievements will appear here as you complete missions."); }, 0);
+          return;
+        }
+        if (target === "certificates") {
+          var complete = MISSIONS.length > 0 && MISSIONS.every(function (m) { return isMissionComplete(m); });
+          if (complete) goToCertificate();
+          else { goToMissionSelect(); toast("Your certificate will be ready after you complete each mission."); }
+        }
+      });
+    });
     // Backfill locally stored completions before the learner sees progress.
     // Signed-in records receive the same check in loadStateFromCloud.
     if (migrateCompletedMissionBadges(state)) {

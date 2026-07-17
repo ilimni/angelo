@@ -54,7 +54,7 @@
     var section = node("section", { class: "learning-journey-panel", "aria-labelledby": "learning-journey-title" });
     section.appendChild(node("div", { class: "learning-journey-panel__heading" }, [
       node("div", {}, [node("p", { class: "learning-journey-panel__eyebrow", text: "Progress overview" }), node("h2", { id: "learning-journey-title", text: "Where you are now" })]),
-      node("p", { class: "learning-journey-panel__intro", text: "Your progress, meaningful learning, and next step." })
+      node("p", { class: "learning-journey-panel__intro", text: "Your progress, completed activities, and next step." })
     ]));
     var card = node("section", { class: "journey-progress-card", "aria-label": "Current learning progress" });
     var overview = node("div", { class: "journey-progress-card__overview" });
@@ -73,7 +73,7 @@
     });
     section.appendChild(node("h3", { class: "journey-timeline__title", text: "Recent meaningful moments" }));
     var timeline = node("div", { class: "journey-timeline", role: "list", "aria-label": "Learning Journey events" });
-    if (!events.length) timeline.appendChild(node("p", { class: "journey-timeline__empty", text: "Your learning story will appear here as you explore." }));
+    if (!events.length) timeline.appendChild(node("p", { class: "journey-timeline__empty", text: "Your completed activities will appear here as you continue." }));
     events.forEach(function (event) {
       var meta = META[event.type];
       var item = node(event.relatedLink ? "button" : "article", { class: "journey-event journey-event--" + String(event.status || "upcoming").toLowerCase(), role: "listitem" });

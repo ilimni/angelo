@@ -16,7 +16,7 @@
     ["You have written a brilliant paragraph and want a spare copy.", "Ctrl + C", ["Ctrl + V", "Ctrl + A", "Alt + Tab"]],
     ["Your copied paragraph needs to appear in a new document.", "Ctrl + V", ["Ctrl + C", "Windows + D", "Ctrl + A"]],
     ["You want to highlight everything in this document at once.", "Ctrl + A", ["Alt + Tab", "Ctrl + V", "Windows + D"]],
-    ["Your teacher calls you to compare two open windows.", "Alt + Tab", ["Ctrl + C", "Windows + D", "Ctrl + A"]],
+    ["You want to compare two open windows.", "Alt + Tab", ["Ctrl + C", "Windows + D", "Ctrl + A"]],
     ["The desktop is hiding beneath lots of open windows.", "Windows + D", ["Alt + Tab", "Ctrl + V", "Ctrl + C"]]
   ];
   var myths = [
@@ -36,7 +36,7 @@
 
   function load() { try { return Object.assign({ stage: "intro", xp: 0, stars: 0, done: false, seen: {} }, JSON.parse(localStorage.getItem(STORE) || "{}")); } catch (e) { return { stage: "intro", xp: 0, stars: 0, done: false, seen: {} }; } }
   function save() { localStorage.setItem(STORE, JSON.stringify(state)); }
-  function student() { try { return (JSON.parse(localStorage.getItem("ilimni_progress_v1") || "{}").studentName || "Agent Angelo"); } catch (e) { return "Agent Angelo"; } }
+  function student() { try { return (JSON.parse(localStorage.getItem("ilimni_progress_v1") || "{}").studentName || "Angelo"); } catch (e) { return "Angelo"; } }
   function escape(s) { var d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
   function hideOtherScreens() { document.querySelectorAll(".screen").forEach(function (el) { el.classList.toggle("is-active", el.id === "screen-weekend"); }); document.getElementById("app-header").hidden = false; window.scrollTo({ top: 0, behavior: "smooth" }); }
   function back() { document.getElementById("screen-weekend").classList.remove("is-active"); document.getElementById("screen-missions").classList.add("is-active"); }
@@ -61,7 +61,7 @@
     certificate();
   }
   function intro() {
-    shell("Keyboard Detective", "Weekend Treat · 15–20 minutes", '<div class="detective-hero"><div class="detective-orb" aria-hidden="true"><i class="ui-icon" data-lucide="keyboard"></i></div><p>Principal at <b>WEB79 ICT Training Centre</b> has found clues hidden around the computer lab. Your mission, <b>' + escape(student()) + '</b>: uncover them and repair the lab computer.</p><p class="weekend-dialogue">“No scary tests here, Agent. Just sharp eyes and clever clicks.”</p><div class="weekend-route"><span>Find keys</span><span>Sort clues</span><span>Shortcut hero</span><span>Repair lab</span></div></div>', '<button class="btn btn--primary btn--lg" id="weekend-start" type="button">Accept the case →</button>');
+    shell("Keyboard Practice", "Optional activity · 15–20 minutes", '<div class="detective-hero"><div class="detective-orb" aria-hidden="true"><i class="ui-icon" data-lucide="keyboard"></i></div><p>Try these keyboard and computer practice activities, <b>' + escape(student()) + '</b>.</p><p class="weekend-dialogue">Take your time and use the clues on each screen.</p><div class="weekend-route"><span>Find keys</span><span>Sort keys</span><span>Try shortcuts</span><span>Answer questions</span></div></div>', '<button class="btn btn--primary btn--lg" id="weekend-start" type="button">Start practice →</button>');
     document.getElementById("weekend-start").onclick = function () { advance("keys"); };
   }
   function keyChallenge() {
@@ -101,14 +101,14 @@
   }
   function celebration() {
     state.done = true; save();
-    shell("Case solved!", "The computer powers on", '<div class="celebration-burst" aria-hidden="true"><i class="ui-icon" data-lucide="sparkles"></i> <i class="ui-icon" data-lucide="monitor-check"></i> <i class="ui-icon" data-lucide="sparkles"></i></div><p class="weekend-lead">The lab computer glows back to life. Principal WEB79 salutes <b>' + escape(student()) + '</b>: you found every clue and repaired every part.</p><div class="unlock-card"><i class="ui-icon" data-lucide="award" aria-hidden="true"></i><div><b>Weekend Badge unlocked</b><small>Keyboard Detective</small></div></div><p class="weekend-dialogue">“You revised a whole week of computer skills without even noticing. That is expert detective work.”</p>', '<button class="btn btn--primary btn--lg" id="weekend-cert" type="button">Reveal my certificate →</button>');
+    shell("Practice complete", "Keyboard activity complete", '<div class="celebration-burst" aria-hidden="true"><i class="ui-icon" data-lucide="sparkles"></i> <i class="ui-icon" data-lucide="monitor-check"></i> <i class="ui-icon" data-lucide="sparkles"></i></div><p class="weekend-lead"><b>' + escape(student()) + '</b>, you completed this keyboard practice activity.</p><div class="unlock-card"><i class="ui-icon" data-lucide="award" aria-hidden="true"></i><div><b>Weekend activity completed</b><small>Keyboard practice</small></div></div><p class="weekend-dialogue">You can return whenever you want more practice.</p>', '<button class="btn btn--primary btn--lg" id="weekend-cert" type="button">View completion note →</button>');
     document.getElementById("weekend-cert").onclick = function () { advance("certificate"); };
   }
   function certificate() {
-    shell("Keyboard Detective Certificate", "Weekend Treat complete", '<div class="weekend-certificate"><div aria-hidden="true"><i class="ui-icon ui-icon--xl" data-lucide="trophy"></i></div><p>This certifies that</p><h3>' + escape(student()) + '</h3><p>has solved the WEB79 computer-lab mystery and earned the title</p><h4>Keyboard Detective</h4><p class="cert-small">Weekend XP earned: ' + state.xp + ' · Issued ' + new Date().toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" }) + '</p></div>', '<button class="btn btn--ghost" id="weekend-print" type="button">Print certificate</button><button class="btn btn--primary" id="weekend-return" type="button">Back to missions</button>');
+    shell("Keyboard Practice", "Optional activity complete", '<div class="weekend-certificate"><div aria-hidden="true"><i class="ui-icon ui-icon--xl" data-lucide="trophy"></i></div><p>This note records that</p><h3>' + escape(student()) + '</h3><p>completed the optional</p><h4>Keyboard Practice Activity</h4><p class="cert-small">Weekend XP earned: ' + state.xp + ' · Issued ' + new Date().toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" }) + '</p></div>', '<button class="btn btn--ghost" id="weekend-print" type="button">Print note</button><button class="btn btn--primary" id="weekend-return" type="button">Back to missions</button>');
     document.getElementById("weekend-print").onclick = function () { window.print(); };
     document.getElementById("weekend-return").onclick = back;
   }
   launch.addEventListener("click", function () { render(); });
-  if (state.done) launch.querySelector("small").textContent = "Completed · view your Keyboard Detective badge and certificate";
+  if (state.done) launch.querySelector("small").textContent = "Completed · view your keyboard practice note";
 })();
