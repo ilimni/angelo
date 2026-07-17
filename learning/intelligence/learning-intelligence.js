@@ -112,7 +112,7 @@
   };
 
   // Additive hydration preserves all legacy content fields and the mission list.
-  // `missionContent` is declared with `const` in content.js, so it is a
+  // `missionContent` is declared with `const` in learning/content.js, so it is a
   // global lexical binding rather than necessarily a `window` property.
   if (typeof missionContent !== "undefined") enrichQuestions(missionContent);
 })(window);

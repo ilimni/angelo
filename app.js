@@ -1,6 +1,6 @@
 /**
  * ILIMNI — Digital Literacy & Computing Foundations Review Experience
- * app.js — generic rendering engine driven entirely by content.js
+ * app.js — generic rendering engine driven entirely by learning/content.js
  *
  * Nothing here hardcodes a question. Every interaction type has one
  * renderer + one checker; adding a new item to missionContent (or a new
@@ -11,7 +11,7 @@
   "use strict";
 
   /* ============================================================
-     0. DATA — pulled straight from content.js (window globals)
+     0. DATA — pulled straight from learning/content.js (window globals)
      ============================================================ */
   var ALL_QUESTIONS = (typeof missionContent !== "undefined" ? missionContent : []);
   var GAMIFICATION = (typeof gamification !== "undefined" ? gamification : { xpPerLevel: 150, badges: [], encouragingMessages: [], confettiOnMissionComplete: true });
@@ -758,7 +758,7 @@
      LEARNING JOURNEY — derives today’s journal from learner state while
      accepting externally supplied (Firebase/classroom) event records.
      Event contract: id, type, title, description, mission, section, status,
-     timestamp, relatedLink. See learning-journey.js for the fixed type list.
+     timestamp, relatedLink. See learning/learning-journey.js for the fixed type list.
      ============================================================ */
   function missionName(m) {
     var detail = MISSION_DETAILS[m] || {};

@@ -7,7 +7,7 @@ This update adds a learner-facing Big Idea collection without changing answer ch
 - `app.js` — automatically unlocks, migrates, and persists dated Big Idea records; renders the collection and its dashboard entry point.
 - `index.html` — adds the My Big Ideas dashboard card and accessible dedicated collection screen.
 - `style.css` — adds calm notebook-style collection cards while retaining the existing design system.
-- `LEARNER-EXPERIENCE.md` — documents the presentation components and their responsibilities.
+- `docs/LEARNER-EXPERIENCE.md` — documents the presentation components and their responsibilities.
 
 ## Reusable components
 

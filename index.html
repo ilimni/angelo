@@ -22,10 +22,10 @@
     />
     <link
       rel="icon"
-      href="branding/ilimni-favicon.svg"
+      href="assets/branding/ilimni-favicon.svg"
       type="image/svg+xml"
     />
-    <link rel="apple-touch-icon" href="branding/ilimni-favicon.svg" />
+    <link rel="apple-touch-icon" href="assets/branding/ilimni-favicon.svg" />
     <meta
       property="og:title"
       content="ILIMNI Learning Portal | Digital Literacy &amp; Computing Foundations"
@@ -35,7 +35,7 @@
       content="Learn to Think, Not Just Click. Build understanding through thoughtful practice, reflection, and discovery."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="branding/ilimni-og.svg" />
+    <meta property="og:image" content="assets/branding/ilimni-og.svg" />
     <meta
       property="og:image:alt"
       content="ILIMNI Learning Portal — Learn to Think, Not Just Click."
@@ -498,7 +498,7 @@
         >
           <img
             class="app-header__logo"
-            src="branding/ilimni-logo-full.svg"
+            src="assets/branding/ilimni-logo-full.svg"
             alt="ILIMNI"
           />
           <span class="app-header__brand-copy"
@@ -617,7 +617,7 @@
         <div class="welcome-hero">
           <img
             class="welcome-hero__logo"
-            src="branding/ilimni-logo-full.svg"
+            src="assets/branding/ilimni-logo-full.svg"
             alt="ILIMNI"
           />
           <p class="welcome-hero__brand">ILIMNI Learning Portal</p>
@@ -1480,19 +1480,19 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-    <script src="firebase-init.js"></script>
+    <script src="services/firebase-init.js"></script>
     <script>
       var module = { exports: {} };
     </script>
-    <script src="content.js"></script>
-    <script src="learning-intelligence/competencies.js"></script>
-    <script src="learning-intelligence/big-ideas.js"></script>
-    <script src="learning-intelligence/misconceptions.js"></script>
-    <script src="learning-intelligence/activities.js"></script>
-    <script src="learning-intelligence/instructional-strategies.js"></script>
-    <script src="learning-intelligence/learning-intelligence.js"></script>
-    <script src="bigIdeas.js"></script>
-    <script src="learning-journey.js"></script>
+    <script src="learning/content.js"></script>
+    <script src="learning/intelligence/competencies.js"></script>
+    <script src="learning/intelligence/big-ideas.js"></script>
+    <script src="learning/intelligence/misconceptions.js"></script>
+    <script src="learning/intelligence/activities.js"></script>
+    <script src="learning/intelligence/instructional-strategies.js"></script>
+    <script src="learning/intelligence/learning-intelligence.js"></script>
+    <script src="learning/bigIdeas.js"></script>
+    <script src="learning/learning-journey.js"></script>
     <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
     <script>
       window.refreshIcons = function () {
@@ -1501,6 +1501,6 @@
       };
     </script>
     <script src="app.js"></script>
-    <script src="weekend-treat.js"></script>
+    <script src="learning/weekend-treat.js"></script>
   </body>
 </html>

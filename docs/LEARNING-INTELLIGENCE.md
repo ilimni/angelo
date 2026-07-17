@@ -1,10 +1,10 @@
 # Learning Intelligence Layer (LIL)
 
-The Learning Intelligence Layer is a data-only, additive architecture for ILIMNI. It attaches an invisible `learningIntelligence` object to every existing question after `content.js` loads. The renderer still uses the original question fields, so question flow, XP, certificates, authentication, local progress, Firebase documents, and learner-facing content are unchanged.
+The Learning Intelligence Layer is a data-only, additive architecture for ILIMNI. It attaches an invisible `learningIntelligence` object to every existing question after `learning/content.js` loads. The renderer still uses the original question fields, so question flow, XP, certificates, authentication, local progress, Firebase documents, and learner-facing content are unchanged.
 
 ## Runtime flow
 
-`content.js` → LIL taxonomies → `learning-intelligence.js` enriches each question → legacy Big Ideas display adapter → `app.js`.
+`learning/content.js` → LIL taxonomies → `learning/intelligence/learning-intelligence.js` enriches each question → legacy Big Ideas display adapter → `app.js`.
 
 The platform therefore has a stable instructional vocabulary that can later be joined with student attempts, teacher assignments, reports, adaptive recommendations, and tutoring prompts without changing the current progress schema.
 
@@ -33,15 +33,15 @@ learningIntelligence: {
 
 ## Files created
 
-- `learning-intelligence/competencies.js` — extensible `COMP-*` competency registry.
-- `learning-intelligence/big-ideas.js` — canonical `BIG-*` registry; each record has id, title, statement, explanation, and tags.
-- `learning-intelligence/misconceptions.js` — `MIS-*` misconceptions and their corrective ideas.
-- `learning-intelligence/activities.js` — reusable `ACT-*` classroom learning objects with the requested curriculum links.
-- `learning-intelligence/instructional-strategies.js` — reusable `STR-*` instructional strategy registry.
-- `learning-intelligence/learning-intelligence.js` — schema contract, non-destructive question enrichment, and validation helpers.
-- `LEARNING-INTELLIGENCE.md` — this architecture guide and authoring contract.
+- `learning/intelligence/competencies.js` — extensible `COMP-*` competency registry.
+- `learning/intelligence/big-ideas.js` — canonical `BIG-*` registry; each record has id, title, statement, explanation, and tags.
+- `learning/intelligence/misconceptions.js` — `MIS-*` misconceptions and their corrective ideas.
+- `learning/intelligence/activities.js` — reusable `ACT-*` classroom learning objects with the requested curriculum links.
+- `learning/intelligence/instructional-strategies.js` — reusable `STR-*` instructional strategy registry.
+- `learning/intelligence/learning-intelligence.js` — schema contract, non-destructive question enrichment, and validation helpers.
+- `docs/LEARNING-INTELLIGENCE.md` — this architecture guide and authoring contract.
 
-`bigIdeas.js` remains in place as a compatibility adapter for current Big Idea cards. It derives their existing `idea` display property from the canonical registry and resolves historic IDs through `legacyId`.
+`learning/bigIdeas.js` remains in place as a compatibility adapter for current Big Idea cards. It derives their existing `idea` display property from the canonical registry and resolves historic IDs through `legacyId`.
 
 ## Authoring future missions
 

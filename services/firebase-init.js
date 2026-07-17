@@ -1,7 +1,7 @@
 /**
  * ILIMNI — Firebase initialization (compat SDK)
  * Loaded after the Firebase compat <script> tags in index.html,
- * before content.js / app.js. Exposes window.firebaseAuth and
+ * before learning/content.js / app.js. Exposes window.firebaseAuth and
  * window.firebaseDb as globals for app.js to use.
  */
 (function () {
