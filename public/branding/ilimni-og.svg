@@ -3,7 +3,7 @@
   <desc id="description">Learn to Think, Not Just Click.</desc>
   <rect width="1200" height="630" fill="#17152d"/>
   <rect x="54" y="54" width="1092" height="522" rx="28" fill="#211d43" stroke="#7770d8" stroke-opacity=".4"/>
-  <image href="ilmni-logo-full.svg" x="102" y="116" width="390" height="95" preserveAspectRatio="xMinYMid meet"/>
+  <image href="ilimni-logo-full.svg" x="102" y="116" width="390" height="95" preserveAspectRatio="xMinYMid meet"/>
   <text x="102" y="330" fill="#ffffff" font-family="Arial, sans-serif" font-size="70" font-weight="700">Learn to Think,</text>
   <text x="102" y="410" fill="#bdb8ff" font-family="Arial, sans-serif" font-size="70" font-weight="700">Not Just Click.</text>
   <text x="102" y="492" fill="#d3d0e9" font-family="Arial, sans-serif" font-size="28">Digital Literacy &amp; Computing Foundations</text>
