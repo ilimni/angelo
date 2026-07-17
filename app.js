@@ -92,7 +92,10 @@
       // Legacy ID list is retained for existing learner records. Rich unlock
       // records support the My Big Ideas collection and future metadata.
       collectedBigIdeaIds: [],
-      bigIdeaUnlocks: {}
+      bigIdeaUnlocks: {},
+      // Firebase-ready event records use LearningJourney.EVENT_TYPES.
+      // Classroom systems can append events here without dashboard changes.
+      learningJourneyEvents: []
     };
   }
 
@@ -109,6 +112,7 @@
       merged.earnedBadges = parsed.earnedBadges || [];
       merged.collectedBigIdeaIds = parsed.collectedBigIdeaIds || [];
       merged.bigIdeaUnlocks = parsed.bigIdeaUnlocks || {};
+      merged.learningJourneyEvents = parsed.learningJourneyEvents || [];
       reconcileMissionProgress(merged);
       return merged;
     } catch (e) {
@@ -151,6 +155,7 @@
         state.earnedBadges = cloud.earnedBadges || [];
         state.collectedBigIdeaIds = cloud.collectedBigIdeaIds || [];
         state.bigIdeaUnlocks = cloud.bigIdeaUnlocks || {};
+        state.learningJourneyEvents = cloud.learningJourneyEvents || [];
         reconcileMissionProgress(state);
         var badgesMigrated = migrateCompletedMissionBadges(state);
         var ideasMigrated = migrateCompletedMissionBigIdeas(state);
@@ -311,7 +316,7 @@
   /* ============================================================
      3. SCREEN NAVIGATION
      ============================================================ */
-  var SCREENS = ["welcome", "auth", "name", "missions", "ideas", "question", "summary", "certificate"];
+  var SCREENS = ["welcome", "auth", "name", "missions", "ideas", "journal", "question", "summary", "certificate"];
   function showScreen(name) {
     SCREENS.forEach(function (s) {
       var node = $("#screen-" + s);
@@ -746,6 +751,59 @@
     preview.hidden = allComplete;
   }
 
+  /* ============================================================
+     LEARNING JOURNEY — derives today’s journal from learner state while
+     accepting externally supplied (Firebase/classroom) event records.
+     Event contract: id, type, title, description, mission, section, status,
+     timestamp, relatedLink. See learning-journey.js for the fixed type list.
+     ============================================================ */
+  function missionName(m) {
+    var detail = MISSION_DETAILS[m] || {};
+    return "Mission " + m + (detail.title ? ": " + detail.title : "");
+  }
+
+  function buildLearningJourneyModel() {
+    var completedMissions = MISSIONS.filter(function (m) { return isMissionComplete(m); });
+    var active = MISSIONS.find(function (m) { return !isMissionComplete(m) && !isMissionLocked(m); }) || MISSIONS[MISSIONS.length - 1];
+    var activeItems = itemsForMission(active);
+    var nextQuestion = activeItems.find(function (q) { return !state.completedQuestions[q.id]; }) || activeItems[0];
+    var events = (state.learningJourneyEvents || []).slice();
+    completedMissions.forEach(function (m) {
+      var answers = itemsForMission(m).map(function (q) { return state.completedQuestions[q.id]; }).filter(Boolean);
+      var latest = answers.map(function (answer) { return answer.completedAt; }).filter(Boolean).sort().pop();
+      events.push({ id: "mission-completed-" + m, type: "MISSION_COMPLETED", title: missionName(m) + " completed", description: "You completed every learning activity in this mission.", mission: m, section: (MISSION_DETAILS[m] || {}).title || "Digital Literacy & Computing Foundations", status: "COMPLETED", timestamp: latest || "", relatedLink: "mission:" + m });
+      var next = MISSIONS[MISSIONS.indexOf(m) + 1];
+      if (next != null) events.push({ id: "mission-unlocked-" + next, type: "MISSION_UNLOCKED", title: missionName(next) + " is ready", description: "Continue when you are ready for the next part of your learning.", mission: next, section: (MISSION_DETAILS[next] || {}).title || "Digital Literacy & Computing Foundations", status: "AVAILABLE", timestamp: latest || "", relatedLink: "mission:" + next });
+    });
+    Object.keys(state.reflectionAnswers || {}).forEach(function (id) {
+      var question = ALL_QUESTIONS.find(function (q) { return q.id === id; });
+      var answer = state.completedQuestions[id] || {};
+      if (question) events.push({ id: "reflection-" + id, type: "REFLECTION_SUBMITTED", title: "Reflection saved", description: question.title, mission: question.mission, section: question.section, status: "COMPLETED", timestamp: answer.completedAt || "", relatedLink: "journal" });
+    });
+    collectedBigIdeas().forEach(function (entry) {
+      events.push({ id: "big-idea-" + entry.idea.id, type: "BIG_IDEA_DISCOVERED", title: "Big Idea discovered: " + entry.idea.title, description: entry.idea.idea, mission: entry.unlock.mission, section: "My Big Ideas", status: "DISCOVERED", timestamp: entry.unlock.unlockedAt || "", relatedLink: "ideas" });
+    });
+    computeEarnedBadges().forEach(function (badge) {
+      events.push({ id: "recognition-" + (badge.id || badge.label), type: "RECOGNITION_EARNED", title: "Recognition earned: " + badge.label, description: "A learning achievement has been added to your journey.", status: "EARNED", timestamp: "", relatedLink: null });
+    });
+    events.push({ id: "weekend-activity", type: "WEEKEND_ACTIVITY_AVAILABLE", title: "Weekend Activity: Keyboard Detective", description: "A short computer-lab mystery that connects classroom learning with review.", status: "AVAILABLE", timestamp: "", relatedLink: "weekend" });
+    if (completedMissions.length === MISSIONS.length && MISSIONS.length) events.push({ id: "certificate-awarded", type: "CERTIFICATE_AWARDED", title: "Course certificate ready", description: "You completed every mission in this learning pathway.", status: "AWARDED", timestamp: "", relatedLink: "certificate" });
+    return { progress: { section: (nextQuestion && nextQuestion.section) || "Digital Literacy & Computing Foundations", currentMission: active ? missionName(active) : "Learning pathway complete", currentFocus: (nextQuestion && nextQuestion.title) || "Celebrate your completed pathway.", completedMissions: completedMissions.length, totalMissions: MISSIONS.length, percent: MISSIONS.length ? Math.round(completedMissions.length / MISSIONS.length * 100) : 0 }, events: events };
+  }
+
+  function navigateLearningJourneyEvent(event) {
+    var link = event.relatedLink || "";
+    if (link.indexOf("mission:") === 0) { startMission(Number(link.split(":")[1])); return; }
+    if (link === "ideas") { renderBigIdeasPage(); showScreen("ideas"); return; }
+    if (link === "weekend") { var launch = $("#btn-weekend-treat"); if (launch) launch.click(); return; }
+    if (link === "certificate") { goToCertificate(); return; }
+    if (link === "journal") { renderJournalPage(); showScreen("journal"); }
+  }
+
+  function renderLearningJourney() {
+    if (window.LearningJourney) window.LearningJourney.render($("#learning-journey-root"), buildLearningJourneyModel(), navigateLearningJourneyEvent);
+  }
+
   function goToMissionSelect() {
     // Progress checks are also a migration point for guests and for any older
     // local record that was loaded before a learner next signs in.
@@ -812,6 +870,7 @@
     renderCertificatePreview();
     renderLatestBigIdeaCard();
     renderBigIdeasDashboardCard();
+    renderLearningJourney();
     renderHeader();
     refreshIcons();
     showScreen("missions");
@@ -854,8 +913,26 @@
     refreshIcons();
   }
 
+  function renderJournalPage() {
+    var list = $("#journal-list");
+    var entries = Object.keys(state.reflectionAnswers || {}).map(function (id) {
+      var question = ALL_QUESTIONS.find(function (q) { return q.id === id; });
+      return question ? { question: question, text: state.reflectionAnswers[id], timestamp: (state.completedQuestions[id] || {}).completedAt } : null;
+    }).filter(Boolean).sort(function (a, b) { return String(b.timestamp || "").localeCompare(String(a.timestamp || "")); });
+    list.innerHTML = "";
+    $("#journal-empty").hidden = !!entries.length;
+    entries.forEach(function (entry) {
+      list.appendChild(el("article", { class: "big-ideas-collection__item" }, [
+        IconContainer("notebook-pen", { variant: "achievement", size: "compact" }),
+        el("div", { class: "big-ideas-collection__content" }, [el("h3", { text: entry.question.title }), el("p", { text: entry.text }), el("p", { class: "big-ideas-collection__meta", text: missionName(entry.question.mission) + " · " + entry.question.section })])
+      ]));
+    });
+    refreshIcons();
+  }
+
   $("#btn-open-big-ideas").addEventListener("click", function () { renderBigIdeasPage(); showScreen("ideas"); });
   $("#btn-back-from-big-ideas").addEventListener("click", goToMissionSelect);
+  $("#btn-back-from-journal").addEventListener("click", goToMissionSelect);
 
   function renderBadgesCard() {
     var earned = computeEarnedBadges();
@@ -1375,7 +1452,7 @@
     if (!skipped) {
       xpAwarded = (correct === false) ? Math.round(q.xp * 0.4) : q.xp;
     }
-    state.completedQuestions[q.id] = { correct: correct, xp: xpAwarded, skipped: skipped, answer: answer };
+    state.completedQuestions[q.id] = { correct: correct, xp: xpAwarded, skipped: skipped, answer: answer, completedAt: new Date().toISOString() };
     state.xp += xpAwarded;
     if (q.type === "reflection") state.reflectionAnswers[q.id] = answer;
     saveState();

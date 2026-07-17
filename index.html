@@ -184,6 +184,8 @@
     </div>
     <div class="mission-grid" id="mission-list"></div>
 
+    <div id="learning-journey-root"></div>
+
     <aside class="big-idea-card big-idea-card--latest" id="latest-big-idea-card" aria-labelledby="latest-big-idea-heading" hidden>
       <i class="big-idea-card__mark ui-icon" data-lucide="lightbulb" aria-hidden="true"></i>
       <div>
@@ -230,6 +232,21 @@
       <div><strong id="big-ideas-empty-title">No Big Ideas collected yet.</strong><span>Complete your first mission to begin your personal collection of discoveries.</span></div>
     </section>
     <div class="big-ideas-page__actions"><button class="btn btn--ghost" id="btn-back-from-big-ideas" type="button">Back to missions</button></div>
+  </section>
+
+  <!-- JOURNAL -->
+  <section class="screen" id="screen-journal" aria-labelledby="journal-title">
+    <div class="screen-head">
+      <p class="big-idea-card__label">Your reflections</p>
+      <h2 class="screen-head__title" id="journal-title">Journal</h2>
+      <p class="screen-head__subtitle">Thoughts you have recorded while learning.</p>
+    </div>
+    <div class="big-ideas-collection" id="journal-list" aria-live="polite"></div>
+    <section class="empty-state big-ideas-empty" id="journal-empty">
+      <i class="ui-icon" data-lucide="notebook-pen" aria-hidden="true"></i>
+      <div><strong>No reflections saved yet.</strong><span>Reflection activities in your missions will appear here.</span></div>
+    </section>
+    <div class="big-ideas-page__actions"><button class="btn btn--ghost" id="btn-back-from-journal" type="button">Back to missions</button></div>
   </section>
 
   <!-- QUESTION -->
@@ -378,6 +395,7 @@
 <script src="learning-intelligence/instructional-strategies.js"></script>
 <script src="learning-intelligence/learning-intelligence.js"></script>
 <script src="bigIdeas.js"></script>
+<script src="learning-journey.js"></script>
 <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
 <script>
   window.refreshIcons = function () {

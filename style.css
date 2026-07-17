@@ -395,6 +395,37 @@ main {
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 20px;
 }
+
+/* ---------------- Learning Journey ----------------
+   The journal stays deliberately quieter than missions: it communicates
+   progress and next steps without turning learning into a social feed. */
+.learning-journey-panel { margin-top: 40px; padding-top: 34px; border-top: 1px solid var(--border); }
+.learning-journey-panel__heading { display: flex; justify-content: space-between; gap: 24px; align-items: end; margin-bottom: 18px; }
+.learning-journey-panel__heading h2 { font-size: 1.45rem; letter-spacing: -.02em; }
+.learning-journey-panel__eyebrow { margin-bottom: 4px; color: var(--brand-dark); font-size: .74rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+.learning-journey-panel__intro { max-width: 290px; color: var(--text-muted); font-size: .88rem; text-align: right; }
+.journey-progress-card { padding: 22px; border: 1px solid color-mix(in srgb, var(--brand) 22%, var(--border)); border-radius: var(--radius-md); background: linear-gradient(135deg, var(--surface), color-mix(in srgb, var(--brand-light) 66%, var(--surface))); box-shadow: var(--shadow-sm); }
+.journey-progress-card__top { display: flex; justify-content: space-between; gap: 16px; align-items: start; }
+.journey-progress-card__label { display: block; margin-bottom: 3px; color: var(--text-muted); font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; }
+.journey-progress-card__top strong { font-family: var(--font-display); font-size: 1rem; }
+.journey-progress-card__mission { display: inline-flex; gap: 6px; align-items: center; color: var(--brand-dark); font-size: .83rem; font-weight: 750; white-space: nowrap; }
+.journey-progress-card__focus { margin: 15px 0; color: var(--text-muted); font-size: .91rem; }
+.journey-progress-card__track { height: 8px; overflow: hidden; border-radius: var(--radius-pill); background: color-mix(in srgb, var(--brand) 12%, var(--surface)); }
+.journey-progress-card__track span { display: block; height: 100%; border-radius: inherit; background: var(--brand); }
+.journey-progress-card__count { margin-top: 8px; color: var(--text-muted); font-size: .81rem; font-weight: 650; }
+.journey-timeline { position: relative; margin: 24px 0 0 17px; padding: 0 0 0 27px; }
+.journey-timeline::before { position: absolute; top: 9px; bottom: 18px; left: 0; width: 1px; background: var(--border); content: ""; }
+.journey-event { position: relative; display: block; width: 100%; margin: 0 0 16px; padding: 17px 18px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface); color: var(--text); text-align: left; box-shadow: var(--shadow-sm); }
+button.journey-event { font: inherit; cursor: pointer; }
+button.journey-event:hover { border-color: color-mix(in srgb, var(--brand) 42%, var(--border)); box-shadow: var(--shadow-md); }
+.journey-event__marker { position: absolute; z-index: 1; top: 18px; left: -45px; display: grid; width: 36px; height: 36px; place-items: center; border: 1px solid color-mix(in srgb, var(--brand) 25%, var(--border)); border-radius: 50%; background: var(--surface); color: var(--brand-dark); }
+.journey-event--completed .journey-event__marker, .journey-event--earned .journey-event__marker, .journey-event--awarded .journey-event__marker, .journey-event--discovered .journey-event__marker { border-color: color-mix(in srgb, var(--success) 42%, var(--border)); background: var(--success-bg); color: var(--success); }
+.journey-event__meta { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 5px; color: var(--text-faint); font-size: .72rem; font-weight: 750; letter-spacing: .04em; text-transform: uppercase; }
+.journey-event h3 { font-size: .98rem; line-height: 1.35; }
+.journey-event p { margin-top: 5px; color: var(--text-muted); font-size: .87rem; }
+.journey-event__status { display: inline-block; margin-top: 10px; color: var(--text-muted); font-size: .71rem; font-weight: 800; letter-spacing: .055em; text-transform: uppercase; }
+.journey-event--available .journey-event__status { color: var(--brand-dark); }
+.journey-timeline__empty { color: var(--text-muted); font-size: .9rem; }
 .mission-card {
   --card-accent: var(--brand);
   position: relative;
@@ -1096,6 +1127,7 @@ main {
   .question-nav__center { margin-left: 0; order: 3; width: 100%; justify-content: center; }
   .certificate { padding: 36px 20px; }
   .weekend-card { padding: 27px 16px; }.weekend-invite { padding: 16px; }.keyboard-board { grid-template-columns: repeat(3, 1fr); gap: 7px; padding: 10px; }.keycap--space { grid-column: span 3; }.group-zones { grid-template-columns: repeat(2, 1fr); }.choice-grid { grid-template-columns: 1fr; }
+  .learning-journey-panel__heading { display: block; }.learning-journey-panel__intro { margin-top: 7px; text-align: left; }.journey-progress-card__top { display: block; }.journey-progress-card__mission { margin-top: 11px; }.journey-timeline { margin-left: 14px; padding-left: 24px; }.journey-event__marker { left: -42px; }
   .welcome-page { padding-top: 8px; }.welcome-hero { margin: 28px auto 54px; }.welcome-hero__copy { font-size: 1rem; }.welcome-features { grid-template-columns: 1fr; }.welcome-feature-card { padding: 20px; }.big-idea-card { padding: 20px; }.big-idea-card--landing { margin-bottom: 52px; }.progress-preview { grid-template-columns: 1fr; gap: 22px; padding: 26px 20px; }.progress-preview__missions { padding: 6px 14px; }
 }
 
