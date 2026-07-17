@@ -12,6 +12,10 @@
     "WEEKEND_ACTIVITY_AVAILABLE", "BIG_IDEA_DISCOVERED", "REFLECTION_SUBMITTED",
     "RECOGNITION_EARNED", "CERTIFICATE_AWARDED", "TEACHER_FEEDBACK"
   ];
+  var MEANINGFUL_EVENT_TYPES = [
+    "LIVE_CLASS_COMPLETED", "MISSION_COMPLETED", "WEEKEND_ACTIVITY_AVAILABLE",
+    "BIG_IDEA_DISCOVERED", "RECOGNITION_EARNED", "CERTIFICATE_AWARDED"
+  ];
   var META = {
     LIVE_CLASS_COMPLETED: { icon: "presentation", label: "Classroom" },
     MISSION_UNLOCKED: { icon: "lock-keyhole-open", label: "Next step" },
@@ -44,24 +48,30 @@
   function render(root, model, onNavigate) {
     if (!root) return;
     var progress = model.progress || {};
-    var events = (model.events || []).filter(function (event) { return EVENT_TYPES.indexOf(event.type) !== -1; })
-      .sort(function (a, b) { return String(b.timestamp || "").localeCompare(String(a.timestamp || "")); });
+    var events = (model.events || []).filter(function (event) { return MEANINGFUL_EVENT_TYPES.indexOf(event.type) !== -1; })
+      .sort(function (a, b) { return String(b.timestamp || "").localeCompare(String(a.timestamp || "")); }).slice(0, 5);
     root.innerHTML = "";
     var section = node("section", { class: "learning-journey-panel", "aria-labelledby": "learning-journey-title" });
     section.appendChild(node("div", { class: "learning-journey-panel__heading" }, [
-      node("div", {}, [node("p", { class: "learning-journey-panel__eyebrow", text: "Your learning journal" }), node("h2", { id: "learning-journey-title", text: "Learning Journey" })]),
-      node("p", { class: "learning-journey-panel__intro", text: "A calm view of what you have learned and where to go next." })
+      node("div", {}, [node("p", { class: "learning-journey-panel__eyebrow", text: "Progress overview" }), node("h2", { id: "learning-journey-title", text: "Where you are now" })]),
+      node("p", { class: "learning-journey-panel__intro", text: "Your progress, meaningful learning, and next step." })
     ]));
     var card = node("section", { class: "journey-progress-card", "aria-label": "Current learning progress" });
-    card.appendChild(node("div", { class: "journey-progress-card__top" }, [
-      node("div", {}, [node("span", { class: "journey-progress-card__label", text: "Section" }), node("strong", { text: progress.section || "Learning pathway" })]),
-      node("div", { class: "journey-progress-card__mission" }, [icon("map-pin"), node("span", { text: progress.currentMission || "Your next mission" })])
-    ]));
-    card.appendChild(node("p", { class: "journey-progress-card__focus", text: progress.currentFocus || "Choose a mission to continue learning." }));
+    var overview = node("div", { class: "journey-progress-card__overview" });
+    [
+      ["Current section", progress.section || "Learning pathway"],
+      ["Current mission", progress.currentMission || "Your next mission"],
+      ["Current focus", progress.currentFocus || "Choose a mission to continue learning."]
+    ].forEach(function (item) { overview.appendChild(node("div", {}, [node("span", { class: "journey-progress-card__label", text: item[0] }), node("strong", { text: item[1] })])); });
+    card.appendChild(overview);
     var bar = node("div", { class: "journey-progress-card__track", role: "progressbar", "aria-label": "Mission completion progress", "aria-valuemin": "0", "aria-valuemax": String(progress.totalMissions || 0), "aria-valuenow": String(progress.completedMissions || 0) }, [node("span", { style: "width:" + Math.max(0, Math.min(100, progress.percent || 0)) + "%" })]);
     card.appendChild(bar);
     card.appendChild(node("p", { class: "journey-progress-card__count", text: (progress.completedMissions || 0) + " of " + (progress.totalMissions || 0) + " Missions Completed" }));
     section.appendChild(card);
+    (model.milestones || []).forEach(function (milestone) {
+      section.appendChild(node("aside", { class: "journey-milestone", "aria-label": "Major milestone" }, [icon("award"), node("div", {}, [node("p", { text: "Major milestone" }), node("h3", { text: milestone.title }), node("span", { text: milestone.description || "" })]) ]));
+    });
+    section.appendChild(node("h3", { class: "journey-timeline__title", text: "Recent meaningful moments" }));
     var timeline = node("div", { class: "journey-timeline", role: "list", "aria-label": "Learning Journey events" });
     if (!events.length) timeline.appendChild(node("p", { class: "journey-timeline__empty", text: "Your learning story will appear here as you explore." }));
     events.forEach(function (event) {

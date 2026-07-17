@@ -2130,16 +2130,10 @@ const missionContent = [
 const gamification = {
   xpPerLevel: 150,
   badges: [
-    { id: "input-master", label: "Input Master", criteria: "Complete all Input section items correctly" },
-    { id: "binary-decoder", label: "Binary Decoder", criteria: "Complete all Binary section items correctly" },
-    { id: "myth-buster", label: "Myth Buster", criteria: "Correctly answer the .com vs file extension and RAM vs ROM items" },
-    { id: "mission-1-complete", label: "Computer Fundamentals Graduate", criteria: "Finish all Mission 1 items" },
-    { id: "mission-2-complete", label: "Windows Navigator", criteria: "Finish all Mission 2 items" },
-    { id: "shortcut-sprinter", label: "Shortcut Sprinter", criteria: "Complete all Keyboard Shortcuts section items correctly" },
-    { id: "mission-3-complete", label: "Keyboard Commander", criteria: "Finish all Mission 3 items" },
-    { id: "mission-4-complete", label: "Smart Computer User", criteria: "Finish all Mission 4 items" },
-    { id: "mission-5-complete", label: "Digital Problem Solver", criteria: "Finish all Mission 5 items" },
-    { id: "mission-6-complete", label: "Digital Investigator", criteria: "Finish all Mission 6 items" }
+    { id: "input-explorer", label: "Input Explorer", criteria: "Complete all Input section items correctly" },
+    { id: "binary-explorer", label: "Binary Explorer", criteria: "Complete all Binary section items correctly" },
+    { id: "task-manager-explorer", label: "Task Manager Explorer", criteria: "Finish all Mission 6 items" },
+    { id: "shortcut-strategist", label: "Shortcut Strategist", criteria: "Complete all Keyboard Shortcuts section items correctly" }
   ],
   encouragingMessages: {
     correct: {
@@ -2206,6 +2200,17 @@ var missionDetails = {
     completionInsight: "Today's discovery: Computers don't simply trust labels. They investigate information. Great learners do the same."
   }
 };
+
+// Archived rather than deleted during the Learning Experience Cleanup Sprint.
+// These titles imply broad competence beyond the evidence currently gathered.
+const archivedRecognitionBadges = [
+  { id: "mission-1-complete", label: "Computer Fundamentals Graduate", criteria: "Finish all Mission 1 items" },
+  { id: "mission-2-complete", label: "Windows Navigator", criteria: "Finish all Mission 2 items" },
+  { id: "mission-3-complete", label: "Keyboard Commander", criteria: "Finish all Mission 3 items" },
+  { id: "mission-4-complete", label: "Smart Computer User", criteria: "Finish all Mission 4 items" },
+  { id: "mission-5-complete", label: "Digital Problem Solver", criteria: "Finish all Mission 5 items" },
+  { id: "mission-6-complete", label: "Digital Investigator", criteria: "Finish all Mission 6 items" }
+];
 
 // Mission 6 is authored directly against the LIL contract. The helper keeps
 // each item explicit while avoiding duplicate mission-level context.

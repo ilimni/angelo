@@ -1172,3 +1172,13 @@ button.journey-event:hover { border-color: color-mix(in srgb, var(--brand) 42%, 
 }
 #form-auth .text-input { margin-bottom: 14px; }
 #form-auth .btn { width: 100%; margin-top: 4px; }
+
+/* Learning Journey is a distinct, calm progress surface. */
+.learning-journey-launch { width: 100%; display: grid; grid-template-columns: auto 1fr auto; gap: 15px; align-items: center; margin-top: 18px; padding: 16px 20px; border: 1px solid color-mix(in srgb, var(--brand) 24%, var(--border)); border-radius: var(--radius-md); background: var(--surface); color: var(--text); text-align: left; cursor: pointer; box-shadow: var(--shadow-sm); }
+.learning-journey-launch:hover { border-color: var(--brand); box-shadow: var(--shadow-md); }.learning-journey-launch:focus-visible { outline: 3px solid color-mix(in srgb, var(--brand) 42%, transparent); outline-offset: 3px; }
+.learning-journey-launch__icon { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px; background: var(--brand-light); color: var(--brand-dark); }.learning-journey-launch strong, .learning-journey-launch small { display: block; }.learning-journey-launch strong { font-family: var(--font-display); font-size: 1rem; }.learning-journey-launch small { margin-top: 3px; color: var(--text-muted); font-size: .84rem; }.learning-journey-launch__arrow { color: var(--brand); }
+.learning-journey-panel { max-width: 900px; margin-top: 0; padding-top: 0; border-top: 0; }
+.journey-progress-card__overview { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }.journey-progress-card__overview strong { display: block; font-family: var(--font-display); font-size: .94rem; line-height: 1.45; }
+.journey-milestone { display: flex; gap: 13px; align-items: start; margin-top: 20px; padding: 18px; border: 1px solid color-mix(in srgb, var(--success) 32%, var(--border)); border-radius: var(--radius-md); background: var(--success-bg); color: var(--text); }.journey-milestone > .ui-icon { margin-top: 2px; color: var(--success); }.journey-milestone p { color: var(--success); font-size: .76rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }.journey-milestone h3 { margin-top: 2px; font-size: 1rem; }.journey-milestone span { display: block; margin-top: 4px; color: var(--text-muted); font-size: .87rem; }
+.journey-timeline__title { margin: 28px 0 0; font-family: var(--font-display); font-size: 1.05rem; }
+@media (max-width: 640px) { .journey-progress-card__overview { grid-template-columns: 1fr; gap: 12px; } }

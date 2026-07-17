@@ -17,6 +17,10 @@
   var GAMIFICATION = (typeof gamification !== "undefined" ? gamification : { xpPerLevel: 150, badges: [], encouragingMessages: [], confettiOnMissionComplete: true });
   var BIG_IDEAS = (typeof bigIdeas !== "undefined" ? bigIdeas : []);
   var MISSION_DETAILS = (typeof missionDetails !== "undefined" ? missionDetails : {});
+  // The learning pathway extends beyond the missions currently available in
+  // this experience. Journey progress must describe the curriculum, not just
+  // the subset rendered on the dashboard.
+  var CURRICULUM_TOTAL_MISSIONS = 18;
 
   var MISSIONS = Array.from(new Set(ALL_QUESTIONS.map(function (q) { return q.mission; })))
     .sort(function (a, b) { return a - b; });
@@ -93,6 +97,7 @@
       // records support the My Big Ideas collection and future metadata.
       collectedBigIdeaIds: [],
       bigIdeaUnlocks: {},
+      archivedBigIdeaUnlocks: [],
       // Firebase-ready event records use LearningJourney.EVENT_TYPES.
       // Classroom systems can append events here without dashboard changes.
       learningJourneyEvents: []
@@ -112,6 +117,7 @@
       merged.earnedBadges = parsed.earnedBadges || [];
       merged.collectedBigIdeaIds = parsed.collectedBigIdeaIds || [];
       merged.bigIdeaUnlocks = parsed.bigIdeaUnlocks || {};
+      merged.archivedBigIdeaUnlocks = parsed.archivedBigIdeaUnlocks || [];
       merged.learningJourneyEvents = parsed.learningJourneyEvents || [];
       reconcileMissionProgress(merged);
       return merged;
@@ -155,10 +161,11 @@
         state.earnedBadges = cloud.earnedBadges || [];
         state.collectedBigIdeaIds = cloud.collectedBigIdeaIds || [];
         state.bigIdeaUnlocks = cloud.bigIdeaUnlocks || {};
+        state.archivedBigIdeaUnlocks = cloud.archivedBigIdeaUnlocks || [];
         state.learningJourneyEvents = cloud.learningJourneyEvents || [];
         reconcileMissionProgress(state);
         var badgesMigrated = migrateCompletedMissionBadges(state);
-        var ideasMigrated = migrateCompletedMissionBigIdeas(state);
+        var ideasMigrated = archiveLegacyBigIdeas(state);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
         if (badgesMigrated || ideasMigrated) {
           // Persist the one-time backfill immediately for signed-in learners.
@@ -300,7 +307,7 @@
     $("#latest-big-idea-explanation").textContent = idea.explanation;
     var journalStatus = $("#latest-big-idea-journal");
     var collected = isBigIdeaCollected(idea.id);
-    journalStatus.textContent = collected ? "Saved in My Big Ideas" : "Complete a mission to add this discovery to your collection.";
+    journalStatus.textContent = collected ? "Saved in My Big Ideas" : "Choose Save to My Big Ideas when this idea is offered after a mission.";
     journalStatus.classList.toggle("is-collected", collected);
   }
 
@@ -316,7 +323,7 @@
   /* ============================================================
      3. SCREEN NAVIGATION
      ============================================================ */
-  var SCREENS = ["welcome", "auth", "name", "missions", "ideas", "journal", "question", "summary", "certificate"];
+  var SCREENS = ["welcome", "auth", "name", "missions", "journey", "ideas", "journal", "question", "summary", "certificate"];
   function showScreen(name) {
     SCREENS.forEach(function (s) {
       var node = $("#screen-" + s);
@@ -569,6 +576,7 @@
   var bigIdeaModalOpener = null;
   var bigIdeaModalTimer = null;
   var activeBigIdea = null;
+  var activeBigIdeaMission = null;
   function setCompletionActionsDisabled(disabled) {
     ["#btn-back-missions", "#btn-continue-next", "#btn-view-certificate"].forEach(function (selector) {
       var button = $(selector);
@@ -576,9 +584,10 @@
     });
   }
 
-  function openBigIdeaModal(idea) {
+  function openBigIdeaModal(idea, missionId) {
     if (!idea) return;
     activeBigIdea = idea;
+    activeBigIdeaMission = missionId || idea.missionId || null;
     bigIdeaModalOpener = document.activeElement;
     $("#big-idea-modal-title").textContent = idea.title;
     $("#big-idea-modal-idea").textContent = idea.idea;
@@ -603,52 +612,51 @@
     return !!(progressState.bigIdeaUnlocks && progressState.bigIdeaUnlocks[id]) || (progressState.collectedBigIdeaIds || []).indexOf(id) !== -1;
   }
 
-  function unlockBigIdeaForMission(missionId, candidateState) {
+  function saveBigIdeaForMission(missionId, candidateState) {
     var progressState = candidateState || state;
     var idea = getBigIdeaForMission(missionId);
     if (!idea || isBigIdeaCollected(idea.id, progressState)) return null;
     if (!progressState.bigIdeaUnlocks || typeof progressState.bigIdeaUnlocks !== "object") progressState.bigIdeaUnlocks = {};
     progressState.bigIdeaUnlocks[idea.id] = {
       id: idea.id,
-      missionId: missionId,
+      mission: missionId,
       missionTitle: missionTitle(missionId),
-      unlockedAt: new Date().toISOString()
+      savedAt: new Date().toISOString()
     };
     if (!Array.isArray(progressState.collectedBigIdeaIds)) progressState.collectedBigIdeaIds = [];
     progressState.collectedBigIdeaIds.push(idea.id);
     return idea;
   }
 
-  // Migrates both the earlier ID-only journal and historical completed
-  // missions. It adds records once and never modifies XP or mission answers.
-  function migrateCompletedMissionBigIdeas(candidateState) {
+  // Earlier versions filled the notebook automatically. Preserve that data in
+  // the learner record, then begin the notebook at the learner's current
+  // stage so every future entry is a deliberate choice.
+  function archiveLegacyBigIdeas(candidateState) {
     var progressState = candidateState || state;
-    var changed = false;
-    if (!progressState.bigIdeaUnlocks || typeof progressState.bigIdeaUnlocks !== "object") {
-      progressState.bigIdeaUnlocks = {};
-      changed = true;
-    }
+    if (progressState.bigIdeasResetForPersonalNotebook) return false;
+    var prior = Object.keys(progressState.bigIdeaUnlocks || {}).map(function (id) { return progressState.bigIdeaUnlocks[id]; });
     (progressState.collectedBigIdeaIds || []).forEach(function (id) {
-      var idea = getBigIdeaById(id);
-      if (idea && !progressState.bigIdeaUnlocks[idea.id]) {
-        progressState.bigIdeaUnlocks[idea.id] = { id: idea.id, missionId: idea.missionId || null, missionTitle: idea.missionId ? missionTitle(idea.missionId) : "", unlockedAt: null };
-        changed = true;
-      }
+      if (!progressState.bigIdeaUnlocks || !progressState.bigIdeaUnlocks[id]) prior.push({ id: id, legacyIdOnly: true });
     });
-    MISSIONS.forEach(function (missionId) {
-      var completed = isMissionComplete(missionId, progressState) || !!(progressState.missionProgress[missionId] && progressState.missionProgress[missionId].completed);
-      var missionIdea = getBigIdeaForMission(missionId);
-      var existingUnlock = missionIdea && progressState.bigIdeaUnlocks[missionIdea.id];
-      if (completed && existingUnlock && !existingUnlock.missionTitle) {
-        existingUnlock.missionId = missionId;
-        existingUnlock.missionTitle = missionTitle(missionId);
-        changed = true;
-      } else if (completed && unlockBigIdeaForMission(missionId, progressState)) changed = true;
-    });
-    return changed;
+    if (prior.length || (progressState.collectedBigIdeaIds || []).length) {
+      progressState.archivedBigIdeaUnlocks = (progressState.archivedBigIdeaUnlocks || []).concat(prior);
+    }
+    progressState.bigIdeaUnlocks = {};
+    progressState.collectedBigIdeaIds = [];
+    progressState.latestBigIdeaId = null;
+    progressState.bigIdeasResetForPersonalNotebook = true;
+    return true;
   }
 
   $("#btn-continue-big-idea").addEventListener("click", closeBigIdeaModal);
+  $("#btn-save-big-idea").addEventListener("click", function () {
+    if (activeBigIdea && saveBigIdeaForMission(activeBigIdeaMission)) {
+      state.latestBigIdeaId = activeBigIdea.id;
+      saveState();
+      toast("Saved to My Big Ideas");
+    }
+    closeBigIdeaModal();
+  });
   document.addEventListener("keydown", function (e) {
     var modal = $("#big-idea-modal");
     if (modal.hidden) return;
@@ -772,23 +780,18 @@
       var answers = itemsForMission(m).map(function (q) { return state.completedQuestions[q.id]; }).filter(Boolean);
       var latest = answers.map(function (answer) { return answer.completedAt; }).filter(Boolean).sort().pop();
       events.push({ id: "mission-completed-" + m, type: "MISSION_COMPLETED", title: missionName(m) + " completed", description: "You completed every learning activity in this mission.", mission: m, section: (MISSION_DETAILS[m] || {}).title || "Digital Literacy & Computing Foundations", status: "COMPLETED", timestamp: latest || "", relatedLink: "mission:" + m });
-      var next = MISSIONS[MISSIONS.indexOf(m) + 1];
-      if (next != null) events.push({ id: "mission-unlocked-" + next, type: "MISSION_UNLOCKED", title: missionName(next) + " is ready", description: "Continue when you are ready for the next part of your learning.", mission: next, section: (MISSION_DETAILS[next] || {}).title || "Digital Literacy & Computing Foundations", status: "AVAILABLE", timestamp: latest || "", relatedLink: "mission:" + next });
-    });
-    Object.keys(state.reflectionAnswers || {}).forEach(function (id) {
-      var question = ALL_QUESTIONS.find(function (q) { return q.id === id; });
-      var answer = state.completedQuestions[id] || {};
-      if (question) events.push({ id: "reflection-" + id, type: "REFLECTION_SUBMITTED", title: "Reflection saved", description: question.title, mission: question.mission, section: question.section, status: "COMPLETED", timestamp: answer.completedAt || "", relatedLink: "journal" });
     });
     collectedBigIdeas().forEach(function (entry) {
-      events.push({ id: "big-idea-" + entry.idea.id, type: "BIG_IDEA_DISCOVERED", title: "Big Idea discovered: " + entry.idea.title, description: entry.idea.idea, mission: entry.unlock.mission, section: "My Big Ideas", status: "DISCOVERED", timestamp: entry.unlock.unlockedAt || "", relatedLink: "ideas" });
+      events.push({ id: "big-idea-" + entry.idea.id, type: "BIG_IDEA_DISCOVERED", title: "Big Idea saved: " + entry.idea.title, description: entry.idea.idea, mission: entry.unlock.mission, section: "My Big Ideas", status: "SAVED", timestamp: entry.unlock.savedAt || "", relatedLink: "ideas" });
     });
     computeEarnedBadges().forEach(function (badge) {
       events.push({ id: "recognition-" + (badge.id || badge.label), type: "RECOGNITION_EARNED", title: "Recognition earned: " + badge.label, description: "A learning achievement has been added to your journey.", status: "EARNED", timestamp: "", relatedLink: null });
     });
     events.push({ id: "weekend-activity", type: "WEEKEND_ACTIVITY_AVAILABLE", title: "Weekend Activity: Keyboard Detective", description: "A short computer-lab mystery that connects classroom learning with review.", status: "AVAILABLE", timestamp: "", relatedLink: "weekend" });
     if (completedMissions.length === MISSIONS.length && MISSIONS.length) events.push({ id: "certificate-awarded", type: "CERTIFICATE_AWARDED", title: "Course certificate ready", description: "You completed every mission in this learning pathway.", status: "AWARDED", timestamp: "", relatedLink: "certificate" });
-    return { progress: { section: (nextQuestion && nextQuestion.section) || "Digital Literacy & Computing Foundations", currentMission: active ? missionName(active) : "Learning pathway complete", currentFocus: (nextQuestion && nextQuestion.title) || "Celebrate your completed pathway.", completedMissions: completedMissions.length, totalMissions: MISSIONS.length, percent: MISSIONS.length ? Math.round(completedMissions.length / MISSIONS.length * 100) : 0 }, events: events };
+    var milestones = [];
+    if (completedMissions.length === CURRICULUM_TOTAL_MISSIONS) milestones.push({ title: "Completed the learning pathway", description: "You completed every mission in this curriculum." });
+    return { progress: { section: (nextQuestion && nextQuestion.section) || "Digital Literacy & Computing Foundations", currentMission: active ? missionName(active) : "Continue your learning pathway", currentFocus: (nextQuestion && nextQuestion.title) || "New missions will be added to your pathway.", completedMissions: completedMissions.length, totalMissions: CURRICULUM_TOTAL_MISSIONS, percent: CURRICULUM_TOTAL_MISSIONS ? Math.round(completedMissions.length / CURRICULUM_TOTAL_MISSIONS * 100) : 0 }, events: events, milestones: milestones };
   }
 
   function navigateLearningJourneyEvent(event) {
@@ -807,7 +810,7 @@
   function goToMissionSelect() {
     // Progress checks are also a migration point for guests and for any older
     // local record that was loaded before a learner next signs in.
-    if (migrateCompletedMissionBadges(state) || migrateCompletedMissionBigIdeas(state)) saveState();
+    if (migrateCompletedMissionBadges(state)) saveState();
     $("#missions-greeting").textContent = state.studentName
       ? ("Welcome back, " + state.studentName)
       : "Choose a mission";
@@ -882,7 +885,7 @@
       var idea = getBigIdeaById(id);
       return idea && unlock ? { idea: idea, unlock: unlock } : null;
     }).filter(Boolean).sort(function (a, b) {
-      return String(b.unlock.unlockedAt || "").localeCompare(String(a.unlock.unlockedAt || ""));
+      return String(b.unlock.savedAt || "").localeCompare(String(a.unlock.savedAt || ""));
     });
   }
 
@@ -897,16 +900,14 @@
     list.innerHTML = "";
     $("#big-ideas-empty").hidden = !!ideas.length;
     ideas.forEach(function (entry, index) {
-      var unlocked = entry.unlock.unlockedAt ? new Date(entry.unlock.unlockedAt) : null;
-      var unlockedMission = entry.unlock.missionTitle || "A previous mission";
-      var dateText = unlocked && !isNaN(unlocked.getTime()) ? "Unlocked " + unlocked.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }) : "Unlocked in " + unlockedMission;
+      var unlockedMission = entry.unlock.missionTitle || missionTitle(entry.idea.missionId) || "this mission";
       list.appendChild(el("article", { class: "big-ideas-collection__item", style: "--idea-index:" + index }, [
         IconContainer("lightbulb", { variant: "achievement", size: "compact", glow: true }),
         el("div", { class: "big-ideas-collection__content" }, [
           el("h3", { text: entry.idea.idea }),
           el("p", { text: entry.idea.explanation }),
-          el("p", { class: "big-ideas-collection__meta", text: unlockedMission }),
-          el("p", { class: "big-ideas-collection__date", text: dateText })
+          el("p", { class: "big-ideas-collection__meta", text: "Discovered during " + unlockedMission }),
+          el("p", { class: "big-ideas-collection__date", text: "Added after completing " + unlockedMission })
         ])
       ]));
     });
@@ -933,6 +934,8 @@
   $("#btn-open-big-ideas").addEventListener("click", function () { renderBigIdeasPage(); showScreen("ideas"); });
   $("#btn-back-from-big-ideas").addEventListener("click", goToMissionSelect);
   $("#btn-back-from-journal").addEventListener("click", goToMissionSelect);
+  $("#btn-open-learning-journey").addEventListener("click", function () { renderLearningJourney(); showScreen("journey"); });
+  $("#btn-back-from-learning-journey").addEventListener("click", goToMissionSelect);
 
   function renderBadgesCard() {
     var earned = computeEarnedBadges();
@@ -1640,10 +1643,10 @@
     }
     if (state.missionProgress[m]) state.missionProgress[m].completed = true;
     else state.missionProgress[m] = { started: true, completed: true };
-    var missionBigIdea = unlockBigIdeaForMission(m);
-    var newlyUnlockedBigIdea = !!missionBigIdea;
-    if (!missionBigIdea) missionBigIdea = getBigIdeaForMission(m);
-    if (missionBigIdea) state.latestBigIdeaId = missionBigIdea.id;
+    // Offer a teacher-approved idea, but only save it if the learner chooses
+    // to remember it in their personal notebook.
+    var missionBigIdea = getBigIdeaForMission(m);
+    var newlyUnlockedBigIdea = !!missionBigIdea && !isBigIdeaCollected(missionBigIdea.id);
     // Award immediately for new completions; the same idempotent helper also
     // backfills historical completions when progress is loaded or checked.
     migrateCompletedMissionBadges(state);
@@ -1716,7 +1719,7 @@
     clearTimeout(bigIdeaModalTimer);
     // Let the completion screen's XP and achievement feedback settle before
     // presenting the lesson that the learner should carry forward.
-    if (newlyUnlockedBigIdea) bigIdeaModalTimer = setTimeout(function () { openBigIdeaModal(missionBigIdea); }, 600);
+    if (newlyUnlockedBigIdea) bigIdeaModalTimer = setTimeout(function () { openBigIdeaModal(missionBigIdea, m); }, 600);
   }
 
   $("#btn-back-missions").addEventListener("click", goToMissionSelect);
@@ -1993,7 +1996,7 @@
       // signed-in learner's authoritative record.
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }
-    if (migrateCompletedMissionBigIdeas(state)) localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    if (archiveLegacyBigIdeas(state)) localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     applyTheme();
     renderTodaysBigIdea();
     renderHeader();
