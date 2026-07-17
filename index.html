@@ -195,6 +195,12 @@
       </div>
     </aside>
 
+    <button class="big-ideas-dashboard-card" id="btn-open-big-ideas" type="button" aria-describedby="my-big-ideas-count">
+      <span class="big-ideas-dashboard-card__icon" aria-hidden="true"><i class="ui-icon" data-lucide="book-open"></i></span>
+      <span><strong>My Big Ideas</strong><small id="my-big-ideas-count">Your discoveries will appear here as you complete missions.</small></span>
+      <i class="ui-icon big-ideas-dashboard-card__arrow" data-lucide="chevron-right" aria-hidden="true"></i>
+    </button>
+
     <button class="weekend-invite" id="btn-weekend-treat" type="button" aria-describedby="weekend-invite-copy">
       <i class="weekend-invite__icon ui-icon" data-lucide="search" aria-hidden="true"></i>
       <span><strong>Weekend Treat: Keyboard Detective</strong><small id="weekend-invite-copy">A 15–20 minute computer-lab mystery · earn a special badge</small></span>
@@ -209,6 +215,21 @@
       <i class="ui-icon" data-lucide="award" aria-hidden="true"></i>
       <div><strong>Your certificate is waiting</strong><span>Complete every mission to unlock it.</span></div>
     </aside>
+  </section>
+
+  <!-- MY BIG IDEAS -->
+  <section class="screen" id="screen-ideas" aria-labelledby="big-ideas-title">
+    <div class="screen-head">
+      <p class="big-idea-card__label">Your personal notebook</p>
+      <h2 class="screen-head__title" id="big-ideas-title">My Big Ideas</h2>
+      <p class="screen-head__subtitle">The most important ideas you've discovered during your learning journey.</p>
+    </div>
+    <div class="big-ideas-collection" id="big-ideas-list" aria-live="polite"></div>
+    <section class="empty-state big-ideas-empty" id="big-ideas-empty" aria-labelledby="big-ideas-empty-title">
+      <i class="ui-icon" data-lucide="book-open" aria-hidden="true"></i>
+      <div><strong id="big-ideas-empty-title">No Big Ideas collected yet.</strong><span>Complete your first mission to begin your personal collection of discoveries.</span></div>
+    </section>
+    <div class="big-ideas-page__actions"><button class="btn btn--ghost" id="btn-back-from-big-ideas" type="button">Back to missions</button></div>
   </section>
 
   <!-- QUESTION -->
@@ -334,12 +355,11 @@
 <div class="modal-backdrop" id="big-idea-modal" hidden>
   <section class="card big-idea-modal" role="dialog" aria-modal="true" aria-labelledby="big-idea-modal-title" aria-describedby="big-idea-modal-idea big-idea-modal-explanation">
     <i class="big-idea-modal__icon ui-icon" data-lucide="sparkles" aria-hidden="true"></i>
-    <p class="big-idea-card__label">Today's Big Idea</p>
+    <p class="big-idea-card__label">New Big Idea Unlocked</p>
     <h2 class="card__title" id="big-idea-modal-title"></h2>
     <p class="big-idea-modal__idea" id="big-idea-modal-idea"></p>
     <p class="big-idea-modal__explanation" id="big-idea-modal-explanation"></p>
     <div class="big-idea-modal__actions">
-      <button class="btn btn--primary" id="btn-remember-big-idea" type="button">✓ I'll Remember This</button>
       <button class="btn btn--ghost" id="btn-continue-big-idea" type="button">Continue</button>
     </div>
   </section>

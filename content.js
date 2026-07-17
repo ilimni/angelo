@@ -2137,7 +2137,9 @@ const gamification = {
     { id: "mission-2-complete", label: "Windows Navigator", criteria: "Finish all Mission 2 items" },
     { id: "shortcut-sprinter", label: "Shortcut Sprinter", criteria: "Complete all Keyboard Shortcuts section items correctly" },
     { id: "mission-3-complete", label: "Keyboard Commander", criteria: "Finish all Mission 3 items" },
-    { id: "mission-4-complete", label: "Smart Computer User", criteria: "Finish all Mission 4 items" }
+    { id: "mission-4-complete", label: "Smart Computer User", criteria: "Finish all Mission 4 items" },
+    { id: "mission-5-complete", label: "Digital Problem Solver", criteria: "Finish all Mission 5 items" },
+    { id: "mission-6-complete", label: "Digital Investigator", criteria: "Finish all Mission 6 items" }
   ],
   encouragingMessages: {
     correct: {

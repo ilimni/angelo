@@ -375,6 +375,16 @@ main {
 .big-idea-modal__explanation { color: var(--text-muted); }
 .big-idea-modal__actions { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
 
+/* ---------------- My Big Ideas ---------------- */
+.big-ideas-dashboard-card { width: 100%; display: grid; grid-template-columns: auto 1fr auto; gap: 15px; align-items: center; margin-top: 24px; padding: 18px 20px; border: 1px solid color-mix(in srgb, var(--brand) 24%, var(--border)); border-radius: var(--radius-md); background: linear-gradient(120deg, var(--surface), color-mix(in srgb, var(--brand-light) 78%, var(--surface))); color: var(--text); text-align: left; cursor: pointer; box-shadow: var(--shadow-sm); transition: transform .2s var(--ease), box-shadow .2s var(--ease), border-color .2s var(--ease); }
+.big-ideas-dashboard-card:hover { transform: translateY(-2px); border-color: var(--brand); box-shadow: 0 12px 26px color-mix(in srgb, var(--brand) 16%, transparent); }
+.big-ideas-dashboard-card:focus-visible { outline: 3px solid color-mix(in srgb, var(--brand) 42%, transparent); outline-offset: 3px; }
+.big-ideas-dashboard-card__icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 13px; background: var(--brand-light); color: var(--brand-dark); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brand) 20%, transparent); }
+.big-ideas-dashboard-card strong, .big-ideas-dashboard-card small { display: block; }.big-ideas-dashboard-card strong { font-family: var(--font-display); font-size: 1.03rem; }.big-ideas-dashboard-card small { margin-top: 3px; color: var(--text-muted); font-size: .84rem; }.big-ideas-dashboard-card__arrow { color: var(--brand); }
+.big-ideas-collection { display: grid; gap: 14px; max-width: 820px; }
+.big-ideas-collection__item { display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: start; padding: 22px; border: 1px solid color-mix(in srgb, var(--brand) 20%, var(--border)); border-radius: var(--radius-md); background: linear-gradient(120deg, var(--surface), color-mix(in srgb, var(--brand-light) 48%, var(--surface))); box-shadow: var(--shadow-sm); animation: bigIdeaReveal .42s var(--ease) both; animation-delay: calc(var(--idea-index, 0) * 70ms); transition: transform .2s var(--ease), box-shadow .2s var(--ease); }
+.big-ideas-collection__item:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }.big-ideas-collection__content h3 { font-family: var(--font-display); font-size: 1.1rem; line-height: 1.45; }.big-ideas-collection__content > p { margin-top: 6px; color: var(--text-muted); }.big-ideas-collection__meta { color: var(--brand-dark) !important; font-size: .84rem; font-weight: 800; }.big-ideas-collection__date { font-size: .78rem; }.big-ideas-empty { max-width: 620px; }.big-ideas-page__actions { margin-top: 24px; }
+
 /* ---------------- Mission select ---------------- */
 .screen-head { margin-bottom: 22px; }
 .screen-head__title { font-size: 1.6rem; font-weight: 800; margin-bottom: 6px; }
