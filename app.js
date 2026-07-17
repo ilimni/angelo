@@ -388,10 +388,6 @@
     renderLearningJourney();
     showScreen("journey");
   });
-  $("#btn-welcome-signin").addEventListener("click", function () {
-    setAuthMode("login");
-    showScreen("auth");
-  });
 
   var syncAccountBtn = $("#btn-sync-account");
   if (syncAccountBtn) {
