@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 638 638" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
-    <g transform="matrix(1,0,0,1,-4135.57496,-1448.58363)">
-        <g transform="matrix(2.857337,0,0,2.857337,-9321.018982,-3816.0494)">
-            <g transform="matrix(0.662651,0,0,0.662651,1642.176273,640.987975)">
-                <defs>
-                    <mask id="Mask">
-                    
-                        <g transform="matrix(0.528146,-0,-0,0.528146,4628.852049,1813.185387)"><image id="_Image1" width="638px" height="638px" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAn4AAAJ+CAAAAAAIu1K8AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABoklEQVR4nO3BgQAAAADDoPlTX+EAVQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAvAY43AAB3irqPAAAAABJRU5ErkJggg=="/>
-                        </g>
-                    </mask>
-                </defs>
-                <g mask="url(#Mask)">
-                    <rect x="4575.906" y="1760.24" width="442.667" height="442.667" style="fill:white;"/>
+<svg width="100%" height="100%" viewBox="0 0 575 575" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,1,-3684.905752,-273.016734)">
+        <g transform="matrix(1,0,0,1,3390,0)">
+            <g transform="matrix(1.355228,0,0,1.355228,-149.74814,-171.637157)">
+                <circle cx="540" cy="518.608" r="65.26" style="fill:white;"/>
+                <g transform="matrix(1,0,0,0.953411,0.479719,25.714575)">
+                    <rect x="516.52" y="551.941" width="46" height="199.956" style="fill:white;"/>
                 </g>
+                <path d="M540,328.103C656.949,328.103 751.897,423.051 751.897,540C751.897,656.949 656.949,751.897 540,751.897C423.051,751.897 328.103,656.949 328.103,540C328.103,423.051 423.051,328.103 540,328.103ZM540,374.824C448.837,374.824 374.824,448.837 374.824,540C374.824,631.163 448.837,705.176 540,705.176C631.163,705.176 705.176,631.163 705.176,540C705.176,448.837 631.163,374.824 540,374.824Z" style="fill:white;"/>
             </g>
         </g>
     </g>
