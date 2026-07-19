@@ -1,5 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="ILIMNI Learning">
-  <circle cx="32" cy="32" r="29" fill="#5b21b6"/>
-  <image href="ilimni-logo-icon.svg" x="17" y="10" width="30" height="39" preserveAspectRatio="xMidYMid meet"/>
-  <path d="M15 47.5c5.7-3.2 11.3-3.2 17 0 5.7-3.2 11.3-3.2 17 0V53c-5.7-3.2-11.3-3.2-17 0-5.7-3.2-11.3-3.2-17 0z" fill="none" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="ILIMNI">
+  <defs>
+    <linearGradient id="ilimniFaviconGradient" x1="6" y1="4" x2="58" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6d28d9"/>
+      <stop offset="1" stop-color="#4c1d95"/>
+    </linearGradient>
+  </defs>
+  <circle cx="32" cy="32" r="30" fill="url(#ilimniFaviconGradient)"/>
+  <image href="ilimni-logo-icon.svg" x="18" y="11" width="28" height="37" preserveAspectRatio="xMidYMid meet"/>
 </svg>

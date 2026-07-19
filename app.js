@@ -323,7 +323,7 @@
   /* ============================================================
      3. SCREEN NAVIGATION
      ============================================================ */
-  var SCREENS = ["welcome", "auth", "name", "missions", "journey", "ideas", "journal", "question", "summary", "certificate", "weekend"];
+  var SCREENS = ["welcome", "auth", "name", "dashboard", "missions", "journey", "ideas", "journal", "achievements", "question", "summary", "certificate", "weekend"];
   function showScreen(name) {
     SCREENS.forEach(function (s) {
       var node = $("#screen-" + s);
@@ -931,6 +931,15 @@
   $("#btn-back-from-journal").addEventListener("click", goToMissionSelect);
   $("#btn-open-learning-journey").addEventListener("click", function () { renderLearningJourney(); showScreen("journey"); });
   $("#btn-back-from-learning-journey").addEventListener("click", goToMissionSelect);
+  $("#btn-back-from-achievements").addEventListener("click", goToMissionSelect);
+  $("#btn-dashboard-resume").addEventListener("click", function () {
+    var active = MISSIONS.find(function (m) { return !isMissionComplete(m) && !isMissionLocked(m); });
+    if (active) startMission(active); else goToMissionSelect();
+  });
+  $("#btn-dashboard-ideas").addEventListener("click", function () { renderBigIdeasPage(); showScreen("ideas"); });
+  $("#btn-dashboard-missions").addEventListener("click", goToMissionSelect);
+  $("#btn-dashboard-weekend").addEventListener("click", function () { $("#btn-weekend-treat").click(); });
+  $("#btn-recognition-certificate").addEventListener("click", goToCertificate);
 
   function renderBadgesCard() {
     var earned = computeEarnedBadges();
@@ -956,6 +965,75 @@
         el("span", { text: b.label })
       ]));
     });
+  }
+
+  function renderDashboardPage() {
+    var allComplete = MISSIONS.length > 0 && MISSIONS.every(function (m) { return isMissionComplete(m); });
+    var model = buildLearningJourneyModel();
+    var resumeCard = $("#dashboard-resume-card");
+    var completeCard = $("#dashboard-complete-card");
+    var subtitle = $("#dashboard-subtitle");
+
+    if (allComplete) {
+      resumeCard.hidden = true;
+      completeCard.hidden = false;
+      subtitle.textContent = "You're all caught up.";
+      $("#dashboard-next-activity").textContent = "Try a Weekend Activity while new missions are prepared.";
+    } else {
+      completeCard.hidden = true;
+      resumeCard.hidden = false;
+      subtitle.textContent = "Pick up right where you paused.";
+      var active = MISSIONS.find(function (m) { return !isMissionComplete(m) && !isMissionLocked(m); });
+      var stats = active ? missionStats(active) : null;
+      $("#dashboard-resume-mission").textContent = model.progress.currentMission;
+      $("#dashboard-resume-focus").textContent = model.progress.currentFocus;
+      $("#dashboard-resume-progress").textContent = stats ? (stats.completedCount + " / " + stats.total + " items · " + stats.pct + "%") : "";
+      $("#dashboard-resume-bar").style.width = (stats ? stats.pct : 0) + "%";
+      var iconHost = $("#dashboard-resume-icon");
+      iconHost.innerHTML = "";
+      if (active) iconHost.appendChild(IconContainer(MISSION_ICON_MAP[active] || "book-open", { variant: "progress", progress: stats.pct, active: true }));
+      $("#dashboard-next-activity").textContent = model.progress.currentFocus;
+    }
+    refreshIcons();
+  }
+
+  function renderRecognitionPage() {
+    var earned = computeEarnedBadges();
+    var row = $("#recognition-badge-row");
+    row.innerHTML = "";
+    $("#recognition-badges-empty").hidden = !!earned.length;
+    earned.forEach(function (b, index) {
+      row.appendChild(el("span", { class: "badge-chip badge-chip--achievement", style: "--achievement-index:" + index }, [
+        IconContainer(achievementIconName(b.label), { variant: "achievement", size: "compact", glow: true, completed: true }),
+        el("span", { text: b.label })
+      ]));
+    });
+
+    var allComplete = MISSIONS.length > 0 && MISSIONS.every(function (m) { return isMissionComplete(m); });
+    var certBtn = $("#btn-recognition-certificate");
+    if (allComplete) {
+      $("#recognition-certificate-status").textContent = "Every mission is complete — your certificate is ready.";
+      certBtn.hidden = false;
+    } else {
+      $("#recognition-certificate-status").textContent = "Complete every mission to unlock your certificate.";
+      certBtn.hidden = true;
+    }
+
+    var ideasCount = collectedBigIdeas().length;
+    $("#recognition-ideas-count").textContent = ideasCount
+      ? ideasCount + " " + (ideasCount === 1 ? "Idea Collected" : "Ideas Collected")
+      : "Your discoveries will appear here as you complete missions.";
+
+    var milestones = model_milestonesText();
+    $("#recognition-milestones-text").textContent = milestones;
+
+    refreshIcons();
+  }
+
+  function model_milestonesText() {
+    var model = buildLearningJourneyModel();
+    if (model.milestones && model.milestones.length) return model.milestones.map(function (ms) { return ms.title; }).join(" · ");
+    return "Keep going — your next milestone is on the way.";
   }
 
   function startMission(m) {
@@ -1981,21 +2059,12 @@
     $$(".primary-nav__link").forEach(function (link) {
       link.addEventListener("click", function () {
         var target = link.getAttribute("data-nav-target");
-        if (target === "dashboard") {
-          var nextMission = MISSIONS.find(function (m) { return !isMissionComplete(m) && !isMissionLocked(m); });
-          if (nextMission) startMission(nextMission);
-          else goToMissionSelect();
-          return;
-        }
+        if (target === "dashboard") { renderDashboardPage(); showScreen("dashboard"); return; }
         if (target === "missions") { goToMissionSelect(); return; }
         if (target === "journey") { renderLearningJourney(); showScreen("journey"); return; }
         if (target === "ideas") { renderBigIdeasPage(); showScreen("ideas"); return; }
         if (target === "weekend") { $("#btn-weekend-treat").click(); return; }
-        if (target === "achievements") {
-          goToMissionSelect();
-          setTimeout(function () { var badges = $("#badges-card"); if (badges && !badges.hidden) badges.scrollIntoView({ behavior: "smooth", block: "center" }); else toast("Your learning achievements will appear here as you complete missions."); }, 0);
-          return;
-        }
+        if (target === "achievements") { renderRecognitionPage(); showScreen("achievements"); return; }
         if (target === "certificates") {
           var complete = MISSIONS.length > 0 && MISSIONS.every(function (m) { return isMissionComplete(m); });
           if (complete) goToCertificate();
