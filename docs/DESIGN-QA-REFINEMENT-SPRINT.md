@@ -186,3 +186,60 @@ dominant color:
 - Decide intentionally whether Continue Learning should become the
   default post-sign-in landing screen (currently still Mission
   Library) — that's a product decision, not a bug fix.
+
+---
+
+## Follow-up round — issues found in live review
+
+Real visual QA (headless Chromium via Playwright, plus pixel-level
+image analysis) was set up and used for this round, rather than
+reasoning about CSS/SVG blind.
+
+- **Favicon not showing the icon** — root cause: it used
+  `<image href="ilimni-logo-icon.svg">`, an external-file reference
+  nested inside another SVG. Browsers don't fetch that in a favicon
+  context, so only the background circle ever rendered. Fixed by
+  fully inlining the glyph as a nested `<svg viewBox="0 0 575 575">`
+  (no external fetch required). Verified with a pixel-level check:
+  white glyph pixels went from 0% to ~12.5% of the canvas.
+- **"ILIMNI Learning" → "ILIMNI Learn"** — renamed everywhere in the
+  web app (title, meta tags, aria-labels, header/hero brand mark,
+  README). Left `learning/intelligence/*.js` alone — those name an
+  internal "ILIMNI Learning Intelligence Layer" subsystem, a separate
+  proper noun, not the product brand.
+- **Open Graph image** — rebuilt with the real inlined logo (same
+  technique as the favicon fix, same pixel-verified approach), the
+  "ILIMNI Learn" rename, and accent-dot colors aligned to the current
+  token palette.
+- **Hero copy tracking too tight** — found `letter-spacing: -.07em`
+  on display text up to 6.8rem, which crushes letterforms at that
+  size. Loosened to `-.02em`/`-.025em` and nudged line-height up
+  slightly.
+- **Landing page not centered** — root cause: `main { margin-left:
+  264px }` was applied unconditionally at ≥900px to reserve sidebar
+  space, even on screens where the sidebar is `hidden` (welcome/auth/
+  name, before sign-in). Fixed with
+  `.app-header:not([hidden]) + main { margin-left: 264px }`. Verified
+  by querying the live `getBoundingClientRect()` of `<main>` in a
+  real browser: 90px/90px left/right on both the welcome and auth
+  screens (previously would have been ~90px/354px).
+- **Guest-view "Save progress to account" button misaligned** — it
+  was plain text with no icon, using a different button class
+  (`.btn.btn--ghost.btn--sm`) than its siblings. Gave it a
+  `cloud-upload` icon and switched it to `.app-header__meta-btn` —
+  confirmed via live DOM measurement that it now has the exact same
+  box geometry (235×44px) as Export Progress.
+
+**Testing note:** this sandbox's network allowlist blocks the CDNs
+the app depends on at runtime (`unpkg.com` for Lucide icons,
+`fonts.googleapis.com`, `gstatic.com` for Firebase) — confirmed via
+console/request logging, not assumed. That means icons don't
+visually render in this sandbox's browser tests even though the
+markup is correct; I cross-checked `cloud-upload` against the Lucide
+changelog to confirm it exists in the app's pinned version
+(0.468.0 — the icon shipped in 0.420.0). All layout, contrast, and
+navigation checks above were verified against real rendered output
+and are unaffected by this limitation. Clicked through every nav
+destination (Continue Learning, Learning Journey, Mission Library,
+Big Ideas, Recognition) with error listeners attached — no runtime
+errors other than the expected blocked Firebase CDN request.
