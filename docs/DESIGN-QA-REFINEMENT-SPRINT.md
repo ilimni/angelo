@@ -243,3 +243,68 @@ and are unaffected by this limitation. Clicked through every nav
 destination (Continue Learning, Learning Journey, Mission Library,
 Big Ideas, Recognition) with error listeners attached — no runtime
 errors other than the expected blocked Firebase CDN request.
+
+---
+
+## Second follow-up round — issues found in live review
+
+- **Theme toggle too close to logo on mobile** — root cause: a stale
+  `.app-header__brand { margin-right: auto }` rule was left over from
+  before the brand/toggle were wrapped in `.app-header__top`; it no
+  longer reached the full header width. Fixed by giving
+  `.app-header__top` itself `flex: 1 1 auto`. Verified via
+  `getBoundingClientRect()`: toggle moved from 179–223px to
+  322–366px on a 390px viewport. Desktop was already correct
+  (confirmed, not changed).
+- **Logo packaged as one SVG object** — built `branding/ilimni-mark.svg`,
+  a single self-contained file with the gradient container and the
+  glyph baked into one graphic (same inlining technique used for the
+  favicon fix). Replaced the container-div + overlaid-`<img>` markup
+  in the header and hero with one `<img>`. Removed the now-dead
+  `.app-header__logo` / `.welcome-hero__logo` CSS and a stale
+  compound selector left over from the old structure.
+- **Badges missing for Missions 2, 4, 5** — confirmed via
+  `learning/content.js`: only 4 badges existed total (Mission 1
+  twice, Mission 3, Mission 6), leaving 2/4/5 with none. Added three
+  mission-level badges using the same pattern already proven for
+  Mission 6.
+- **Certificate badge / weekend-treat icon side-alignment** — root
+  cause: `.icon-container` (`display: grid`, block-level) and the
+  Shortcut Hero / Truth-or-Myth icons (`display: block`) had no
+  horizontal centering, so they sat left while the text below them
+  was centered via `text-align`. Fixed both; verified via
+  `getBoundingClientRect()` that icon, text, and card all share the
+  same center x-coordinate now.
+- **"Why ILIMNI" section disaligned** — same "duplicate override
+  wins" bug pattern found earlier in this sprint: a later rule
+  silently flipped it from centered to `text-align: left`. Removed
+  the stray override.
+- **Purple overuse** — removed it from passive/decorative uses that
+  created a persistent wash (resume card background, badges card
+  background, Why ILIMNI lead text), while deliberately keeping it on
+  functional/semantic uses — primary buttons, active nav state,
+  quiz-widget selection states, and the one "in-progress" status
+  color among four. Those are the "necessary and unique" places it
+  should stay.
+- **"Your Learning Journey" flowchart too small/misaligned** — real
+  bug: it was a vertical stack of 5 words at 0.88rem with `↓` between
+  them, in a section capped at 760px while every sibling section used
+  the full ~1080px width. Rebuilt as a horizontal step-flow with
+  numbered purple circles and `→` connectors, and removed the
+  narrower max-width. Verified: now 1080px wide (matching siblings)
+  with all 5 steps on one row.
+- **Hero copy bolder** — bumped to font-weight 800 and added a purple
+  accent span on the second line, echoing the OG image's treatment.
+  Verified computed style: weight 800, accent color #5b21b6.
+- **OG image simplified** — cut from ~4–5KB (two decorative blobs, a
+  full mock interface-preview card, a CTA button) down to 2.2KB: just
+  the brand mark, a bold two-line headline, and one tagline. Verified
+  the logo glyph still renders and content stays within canvas bounds
+  (no clipping).
+
+Full regression after all of the above: `node --check app.js` passes,
+HTML/CSS tag and brace balance confirmed, clicked through every nav
+destination with an error listener attached (only the expected
+blocked-Firebase-CDN message in this sandbox), dark-mode button
+contrast re-confirmed still correct, and welcome-page centering
+re-confirmed at 90px/90px after every change in this round.

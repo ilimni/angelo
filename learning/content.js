@@ -2132,8 +2132,11 @@ const gamification = {
   badges: [
     { id: "input-explorer", label: "Input activities completed", criteria: "Complete all Input section items correctly" },
     { id: "binary-explorer", label: "Binary activities completed", criteria: "Complete all Binary section items correctly" },
-    { id: "task-manager-explorer", label: "Mission 6 activities completed", criteria: "Finish all Mission 6 items" },
-    { id: "shortcut-strategist", label: "Keyboard shortcut activities completed", criteria: "Complete all Keyboard Shortcuts section items correctly" }
+    { id: "systems-explorer", label: "Mission 2 activities completed", criteria: "Finish all Mission 2 items" },
+    { id: "shortcut-strategist", label: "Keyboard shortcut activities completed", criteria: "Complete all Keyboard Shortcuts section items correctly" },
+    { id: "productivity-explorer", label: "Mission 4 activities completed", criteria: "Finish all Mission 4 items" },
+    { id: "organisation-explorer", label: "Mission 5 activities completed", criteria: "Finish all Mission 5 items" },
+    { id: "task-manager-explorer", label: "Mission 6 activities completed", criteria: "Finish all Mission 6 items" }
   ],
   encouragingMessages: {
     correct: {
