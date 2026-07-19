@@ -108,6 +108,7 @@ button { font-family: inherit; }
   top: 0;
   z-index: 50;
   background: color-mix(in srgb, var(--bg-alt) 88%, transparent);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
 }
@@ -293,6 +294,7 @@ main {
   border: 1px solid var(--border);
 }
 .btn--ghost:hover:not(:disabled) { border-color: var(--brand); color: var(--brand); }
+.btn--guest-cta { margin-top: 14px; width: 100%; }
 .btn--lg { padding: 14px 30px; font-size: 1rem; }
 .btn--sm { padding: 7px 14px; font-size: .82rem; }
 
@@ -442,6 +444,7 @@ button.journey-event:hover { border-color: color-mix(in srgb, var(--brand) 42%, 
   border-radius: 22px;
   padding: 22px;
   background: linear-gradient(145deg, color-mix(in srgb, var(--surface) 88%, var(--brand-light)), var(--surface));
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   box-shadow: var(--shadow-md);
   color: var(--text);
@@ -505,13 +508,13 @@ button.journey-event:hover { border-color: color-mix(in srgb, var(--brand) 42%, 
 .mission-card__status--locked { background: color-mix(in srgb, var(--text-faint) 12%, var(--surface)); color: var(--text-muted); }
 
 /* Reusable Lucide icon treatment for mission cards and future learning surfaces. */
-.icon-container { --ring-color: var(--brand); position: relative; flex: 0 0 auto; width: 58px; height: 58px; display: grid; place-items: center; border: 1px solid color-mix(in srgb, var(--ring-color) 24%, var(--border)); border-radius: 18px; color: var(--ring-color); background: linear-gradient(145deg, color-mix(in srgb, var(--ring-color) 17%, var(--surface)), color-mix(in srgb, var(--ring-color) 7%, var(--surface))); backdrop-filter: blur(8px); box-shadow: inset 0 1px 0 rgba(255,255,255,.5), var(--shadow-sm); transition: transform .25s var(--ease), box-shadow .25s var(--ease); }
+.icon-container { --ring-color: var(--brand); position: relative; flex: 0 0 auto; width: 58px; height: 58px; display: grid; place-items: center; border: 1px solid color-mix(in srgb, var(--ring-color) 24%, var(--border)); border-radius: 18px; color: var(--ring-color); background: linear-gradient(145deg, color-mix(in srgb, var(--ring-color) 17%, var(--surface)), color-mix(in srgb, var(--ring-color) 7%, var(--surface))); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow: inset 0 1px 0 rgba(255,255,255,.5), var(--shadow-sm); transition: transform .25s var(--ease), box-shadow .25s var(--ease); }
 .icon-container:hover { transform: translateY(-2px) scale(1.03); box-shadow: inset 0 1px 0 rgba(255,255,255,.5), var(--shadow-md); }
 .mission-card:hover .icon-container { transform: translateY(-2px) scale(1.045); box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 10px 20px color-mix(in srgb, var(--ring-color) 16%, transparent); }
 .icon-container__icon { position: relative; width: 1.7rem; height: 1.7rem; vertical-align: 0; }
 .icon-container__ring { position: absolute; inset: -4px; border-radius: 21px; opacity: 0; pointer-events: none; }
 .icon-container--progress { --ring-color: var(--brand); }
-.icon-container--progress .icon-container__ring { opacity: 1; background: conic-gradient(var(--ring-color) var(--progress), color-mix(in srgb, var(--ring-color) 13%, transparent) 0); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; padding: 2px; animation: missionRingPulse 2.4s ease-in-out infinite; }
+.icon-container--progress .icon-container__ring { opacity: 1; background: conic-gradient(var(--ring-color) var(--progress), color-mix(in srgb, var(--ring-color) 13%, transparent) 0); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; padding: 2px; animation: missionRingPulse 2.4s ease-in-out infinite; }
 .icon-container--done { --ring-color: #c99532; }
 .icon-container--done .icon-container__ring { opacity: 1; border: 2px solid var(--ring-color); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring-color) 14%, transparent), 0 0 16px color-mix(in srgb, var(--ring-color) 24%, transparent); }
 .icon-container--done::after { content: "✦"; position: absolute; top: -10px; right: -8px; color: var(--ring-color); font-size: .85rem; text-shadow: 0 0 10px color-mix(in srgb, var(--ring-color) 50%, transparent); animation: sparkleSoft 2.2s ease-in-out infinite; }
@@ -1110,7 +1113,7 @@ button.journey-event:hover { border-color: color-mix(in srgb, var(--brand) 42%, 
 @keyframes keyFound { 50% { transform: scale(1.12); } }
 .key-token { display: inline-block; background: #292b55; color: #fff; padding: 6px 14px; border-radius: 8px; cursor: grab; }
 .group-zones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }.group-zone { min-height: 73px; border: 2px dashed var(--brand); border-radius: var(--radius-md); color: var(--brand-dark); background: var(--surface); font-weight: 700; padding: 9px; cursor: pointer; }.group-zone:hover, .group-zone.is-dragover { background: var(--brand-light); border-style: solid; }
-.scenario-card, .myth-card, .repair-scene { padding: 18px; border-radius: var(--radius-md); background: var(--surface); border: 1px solid var(--border); margin-bottom: 15px; }.scenario-card .ui-icon, .myth-card .ui-icon { width: 2rem; height: 2rem; display: block; margin-bottom: 5px; color: var(--brand); vertical-align: 0; }.scenario-card p, .myth-card p { font-size: 1.08rem; font-weight: 700; }
+.scenario-card, .myth-card, .repair-scene { padding: 18px; border-radius: var(--radius-md); background: var(--surface); border: 1px solid var(--border); margin-bottom: 15px; }.scenario-card .ui-icon, .myth-card .ui-icon { width: 2rem; height: 2rem; display: block; margin-bottom: 5px; color: var(--brand); }.scenario-card p, .myth-card p { font-size: 1.08rem; font-weight: 700; }
 .choice-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }.shortcut-choice, .truth-buttons button { min-height: 54px; border: 1.5px solid var(--border); border-radius: var(--radius-md); background: var(--surface); color: var(--text); font-weight: 800; font-size: 1rem; cursor: pointer; transition: all .18s var(--ease); }.shortcut-choice:hover, .truth-buttons button:hover { background: var(--brand-light); border-color: var(--brand); }.shortcut-choice.is-right { background: var(--success-bg); border-color: var(--success); }
 .truth-buttons { display: flex; gap: 12px; justify-content: center; }.truth-buttons button { width: min(220px, 50%); }.truth-buttons button:first-child { color: var(--success); }.truth-buttons button:last-child { color: var(--danger); }
 .repair-meter { margin: 0 auto 16px; max-width: 440px; }.repair-scene { display: flex; align-items: center; gap: 18px; text-align: left; }.lab-computer { color: var(--text-muted); }.lab-computer .ui-icon { width: 3.1rem; height: 3.1rem; vertical-align: 0; }.repair-scene p { margin: 0; }
@@ -1300,7 +1303,7 @@ main { max-width: 1000px; padding: clamp(32px, 5vw, 68px) clamp(20px, 5vw, 64px)
 
 /* App shell: a calm Notion-like rail above tablet size, without inventing new learning destinations. */
 @media (min-width: 900px) {
-  .app-header { position: fixed; inset: 0 auto 0 0; width: 264px; border: 0; border-right: 1px solid var(--border); background: var(--bg-alt); backdrop-filter: none; }
+  .app-header { position: fixed; inset: 0 auto 0 0; width: 264px; border: 0; border-right: 1px solid var(--border); background: var(--bg-alt); -webkit-backdrop-filter: none; backdrop-filter: none; }
   .app-header__inner { height: 100%; max-width: none; padding: 24px 14px; display: flex; flex-direction: column; align-items: stretch; gap: 26px; }
   .app-header__brand { padding: 4px 10px; }
   .primary-nav { width: 100%; flex: 0 1 auto; overflow: visible; display: grid; gap: 4px; }

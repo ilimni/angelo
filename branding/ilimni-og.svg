@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">ILIMNI Learning</title>
+  <desc id="description">A thoughtful learning space. Learn to Think, Not Just Click.</desc>
+  <rect width="1200" height="630" fill="#fafafa"/>
+  <circle cx="1120" cy="-20" r="280" fill="#f3e8ff"/>
+  <circle cx="1030" cy="550" r="230" fill="#ede9fe"/>
+  <text x="76" y="86" fill="#5b21b6" font-family="Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="3">ILIMNI LEARNING</text>
+  <text x="76" y="220" fill="#171717" font-family="Arial, sans-serif" font-size="74" font-weight="700">Learn to Think,</text>
+  <text x="76" y="302" fill="#5b21b6" font-family="Arial, sans-serif" font-size="74" font-weight="700">Not Just Click.</text>
+  <text x="80" y="370" fill="#525252" font-family="Arial, sans-serif" font-size="27">Thoughtful practice, reflection, and discovery.</text>
+  <rect x="76" y="436" width="190" height="54" rx="27" fill="#171717"/>
+  <text x="106" y="470" fill="#fff" font-family="Arial, sans-serif" font-size="19" font-weight="700">Continue learning</text>
+  <g transform="translate(754 124)">
+    <rect width="356" height="318" rx="22" fill="#fff" stroke="#e5e5e5" stroke-width="2"/>
+    <rect x="25" y="26" width="30" height="30" rx="8" fill="#5b21b6"/>
+    <path d="M35 43h10M40 34v18" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    <text x="70" y="47" fill="#171717" font-family="Arial, sans-serif" font-size="18" font-weight="700">Your learning space</text>
+    <text x="25" y="102" fill="#737373" font-family="Arial, sans-serif" font-size="14">TODAY'S BIG IDEA</text>
+    <text x="25" y="139" fill="#171717" font-family="Arial, sans-serif" font-size="23" font-weight="700">Ideas are tools for thinking.</text>
+    <rect x="25" y="176" width="306" height="1" fill="#e5e5e5"/>
+    <circle cx="42" cy="214" r="9" fill="#5b21b6"/><text x="62" y="220" fill="#404040" font-family="Arial, sans-serif" font-size="16">Investigate</text>
+    <circle cx="42" cy="256" r="9" fill="#16a34a"/><text x="62" y="262" fill="#404040" font-family="Arial, sans-serif" font-size="16">Make sense</text>
+    <circle cx="42" cy="298" r="9" fill="#f59e0b"/><text x="62" y="304" fill="#404040" font-family="Arial, sans-serif" font-size="16">Carry it forward</text>
+  </g>
+</svg>
