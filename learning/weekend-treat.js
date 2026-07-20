@@ -45,11 +45,15 @@
     });
   }
   function hideOtherScreens() { document.querySelectorAll(".screen").forEach(function (el) { el.classList.toggle("is-active", el.id === "screen-weekend"); }); document.getElementById("app-header").hidden = false; setActiveNav("weekend"); window.scrollTo({ top: 0, behavior: "smooth" }); }
-  function back() { document.getElementById("screen-weekend").classList.remove("is-active"); document.getElementById("screen-missions").classList.add("is-active"); setActiveNav("missions"); }
-  function progress() { var labels = { intro: 0, keys: 1, groups: 2, shortcuts: 3, myths: 4, boss: 5, celebration: 6, certificate: 6 }; return Math.round((labels[state.stage] || 0) / 6 * 100); }
-  function shell(title, eyebrow, body, controls) {
-    host.innerHTML = '<div class="weekend-shell"><div class="weekend-top"><button class="btn btn--ghost btn--sm" id="weekend-back" type="button">← Missions</button><span class="weekend-score"><i class="ui-icon ui-icon--sm" data-lucide="star" aria-hidden="true"></i> ' + state.stars + ' <b>·</b> <i class="ui-icon ui-icon--sm" data-lucide="zap" aria-hidden="true"></i> ' + state.xp + ' Weekend XP</span></div><div class="weekend-progress" aria-label="Adventure progress"><i style="width:' + progress() + '%"></i></div><div class="weekend-card"><p class="weekend-eyebrow">' + eyebrow + '</p><h2 id="weekend-title">' + title + '</h2>' + body + (controls ? '<div class="weekend-controls">' + controls + '</div>' : '') + '</div></div>';
-    document.getElementById("weekend-back").addEventListener("click", back);
+  function backToMissions() { document.getElementById("screen-weekend").classList.remove("is-active"); document.getElementById("screen-missions").classList.add("is-active"); setActiveNav("missions"); }
+  function back() { renderPicker(); }
+  function progress(s) { s = s || state; var labels = { intro: 0, keys: 1, groups: 2, shortcuts: 3, myths: 4, boss: 5, celebration: 6, certificate: 6 }; return Math.round((labels[s.stage] || 0) / 6 * 100); }
+  function shell(title, eyebrow, body, controls, opts) {
+    opts = opts || {};
+    var s = opts.state || state;
+    var pct = opts.progress != null ? opts.progress : progress(s);
+    host.innerHTML = '<div class="weekend-shell"><div class="weekend-top"><button class="btn btn--ghost btn--sm" id="weekend-back" type="button">← Weekend Treats</button><span class="weekend-score"><i class="ui-icon ui-icon--sm" data-lucide="star" aria-hidden="true"></i> ' + s.stars + ' <b>·</b> <i class="ui-icon ui-icon--sm" data-lucide="zap" aria-hidden="true"></i> ' + s.xp + ' Weekend XP</span></div><div class="weekend-progress" aria-label="Adventure progress"><i style="width:' + pct + '%"></i></div><div class="weekend-card"><p class="weekend-eyebrow">' + eyebrow + '</p><h2 id="weekend-title">' + title + '</h2>' + body + (controls ? '<div class="weekend-controls">' + controls + '</div>' : '') + '</div></div>';
+    document.getElementById("weekend-back").addEventListener("click", opts.onBack || back);
     if (window.refreshIcons) window.refreshIcons();
   }
   function reward(message) { state.xp += 20; state.stars++; save(); var box = host.querySelector(".weekend-feedback"); if (box) { box.innerHTML = '<i class="ui-icon" data-lucide="sparkles" aria-hidden="true"></i> ' + message + ' <b>+20 XP</b>'; if (window.refreshIcons) window.refreshIcons(); } }
@@ -111,10 +115,114 @@
     document.getElementById("weekend-cert").onclick = function () { advance("certificate"); };
   }
   function certificate() {
-    shell("Keyboard Practice", "Optional activity complete", '<div class="weekend-certificate"><div aria-hidden="true"><i class="ui-icon ui-icon--xl" data-lucide="trophy"></i></div><p>This note records that</p><h3>' + escape(student()) + '</h3><p>completed the optional</p><h4>Keyboard Practice Activity</h4><p class="cert-small">Weekend XP earned: ' + state.xp + ' · Issued ' + new Date().toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" }) + '</p></div>', '<button class="btn btn--ghost" id="weekend-print" type="button">Print note</button><button class="btn btn--primary" id="weekend-return" type="button">Back to missions</button>');
+    shell("Keyboard Practice", "Optional activity complete", '<div class="weekend-certificate"><div aria-hidden="true"><i class="ui-icon ui-icon--xl" data-lucide="trophy"></i></div><p>This note records that</p><h3>' + escape(student()) + '</h3><p>completed the optional</p><h4>Keyboard Practice Activity</h4><p class="cert-small">Weekend XP earned: ' + state.xp + ' · Issued ' + new Date().toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" }) + '</p></div>', '<button class="btn btn--ghost" id="weekend-print" type="button">Print note</button><button class="btn btn--primary" id="weekend-return" type="button">Back to Weekend Treats</button>');
     document.getElementById("weekend-print").onclick = function () { window.print(); };
     document.getElementById("weekend-return").onclick = back;
   }
-  launch.addEventListener("click", function () { render(); });
-  if (state.done) launch.querySelector("small").textContent = "Completed · view your keyboard practice note";
+  /* ============================================================
+     Weekend Treats hub — lets a learner reach either treat
+     independently, in chronological order. Does not touch the
+     Keyboard Practice treat's own code above.
+     ============================================================ */
+  function renderPicker() {
+    hideOtherScreens();
+    host.innerHTML =
+      '<div class="weekend-shell"><div class="weekend-top"><button class="btn btn--ghost btn--sm" id="weekend-hub-back" type="button">← Missions</button></div>' +
+      '<div class="weekend-card"><p class="weekend-eyebrow">Optional · pick an activity</p><h2>Weekend Treats</h2>' +
+      '<p>Two short activities you can revisit anytime, ' + escape(student()) + '.</p>' +
+      '<button class="weekend-invite" type="button" id="pick-keyboard"><i class="ui-icon weekend-invite__icon" data-lucide="keyboard" aria-hidden="true"></i><span><strong>1. Keyboard Practice</strong><small>' + (state.done ? "Completed · revisit anytime" : "Find keys, sort them, and try shortcuts") + '</small></span><i class="ui-icon weekend-invite__arrow" data-lucide="arrow-right" aria-hidden="true"></i></button>' +
+      '<button class="weekend-invite" type="button" id="pick-idea"><i class="ui-icon weekend-invite__icon" data-lucide="lightbulb" aria-hidden="true"></i><span><strong>2. The Idea Behind the Tool</strong><small>' + (idea.done ? "Completed · revisit anytime" : "A short activity about understanding, not memorising") + '</small></span><i class="ui-icon weekend-invite__arrow" data-lucide="arrow-right" aria-hidden="true"></i></button>' +
+      '</div></div>';
+    document.getElementById("weekend-hub-back").addEventListener("click", backToMissions);
+    document.getElementById("pick-keyboard").addEventListener("click", function () { render(); });
+    document.getElementById("pick-idea").addEventListener("click", function () { renderIdea(); });
+    if (window.refreshIcons) window.refreshIcons();
+  }
+
+  /* ============================================================
+     Weekend Treat 2 — "The Idea Behind the Tool"
+     Source: teacher notes, Day 6 ("concept vs tools", search bars),
+     Day 5 (Accessibility, explored rather than told), and Day 6's
+     Settings/Control Panel/Contrast discussion. Every task below
+     maps to something the notes describe as actually taught or
+     explored, not invented.
+     ============================================================ */
+  var IDEA_STORE = "ilimni_idea_behind_tool_v1";
+  var explorationTasks = [
+    { id: "accessibility", label: "Find the Accessibility (Ease of Access) settings.", tip: "Try the search bar — type a word close to what you're looking for, not the exact name." },
+    { id: "contrast", label: "Find where High Contrast can be turned on.", tip: "It usually lives near Accessibility or Display settings." },
+    { id: "controlpanel", label: "Find Control Panel and compare it with Settings.", tip: "Search for it by name, then notice what feels familiar between the two." },
+    { id: "search", label: "Use the search bar to find one setting instead of clicking through menus.", tip: "Type what you're trying to do, not just a feature's name." }
+  ];
+  var idea = loadIdea();
+  function loadIdea() { try { return Object.assign({ stage: "story", xp: 0, stars: 0, done: false, checked: {}, reflection: null }, JSON.parse(localStorage.getItem(IDEA_STORE) || "{}")); } catch (e) { return { stage: "story", xp: 0, stars: 0, done: false, checked: {}, reflection: null }; } }
+  function saveIdea() { localStorage.setItem(IDEA_STORE, JSON.stringify(idea)); }
+  function ideaProgress() { var order = { story: 0, challenge: 1, reflection: 2, bigidea: 3, ack: 4 }; return Math.round((order[idea.stage] || 0) / 4 * 100); }
+  function advanceIdea(stage) { idea.stage = stage; saveIdea(); renderIdea(); }
+
+  function renderIdea() {
+    hideOtherScreens();
+    if (idea.stage === "story") return ideaStory();
+    if (idea.stage === "challenge") return ideaChallenge();
+    if (idea.stage === "reflection") return ideaReflection();
+    if (idea.stage === "bigidea") return ideaBigIdea();
+    ideaAck();
+  }
+  function ideaStory() {
+    shell("The Idea Behind the Tool", "Optional activity · 10–15 minutes",
+      '<div class="detective-hero"><div class="detective-orb" aria-hidden="true"><i class="ui-icon" data-lucide="lightbulb"></i></div>' +
+      '<p>Imagine sitting down at a computer you have never used before, ' + escape(student()) + '.</p>' +
+      '<p class="weekend-dialogue">The Settings app looks different. Menus have moved. The colours and icons are not what you are used to.</p>' +
+      '<p class="weekend-dialogue">Instead of worrying, you stop and ask yourself one question: <b>"What am I trying to do?"</b></p>' +
+      '<p class="weekend-dialogue">Then you look around, try the search bar, and think about what you already understand — even though the buttons moved.</p></div>',
+      '<button class="btn btn--primary btn--lg" id="idea-start" type="button">Try it myself →</button>',
+      { state: idea, progress: ideaProgress(), onBack: back });
+    document.getElementById("idea-start").onclick = function () { advanceIdea("challenge"); };
+  }
+  function ideaChallenge() {
+    var doneCount = explorationTasks.filter(function (t) { return idea.checked[t.id]; }).length;
+    var body = '<p class="weekend-prompt">Try these on any computer near you. You do not need Google — try the search bar first, and look around before asking for help.</p>' +
+      '<p class="weekend-feedback" role="status">' + doneCount + ' / ' + explorationTasks.length + ' explored</p>' +
+      '<div class="explore-list">' + explorationTasks.map(function (t) {
+        var isDone = !!idea.checked[t.id];
+        return '<div class="explore-item' + (isDone ? ' is-done' : '') + '"><p>' + t.label + '</p><p class="explore-item__tip">' + t.tip + '</p><button type="button" class="btn btn--ghost btn--sm" data-task="' + t.id + '"' + (isDone ? " disabled" : "") + '>' + (isDone ? "✓ Found it" : "I found it") + '</button></div>';
+      }).join("") + '</div>';
+    shell("Explore first", "Clue · try before you ask", body,
+      doneCount === explorationTasks.length ? '<button class="btn btn--primary btn--lg" id="idea-next" type="button">Continue →</button>' : "",
+      { state: idea, progress: ideaProgress(), onBack: back });
+    host.querySelectorAll("[data-task]").forEach(function (btn) {
+      btn.onclick = function () { idea.checked[btn.dataset.task] = true; idea.xp += 5; saveIdea(); ideaChallenge(); };
+    });
+    var next = document.getElementById("idea-next");
+    if (next) next.onclick = function () { advanceIdea("reflection"); };
+  }
+  function ideaReflection() {
+    var answered = idea.reflection;
+    var body = '<div class="myth-card"><i class="ui-icon" data-lucide="brain" aria-hidden="true"></i><p>Which helped you more today —</p></div>' +
+      '<div class="choice-grid"><button type="button" class="shortcut-choice' + (answered === "remember" ? " is-chosen" : "") + '" data-reflect="remember">Remembering where something was</button><button type="button" class="shortcut-choice' + (answered === "understand" ? " is-chosen" : "") + '" data-reflect="understand">Understanding what it was supposed to do</button></div>' +
+      (answered ? '<p class="weekend-feedback"><i class="ui-icon" data-lucide="sparkles" aria-hidden="true"></i> Thank you for thinking that through — there is no wrong answer here.</p>' : '<p class="weekend-feedback" role="status">There is no wrong answer. Just notice what actually helped you.</p>');
+    shell("A quick reflection", "Clue · think it through", body,
+      answered ? '<button class="btn btn--primary btn--lg" id="idea-next2" type="button">Continue →</button>' : "",
+      { state: idea, progress: ideaProgress(), onBack: back });
+    host.querySelectorAll("[data-reflect]").forEach(function (b) { b.onclick = function () { idea.reflection = b.dataset.reflect; saveIdea(); ideaReflection(); }; });
+    var next = document.getElementById("idea-next2");
+    if (next) next.onclick = function () { advanceIdea("bigidea"); };
+  }
+  function ideaBigIdea() {
+    shell("Big idea", "One idea worth keeping",
+      '<div class="unlock-card"><i class="ui-icon" data-lucide="lightbulb" aria-hidden="true"></i><div><b>Understanding a concept helps you use many different tools.</b><small>Even when the buttons move, what you understand stays with you.</small></div></div>',
+      '<button class="btn btn--primary btn--lg" id="idea-next3" type="button">Continue →</button>',
+      { state: idea, progress: ideaProgress(), onBack: back });
+    document.getElementById("idea-next3").onclick = function () { advanceIdea("ack"); };
+  }
+  function ideaAck() {
+    idea.done = true; saveIdea();
+    shell("Activity complete", "The Idea Behind the Tool",
+      '<p class="weekend-lead"><b>' + escape(student()) + '</b>, you practised thinking beyond buttons.</p><p class="weekend-dialogue">You can revisit this activity, or the Keyboard Practice activity, anytime.</p>',
+      '<button class="btn btn--primary btn--lg" id="idea-done" type="button">Back to Weekend Treats →</button>',
+      { state: idea, progress: 100, onBack: back });
+    document.getElementById("idea-done").onclick = back;
+  }
+
+  launch.addEventListener("click", function () { renderPicker(); });
 })();
